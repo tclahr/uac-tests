@@ -1,6 +1,6 @@
 ## UAC (Unix-like Artifacts Collector) Unit Test
 
-[![ShellCheck](https://github.com/tclahr/uac-unit-test/actions/workflows/shellcheck.yaml/badge.svg)](https://github.com/tclahr/uac/actions/workflows/shellcheck.yaml)
+[![ShellCheck](https://github.com/tclahr/uac-unit-test/actions/workflows/shellcheck.yaml/badge.svg)](https://github.com/tclahr/uac-unit-test/actions/workflows/shellcheck.yaml)
 [![GitHub](https://img.shields.io/github/license/tclahr/uac-unit-test?style=flat)](LICENSE)
 
 This project is a testing framework for UAC (Unix-like Artifacts Collector) tool. It provides a simple way to test the quality and make UAC maintainable and trustworthy.
