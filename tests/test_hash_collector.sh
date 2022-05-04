@@ -483,7 +483,11 @@ test_ignore_date_range() {
     "root_directory" \
     "" \
     "ignore_date_range_output_file.txt"
-  assert_not_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt.md5"
+  if ${FIND_MTIME_SUPPORT}; then
+    assert_not_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt.md5"
+  else
+    assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt.md5"
+  fi
 }
 
 test_ignore_date_range_true() {

@@ -419,5 +419,9 @@ test_date_range_end() {
     "10" \
     >"${TEMP_DATA_DIR}/date_range_start_output_file.txt" \
     2>/dev/null
-  assert_not_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/date_range_start_output_file.txt"
+  if ${FIND_MTIME_SUPPORT}; then
+    assert_not_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/date_range_start_output_file.txt"
+  else
+    assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/date_range_start_output_file.txt"
+  fi
 }

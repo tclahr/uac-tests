@@ -49,7 +49,9 @@ test_path() {
     "root_directory" \
     "" \
     "path_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_output_file.txt"
+  fi
 }
 
 test_empty_path() {
@@ -74,7 +76,9 @@ test_path_with_white_spaces() {
     "root_directory" \
     "" \
     "path_with_white_spaces_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_with_white_spaces_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_with_white_spaces_output_file.txt"
+  fi
 }
 
 test_path_with_double_quotes() {
@@ -95,7 +99,9 @@ test_path_with_double_quotes() {
     "root_directory" \
     "" \
     "path_with_double_quotes_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/double\"quotes\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_with_double_quotes_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/double\"quotes\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_with_double_quotes_output_file.txt"
+  fi
 }
 
 test_file_list_absolute_path() {
@@ -116,7 +122,9 @@ test_file_list_absolute_path() {
     "root_directory" \
     "" \
     "file_list_absolute_path_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/file_list_absolute_path_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/file_list_absolute_path_output_file.txt"
+  fi
 }
 
 test_file_list_relative_path() {
@@ -140,7 +148,9 @@ test_file_list_relative_path() {
     "root_directory" \
     "" \
     "file_list_relative_path_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/file_list_relative_path_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/file_list_relative_path_output_file.txt"
+  fi
 }
 
 test_path_pattern_usr_lib() {
@@ -161,18 +171,24 @@ test_path_pattern_usr_lib() {
     "root_directory" \
     "" \
     "path_pattern_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
+  fi
 }
 
 test_path_pattern_etc() {
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
+  fi
 }
 
 test_path_pattern_find_operators_support() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
+    fi
   fi
 }
 
@@ -194,7 +210,9 @@ test_path_pattern_with_white_spaces() {
     "root_directory" \
     "" \
     "path_pattern_with_white_spaces_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_with_white_spaces_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_with_white_spaces_output_file.txt"
+  fi
 }
 
 test_name_pattern_so() {
@@ -215,18 +233,24 @@ test_name_pattern_so() {
     "root_directory" \
     "" \
     "name_pattern_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
+  fi
 }
 
 test_name_pattern_sh() {
-  assert_matches_file_content "^0\|${MOUNT_POINT}/bin/gpg.sh\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/gpg.sh\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
+  fi
 }
 
 test_name_pattern_find_operators_support() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
+    fi
   fi
 }
 
@@ -248,7 +272,9 @@ test_name_pattern_with_white_spaces() {
     "root_directory" \
     "" \
     "name_pattern_with_white_spaces_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space/file name\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_with_white_spaces_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space/file name\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_with_white_spaces_output_file.txt"
+  fi
 }
 
 test_exclude_path_pattern() {
@@ -269,22 +295,28 @@ test_exclude_path_pattern() {
     "root_directory" \
     "" \
     "exclude_path_pattern_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
+  fi
 }
 
 test_exclude_path_pattern_find_operators_support_usr_lib() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
+    fi
   fi
 }
 
 test_exclude_path_pattern_find_operators_support_etc() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
+    fi
   fi
 }
 
@@ -306,22 +338,28 @@ test_exclude_name_pattern() {
     "root_directory" \
     "" \
     "exclude_name_pattern_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
+  fi
 }
 
 test_exclude_name_pattern_find_operators_support_so() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
+    fi
   fi
 }
 
 test_exclude_name_pattern_find_operators_support_sh() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/gpg.sh\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/gpg.sh\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/gpg.sh\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/bin/gpg.sh\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
+    fi
   fi
 }
 
@@ -343,14 +381,18 @@ test_max_depth() {
     "root_directory" \
     "" \
     "max_depth_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt"
+  fi
 }
 
 test_no_max_depth_support() {
-  if ${FIND_MAXDEPTH_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_MAXDEPTH_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt"
+    fi
   fi
 }
 
@@ -372,7 +414,9 @@ test_type() {
     "root_directory" \
     "" \
     "type_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib\|[0-9]*\|d.........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/type_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib\|[0-9]*\|d.........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/type_output_file.txt"
+  fi
 }
 
 test_min_file_size() {
@@ -393,14 +437,18 @@ test_min_file_size() {
     "root_directory" \
     "" \
     "min_file_size_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/bin/fiftyb\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/fiftyb\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt"
+  fi
 }
 
 test_min_file_size_no_smaller_than_40b() {
-  if ${FIND_SIZE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_SIZE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt"
+    fi
   fi
 }
 
@@ -422,14 +470,18 @@ test_max_file_size() {
     "root_directory" \
     "" \
     "max_file_size_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt"
+  fi
 }
 
 test_min_file_size_no_greater_than_40b() {
-  if ${FIND_SIZE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/fiftyb\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/fiftyb\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_SIZE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/fiftyb\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/bin/fiftyb\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt"
+    fi
   fi
 }
 
@@ -451,14 +503,18 @@ test_perm() {
     "root_directory" \
     "" \
     "perm_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt"
+  fi
 }
 
 test_no_perm_support() {
-  if ${FIND_PERM_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt"
-  else
-    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_PERM_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt"
+    fi
   fi
 }
 
@@ -481,7 +537,13 @@ test_ignore_date_range() {
     "root_directory" \
     "" \
     "ignore_date_range_output_file.txt"
-  assert_not_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    if ${FIND_MTIME_SUPPORT}; then
+      assert_not_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+    else
+      assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+    fi
+  fi
 }
 
 test_ignore_date_range_true() {
@@ -503,7 +565,9 @@ test_ignore_date_range_true() {
     "root_directory" \
     "" \
     "ignore_date_range_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+  fi
 }
 
 test_output_directory() {
@@ -524,5 +588,7 @@ test_output_directory() {
     "root_directory" \
     "output_directory" \
     "output_directory_output_file.txt"
-  assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/output_directory/output_directory_output_file.txt"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/output_directory/output_directory_output_file.txt"
+  fi
 }
