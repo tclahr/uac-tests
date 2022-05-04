@@ -26,51 +26,51 @@ assert_not_equals()
   ne_actual="${2}"
 
   if [ "${ne_unexpected}" = "${ne_actual}" ]; then
-    fail "# expected different value than [${ne_unexpected}] but was [${ne_actual}]"
+    fail "# expected value different than [${ne_unexpected}] but was [${ne_actual}]"
   fi
 }
 
 assert_matches()
 {
-  ma_expected="${1}"
-  ma_actual="${2}"
+  ma_string="${1}"
+  ma_regex="${2}"
 
-  if echo "${ma_actual}" | grep -q -E "${ma_expected}"; then
+  if echo "${ma_string}" | grep -q -E "${ma_regex}"; then
     true
   else
-    fail "# expected regex [${ma_expected}] to match [${ma_actual}]"
+    fail "# expected regex [${ma_regex}] to match [${ma_string}]"
   fi
 }
 
 assert_not_matches()
 {
-  nm_unexpected="${1}"
-  nm_actual="${2}"
+  nm_string="${1}"
+  nm_regex="${2}"
 
-  if echo "${nm_actual}" | grep -q -E "${nm_unexpected}"; then
-    fail "# expected regex [${nm_unexpected}] should not match but matched [${nm_actual}]"
+  if echo "${nm_string}" | grep -q -E "${nm_regex}"; then
+    fail "# expected regex [${nm_regex}] should not match but matched [${nm_string}]"
   fi
 }
 
 assert_matches_file_content()
 {
-  mf_expected="${1}"
+  mf_regex="${1}"
   mf_file="${2}"
 
-  if grep -q -E "${mf_expected}" "${mf_file}"; then
+  if grep -q -E "${mf_regex}" "${mf_file}"; then
     true
   else
-    fail "# expected regex [${mf_expected}] to match file content [${mf_file}]"
+    fail "# expected regex [${mf_regex}] to match file content [${mf_file}]"
   fi
 }
 
 assert_not_matches_file_content()
 {
-  nf_expected="${1}"
+  nf_regex="${1}"
   nf_file="${2}"
 
-  if grep -q -E "${nf_expected}" "${nf_file}"; then
-    fail "# expected regex [${nf_expected}] should not match but matched file content [${nf_file}]"
+  if grep -q -E "${nf_regex}" "${nf_file}"; then
+    fail "# expected regex [${nf_regex}] should not match but matched file content [${nf_file}]"
   fi
 }
 
@@ -79,7 +79,7 @@ assert()
   as_assertion="${1}"
   
   as_status=0
-  eval "(${as_assertion})" >/dev/null 2>/dev/null && as_status=$? || as_status=$?
+  eval "(${as_assertion})" >/dev/null && as_status=$? || as_status=$?
   if [ "${as_status}" -ne 0 ]; then
     fail "# expected status code [0] but was [${as_status}]"
   fi
@@ -90,7 +90,7 @@ assert_fails()
   af_assertion="${1}"
   
   af_status=0
-  eval "(${af_assertion})" >/dev/null 2>/dev/null && af_status=$? || af_status=$?
+  eval "(${af_assertion})" >/dev/null && af_status=$? || af_status=$?
   if [ "${af_status}" -eq 0 ]; then
     fail "# expected different status code than [0] but was [${af_status}]"
   fi
@@ -102,7 +102,7 @@ assert_status_code()
   sc_assertion="${2}"
   
   sc_status=0
-  eval "(${sc_assertion})" >/dev/null 2>/dev/null && sc_status=$? || sc_status=$?
+  eval "(${sc_assertion})" >/dev/null && sc_status=$? || sc_status=$?
   if [ "${sc_status}" -ne "${sc_expected_status}" ]; then
     fail "# expected status code [${sc_expected_status}] but was [${sc_status}]"
   fi
@@ -121,7 +121,7 @@ run_test()
 {
   ru_test="${1}"
   #set -e
-  "${ru_test}" && printf %b "ok ${uu_CURRENT_TEST_NUMBER} ${ru_test}\n"
+  "${ru_test}" 2>>"${TEMP_DIR}/run_test.stderr" && printf %b "ok ${uu_CURRENT_TEST_NUMBER} ${ru_test}\n"
 }
 
 run_tests()
