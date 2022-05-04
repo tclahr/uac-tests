@@ -427,7 +427,11 @@ test_ignore_date_range() {
     "root_directory" \
     "" \
     "ignore_date_range_output_file.txt"
-  assert_not_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+  if ${FIND_MTIME_SUPPORT}; then
+    assert_not_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+  else
+    assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+  fi
 }
 
 test_ignore_date_range_true() {
