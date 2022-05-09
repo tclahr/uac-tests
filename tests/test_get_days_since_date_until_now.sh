@@ -17,7 +17,7 @@ after_each_test() {
 }
 
 test_date_as_parameter() {
-  assert "get_days_since_date_until_now 2022-01-01"
+  assert "get_days_since_date_until_now 1985-10-26"
 }
 
 test_invalid_date_as_parameter() {
