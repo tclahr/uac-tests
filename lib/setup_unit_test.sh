@@ -45,6 +45,7 @@ setup_unit_test()
   
   # /usr/lib
   mkdir -p "${MOUNT_POINT}/usr/lib"
+  mkdir -p "${MOUNT_POINT}/usr/lib/empty"
   echo "/usr/lib/library.so.1" >"${MOUNT_POINT}/usr/lib/library.so.1"
   echo "/usr/lib/library.so.2" >"${MOUNT_POINT}/usr/lib/library.so.2"
   echo "/usr/lib/shared.so.1" >"${MOUNT_POINT}/usr/lib/shared.so.1"

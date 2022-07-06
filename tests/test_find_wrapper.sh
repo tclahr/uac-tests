@@ -288,7 +288,7 @@ test_type() {
     "" \
     "" \
     "" \
-    "d" \
+    "f" \
     "" \
     "" \
     "" \
@@ -296,11 +296,15 @@ test_type() {
     "" \
     >"${TEMP_DATA_DIR}/type_output_file.txt" \
     2>/dev/null
-  assert_matches_file_content "${MOUNT_POINT}/bin" "${TEMP_DATA_DIR}/type_output_file.txt"
+  assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/type_output_file.txt"
 }
 
-test_type_only_directories() {
-  assert_not_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/type_output_file.txt"
+test_no_type_support() {
+  if ${FIND_TYPE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+    assert_not_matches_file_content "${MOUNT_POINT}/usr/lib/empty" "${TEMP_DATA_DIR}/max_depth_output_file.txt"
+  else
+    assert_matches_file_content "${MOUNT_POINT}/usr/lib/empty" "${TEMP_DATA_DIR}/max_depth_output_file.txt"
+  fi
 }
 
 test_min_file_size() {
