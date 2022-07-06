@@ -9,7 +9,7 @@ UAC source code is available here: [github.com/tclahr/uac](https://github.com/tc
 
 ## Getting Started
 
-Development for UAC is easy, as the tool is written in shell script. UAC uses the Bourne shell (/bin/sh) on the target system. By adhering to the Bourne shell, UAC remains portable, and allows it to run on any Unix-like system.
+Development for UAC is easy, as the tool is written in shell script. UAC uses the Bourne shell (/bin/sh) on the target system. By adhering to the Bourne shell, UAC remains portable and allows it to run on any Unix-like system.
 
 ## Usage
 
