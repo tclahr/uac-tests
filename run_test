@@ -117,6 +117,15 @@ assert_file_exists()
   fi
 }
 
+assert_file_not_exists()
+{
+  fe_file="${1}"
+
+  if [ -f "${fe_file}" ]; then
+    fail "# expected file to not exist [${fe_file}]"
+  fi
+}
+
 run_test()
 {
   ru_test="${1}"
