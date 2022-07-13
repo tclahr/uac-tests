@@ -296,14 +296,16 @@ test_type() {
     "" \
     >"${TEMP_DATA_DIR}/type_output_file.txt" \
     2>/dev/null
-  assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/type_output_file.txt"
+  if ${FIND_TYPE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/type_output_file.txt"
+  else
+    assert_file_not_exists "${TEMP_DATA_DIR}/type_output_file.txt"
+  fi
 }
 
 test_no_type_support() {
   if ${FIND_TYPE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
     assert_not_matches_file_content "${MOUNT_POINT}/usr/lib/empty" "${TEMP_DATA_DIR}/max_depth_output_file.txt"
-  else
-    assert_matches_file_content "${MOUNT_POINT}/usr/lib/empty" "${TEMP_DATA_DIR}/max_depth_output_file.txt"
   fi
 }
 
@@ -377,14 +379,16 @@ test_perm() {
     "" \
     >"${TEMP_DATA_DIR}/perm_output_file.txt" \
     2>/dev/null
-  assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/perm_output_file.txt"
+  if ${FIND_TYPE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
+    assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/perm_output_file.txt"
+  else
+    assert_file_not_exists "${TEMP_DATA_DIR}/perm_output_file.txt"
+  fi
 }
 
 test_no_perm_support() {
   if ${FIND_PERM_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
     assert_not_matches_file_content "${MOUNT_POINT}/usr/bin/host" "${TEMP_DATA_DIR}/perm_output_file.txt"
-  else
-    assert_matches_file_content "${MOUNT_POINT}/usr/bin/host" "${TEMP_DATA_DIR}/perm_output_file.txt"
   fi
 }
 
