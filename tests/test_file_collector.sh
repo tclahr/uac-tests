@@ -38,6 +38,7 @@ test_path() {
     "" \
     "" \
     "" \
+    "root_directory" \
     "output_file.txt"
   assert_matches_file_content "${MOUNT_POINT}/etc/issue" "${TEMP_DATA_DIR}/output_file.txt"
 }
