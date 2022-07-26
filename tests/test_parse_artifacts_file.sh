@@ -87,6 +87,8 @@ setup_test() {
     shift
     fl_ignore_date_range="${1:-false}"
     shift
+    fl_root_output_directory="${1:-}"
+    shift
     fl_output_file="${1:-}"
 
     printf %b "file_collector \"${fl_path}\" \"${fl_is_file_list}\" \
@@ -94,7 +96,7 @@ setup_test() {
 \"${fl_exclude_name_pattern}\" \"${fl_exclude_file_system}\" \
 \"${fl_max_depth}\" \"${fl_file_type}\" \"${fl_min_file_size}\" \
 \"${fl_max_file_size}\" \"${fl_permissions}\" \"${fl_ignore_date_range}\" \
-\"${fl_output_file}\"\n"
+\"${fl_root_output_directory}\" \"${fl_output_file}\"\n"
   }
 
   hash_collector()
@@ -309,7 +311,7 @@ artifacts:
 EOF
   _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
   assert_equals "file_collector \"/usr\" \"true\" \"/usr/bin\" \"*.txt\" \"/usr/lib,/usr/share\" \"*.html\" \"apfs,ntfs\" \
-\"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \".files.tmp\"" "${_result}"
+\"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \"output_directory\" \".files.tmp\"" "${_result}"
 }
 
 test_success_on_valid_hash() {
