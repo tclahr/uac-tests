@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# shellcheck disable=SC2006
+# shellcheck disable=SC2006,SC2317
 
 setup_test() {
   TEMP_DATA_DIR="${TEMP_DIR}/test_parse_artifacts_file"
@@ -12,11 +12,13 @@ setup_test() {
     cm_root_output_directory="${3:-}"
     cm_output_directory="${4:-}"
     cm_output_file="${5:-}"
-    cm_compress_output_file="${6:-false}"
+    cm_stderr_output_file="${6:-}"
+    cm_compress_output_file="${7:-false}"
 
     printf %b "command_collector \"${cm_loop_command}\" \
 \"${cm_command}\" \"${cm_root_output_directory}\" \"${cm_output_directory}\" \
-\"${cm_output_file}\" \"${cm_compress_output_file}\"\n"
+\"${cm_output_file}\" \"${cm_stderr_output_file}\" \
+\"${cm_compress_output_file}\"\n"
   }
 
   find_collector()
@@ -213,7 +215,7 @@ artifacts:
     output_file: 01.txt
 EOF
   _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
-  assert_equals "command_collector \"\" \"ps\" \"output_directory\" \"\" \"01.txt\" \"false\"" "${_result}"
+  assert_equals "command_collector \"\" \"ps\" \"output_directory\" \"\" \"01.txt\" \"\" \"false\"" "${_result}"
 }
 
 test_success_on_valid_command_with_compression() {
@@ -228,7 +230,7 @@ artifacts:
     compress_output_file: true
 EOF
   _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
-  assert_equals "command_collector \"\" \"ps\" \"output_directory\" \"\" \"01.txt\" \"true\"" "${_result}"
+  assert_equals "command_collector \"\" \"ps\" \"output_directory\" \"\" \"01.txt\" \"\" \"true\"" "${_result}"
 }
 
 test_success_on_valid_command_with_output_directory() {
@@ -243,7 +245,23 @@ artifacts:
     output_file: 01.txt
 EOF
   _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
-  assert_equals "command_collector \"\" \"ps\" \"output_directory\" \"subdir\" \"01.txt\" \"false\"" "${_result}"
+  assert_equals "command_collector \"\" \"ps\" \"output_directory\" \"subdir\" \"01.txt\" \"\" \"false\"" "${_result}"
+}
+
+test_success_on_valid_command_with_stderr_output_file() {
+  cat << EOF >>"${TEMP_DATA_DIR}/artifacts/01.yaml"
+artifacts:
+  -
+    description: 01
+    supported_os: [all]
+    collector: command
+    command: ps
+    output_directory: subdir
+    output_file: 01.txt
+    stderr_output_file: custom.stderr
+EOF
+  _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
+  assert_equals "command_collector \"\" \"ps\" \"output_directory\" \"subdir\" \"01.txt\" \"custom.stderr\" \"false\"" "${_result}"
 }
 
 test_success_on_valid_loop_command() {
@@ -258,7 +276,7 @@ artifacts:
     output_file: 01.txt
 EOF
   _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
-  assert_equals "command_collector \"ls /proc\" \"ps\" \"output_directory\" \"\" \"01.txt\" \"false\"" "${_result}"
+  assert_equals "command_collector \"ls /proc\" \"ps\" \"output_directory\" \"\" \"01.txt\" \"\" \"false\"" "${_result}"
 }
 
 test_success_on_valid_find() {

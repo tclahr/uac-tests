@@ -57,10 +57,14 @@ assert_matches_file_content()
   mf_regex="${1}"
   mf_file="${2}"
 
-  if grep -q -E "${mf_regex}" "${mf_file}"; then
-    true
+  if [ -f "${mf_file}" ]; then
+    if grep -q -E "${mf_regex}" "${mf_file}"; then
+      true
+    else
+      fail "# expected regex [${mf_regex}] to match file content [${mf_file}]"
+    fi
   else
-    fail "# expected regex [${mf_regex}] to match file content [${mf_file}]"
+    fail "# expected file not found [${mf_file}]"
   fi
 }
 
@@ -69,8 +73,12 @@ assert_not_matches_file_content()
   nf_regex="${1}"
   nf_file="${2}"
 
-  if grep -q -E "${nf_regex}" "${nf_file}"; then
-    fail "# expected regex [${nf_regex}] should not match but matched file content [${nf_file}]"
+  if [ -f "${nf_file}" ]; then
+    if grep -q -E "${nf_regex}" "${nf_file}"; then
+      fail "# expected regex [${nf_regex}] should not match but matched file content [${nf_file}]"
+    fi
+  else
+    fail "# expected file not found [${nf_file}]"
   fi
 }
 
