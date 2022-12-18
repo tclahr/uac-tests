@@ -50,12 +50,17 @@ test_path() {
     "" \
     "root_directory" \
     "" \
-    "path_output_file.txt"
+    "path_output_file.txt" \
+    ""
   assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.md5"
 }
 
+test_stderr_file_exists() {
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.stderr"
+}
+
 test_empty_path() {
-  assert_fails "hash_collector \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" 2>/dev/null"
+  assert_fails "hash_collector \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" 2>/dev/null"
 }
 
 test_path_with_white_spaces() {
@@ -75,7 +80,8 @@ test_path_with_white_spaces() {
     "" \
     "root_directory" \
     "" \
-    "path_with_white_spaces_output_file.txt"
+    "path_with_white_spaces_output_file.txt" \
+    ""
   assert_matches_file_content "1c9450a30cea35865b10519e59f31e3e" "${TEMP_DATA_DIR}/root_directory/path_with_white_spaces_output_file.txt.md5"
 }
 
@@ -96,7 +102,8 @@ test_path_with_double_quotes() {
     "" \
     "root_directory" \
     "" \
-    "path_with_double_quotes_output_file.txt"
+    "path_with_double_quotes_output_file.txt" \
+    ""
   assert_matches_file_content "95f7cb0a18169634db6a0d30cc30e287" "${TEMP_DATA_DIR}/root_directory/path_with_double_quotes_output_file.txt.md5"
 }
 
@@ -117,7 +124,8 @@ test_file_list_absolute_path() {
     "" \
     "root_directory" \
     "" \
-    "file_list_absolute_path_output_file.txt"
+    "file_list_absolute_path_output_file.txt" \
+    ""
   assert_matches_file_content "8d8274be55beb805e21db30e20601c89" "${TEMP_DATA_DIR}/root_directory/file_list_absolute_path_output_file.txt.md5"
 }
 
@@ -141,7 +149,8 @@ test_file_list_relative_path() {
     "" \
     "root_directory" \
     "" \
-    "file_list_relative_path_output_file.txt"
+    "file_list_relative_path_output_file.txt" \
+    ""
   assert_matches_file_content "8d8274be55beb805e21db30e20601c89" "${TEMP_DATA_DIR}/root_directory/file_list_relative_path_output_file.txt.md5"
 }
 
@@ -162,7 +171,8 @@ test_path_pattern_usr_lib() {
     "" \
     "root_directory" \
     "" \
-    "path_pattern_output_file.txt"
+    "path_pattern_output_file.txt" \
+    ""
   assert_matches_file_content "844e7199b251dc8d08df5f87ec686e1e" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt.md5"
 }
 
@@ -195,7 +205,8 @@ test_path_pattern_with_white_spaces() {
     "" \
     "root_directory" \
     "" \
-    "path_pattern_with_white_spaces_output_file.txt"
+    "path_pattern_with_white_spaces_output_file.txt" \
+    ""
   assert_matches_file_content "1c9450a30cea35865b10519e59f31e3e" "${TEMP_DATA_DIR}/root_directory/path_pattern_with_white_spaces_output_file.txt.md5"
 }
 
@@ -216,7 +227,8 @@ test_name_pattern_so() {
     "" \
     "root_directory" \
     "" \
-    "name_pattern_output_file.txt"
+    "name_pattern_output_file.txt" \
+    ""
   assert_matches_file_content "844e7199b251dc8d08df5f87ec686e1e" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt.md5"
 }
 
@@ -249,7 +261,8 @@ test_name_pattern_with_white_spaces() {
     "" \
     "root_directory" \
     "" \
-    "name_pattern_with_white_spaces_output_file.txt"
+    "name_pattern_with_white_spaces_output_file.txt" \
+    ""
   assert_matches_file_content "1c9450a30cea35865b10519e59f31e3e" "${TEMP_DATA_DIR}/root_directory/name_pattern_with_white_spaces_output_file.txt.md5"
 }
 
@@ -270,7 +283,8 @@ test_exclude_path_pattern() {
     "" \
     "root_directory" \
     "" \
-    "exclude_path_pattern_output_file.txt"
+    "exclude_path_pattern_output_file.txt" \
+    ""
   assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt.md5"
 }
 
@@ -307,7 +321,8 @@ test_exclude_name_pattern() {
     "" \
     "root_directory" \
     "" \
-    "exclude_name_pattern_output_file.txt"
+    "exclude_name_pattern_output_file.txt" \
+    ""
   assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt.md5"
 }
 
@@ -344,7 +359,8 @@ test_max_depth() {
     "" \
     "root_directory" \
     "" \
-    "max_depth_output_file.txt"
+    "max_depth_output_file.txt" \
+    ""
   assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt.md5"
 }
 
@@ -373,7 +389,8 @@ test_type() {
     "" \
     "root_directory" \
     "" \
-    "type_output_file.txt"
+    "type_output_file.txt" \
+    ""
   assert_not_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/type_output_file.txt.md5"
 }
 
@@ -394,7 +411,8 @@ test_min_file_size() {
     "" \
     "root_directory" \
     "" \
-    "min_file_size_output_file.txt"
+    "min_file_size_output_file.txt" \
+    ""
   assert_matches_file_content "ed9fbd6b98461aeb46c310c94c83c325" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt.md5"
 }
 
@@ -423,7 +441,8 @@ test_max_file_size() {
     "" \
     "root_directory" \
     "" \
-    "max_file_size_output_file.txt"
+    "max_file_size_output_file.txt" \
+    ""
   assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt.md5"
 }
 
@@ -452,7 +471,8 @@ test_perm() {
     "" \
     "root_directory" \
     "" \
-    "perm_output_file.txt"
+    "perm_output_file.txt" \
+    ""
   assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt.md5"
 }
 
@@ -482,7 +502,8 @@ test_ignore_date_range() {
     "" \
     "root_directory" \
     "" \
-    "ignore_date_range_output_file.txt"
+    "ignore_date_range_output_file.txt" \
+    ""
   if ${FIND_MTIME_SUPPORT}; then
     assert_not_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt.md5"
   else
@@ -508,7 +529,8 @@ test_ignore_date_range_true() {
     "true" \
     "root_directory" \
     "" \
-    "ignore_date_range_output_file.txt"
+    "ignore_date_range_output_file.txt" \
+    ""
   assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt.md5"
 }
 
@@ -529,7 +551,8 @@ test_output_directory() {
     "" \
     "root_directory" \
     "output_directory" \
-    "output_directory_output_file.txt"
+    "output_directory_output_file.txt" \
+    ""
   assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/output_directory/output_directory_output_file.txt.md5"
 }
 
@@ -553,7 +576,8 @@ test_sha1_algorithm() {
       "" \
       "root_directory" \
       "" \
-      "path_output_file.txt"
+      "path_output_file.txt" \
+      ""
     assert_matches_file_content "9c7169dd204698f0fa5490fa117826a30c331126" "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.sha1"
   fi
 }
@@ -578,7 +602,30 @@ test_sha256_algorithm() {
       "" \
       "root_directory" \
       "" \
-      "path_output_file.txt"
+      "path_output_file.txt" \
+      ""
     assert_matches_file_content "7d0ac3f078127faed1aff3ae1adccf9dce266457753d15d423324a8ccb55edb1" "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.sha256"
   fi
+}
+
+test_stderr_output_file() {
+  hash_collector \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "root_directory" \
+    "" \
+    "stderr_output_file.txt" \
+    "custom_stderr_output_file.stderr"
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/custom_stderr_output_file.stderr"
 }

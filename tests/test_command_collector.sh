@@ -35,7 +35,7 @@ after_each_test() {
 }
 
 test_simple_command() {
-  assert "command_collector \"\" \"__ps\" \"root_directory\" \"\" \"ps.txt\" \"\""
+  assert "command_collector \"\" \"__ps\" \"root_directory\" \"\" \"ps.txt\" \"\" \"\""
 }
 
 test_simple_command_output_file_exists() {
@@ -51,15 +51,19 @@ test_simple_command_stderr_file_exists() {
 }
 
 test_simple_command_compressed_output_file() {
-  assert "command_collector \"\" \"__uname\" \"root_directory\" \"\" \"uname.txt\" \"true\""
+  assert "command_collector \"\" \"__uname\" \"root_directory\" \"\" \"uname.txt\" \"custom.stderr\" \"true\""
 }
 
 test_simple_command_compressed_output_file_exists() {
   assert_file_exists "${TEMP_DATA_DIR}/root_directory/uname.txt.gz"
 }
 
+test_simple_command_custom_stderr_file_exists() {
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/custom.stderr"
+}
+
 test_simple_command_output_directory() {
-  assert "command_collector \"\" \"__ps\" \"root_directory\" \"output_directory\" \"ps.txt\" \"\""
+  assert "command_collector \"\" \"__ps\" \"root_directory\" \"output_directory\" \"ps.txt\" \"\" \"\""
 }
 
 test_simple_command_output_directory_output_file_exists() {
@@ -71,15 +75,24 @@ test_simple_command_output_directory_output_file_matches() {
 }
 
 test_empty_command() {
-  assert_fails "command_collector \"\" \"\" \"root_directory\" \"\" \"empty_command.txt\" \"\""
+  assert_fails "command_collector \"\" \"\" \"root_directory\" \"\" \"empty_command.txt\" \"\" \"\""
 }
 
 test_loop_command_output_file_exists() {
-  command_collector "ls -l \"${MOUNT_POINT}\"/proc/[0-9]*/cmd | awk -F\"/proc/|/cmd\" '{print \$2}'" "cat \"${MOUNT_POINT}\"/proc/%line%/cmd" "root_directory" "proc/%line%" "proc_%line%_cmd.txt" ""
+  command_collector "ls -l \"${MOUNT_POINT}\"/proc/[0-9]*/cmd | awk -F\"/proc/|/cmd\" '{print \$2}'" "cat \"${MOUNT_POINT}\"/proc/%line%/cmd" "root_directory" "proc/%line%" "proc_%line%_cmd.txt" "" ""
   assert_file_exists "${TEMP_DATA_DIR}/root_directory/proc/1/proc_1_cmd.txt"
 }
 
 test_loop_command_compressed_output_file_exists() {
-  command_collector "ls -l \"${MOUNT_POINT}\"/proc/[0-9]*/cmd | awk -F\"/proc/|/cmd\" '{print \$2}'" "cat \"${MOUNT_POINT}\"/proc/%line%/cmd" "root_directory" "proc/%line%" "proc_%line%_cmd.txt" "true"
+  command_collector "ls -l \"${MOUNT_POINT}\"/proc/[0-9]*/cmd | awk -F\"/proc/|/cmd\" '{print \$2}'" "cat \"${MOUNT_POINT}\"/proc/%line%/cmd" "root_directory" "proc/%line%" "proc_%line%_cmd.txt" "custom_%line%.stderr" "true"
   assert_file_exists "${TEMP_DATA_DIR}/root_directory/proc/1/proc_1_cmd.txt.gz"
+}
+
+test_loop_command_custom_stderr_file_exists() {
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/proc/1/custom_1.stderr"
+}
+
+test_replace_output_file_variable_in_command() {
+  command_collector "" "touch %output_file%" "root_directory" "" "replace_output_file_variable.txt" "" ""
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/replace_output_file_variable.txt"
 }
