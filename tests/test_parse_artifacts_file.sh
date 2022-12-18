@@ -21,46 +21,6 @@ setup_test() {
 \"${cm_compress_output_file}\"\n"
   }
 
-  find_collector()
-  {
-    fm_path="${1:-}"
-    shift
-    fm_path_pattern="${1:-}"
-    shift
-    fm_name_pattern="${1:-}"
-    shift
-    fm_exclude_path_pattern="${1:-}"
-    shift
-    fm_exclude_name_pattern="${1:-}"
-    shift
-    fm_exclude_file_system="${1:-}"
-    shift
-    fm_max_depth="${1:-}"
-    shift
-    fm_file_type="${1:-}"
-    shift
-    fm_min_file_size="${1:-}"
-    shift
-    fm_max_file_size="${1:-}"
-    shift
-    fm_permissions="${1:-}"
-    shift
-    fm_ignore_date_range="${1:-false}"
-    shift
-    fm_root_output_directory="${1:-}"
-    shift
-    fm_output_directory="${1:-}"
-    shift
-    fm_output_file="${1:-}"
-
-    printf %b "find_collector \"${fm_path}\" \
-\"${fm_path_pattern}\" \"${fm_name_pattern}\" \"${fm_exclude_path_pattern}\" \
-\"${fm_exclude_name_pattern}\" \"${fm_exclude_file_system}\" \
-\"${fm_max_depth}\" \"${fm_file_type}\" \"${fm_min_file_size}\" \
-\"${fm_max_file_size}\" \"${fm_permissions}\" \"${fm_ignore_date_range}\" \
-\"${fm_root_output_directory}\" \"${fm_output_directory}\" \"${fm_output_file}\"\n"
-  }
-
   file_collector()
   {
     fl_path="${1:-}"
@@ -101,6 +61,49 @@ setup_test() {
 \"${fl_root_output_directory}\" \"${fl_output_file}\"\n"
   }
 
+  find_collector()
+  {
+    fm_path="${1:-}"
+    shift
+    fm_path_pattern="${1:-}"
+    shift
+    fm_name_pattern="${1:-}"
+    shift
+    fm_exclude_path_pattern="${1:-}"
+    shift
+    fm_exclude_name_pattern="${1:-}"
+    shift
+    fm_exclude_file_system="${1:-}"
+    shift
+    fm_max_depth="${1:-}"
+    shift
+    fm_file_type="${1:-}"
+    shift
+    fm_min_file_size="${1:-}"
+    shift
+    fm_max_file_size="${1:-}"
+    shift
+    fm_permissions="${1:-}"
+    shift
+    fm_ignore_date_range="${1:-false}"
+    shift
+    fm_root_output_directory="${1:-}"
+    shift
+    fm_output_directory="${1:-}"
+    shift
+    fm_output_file="${1:-}"
+    shift
+    fm_stderr_output_file="${1:-}"
+
+    printf %b "find_collector \"${fm_path}\" \
+\"${fm_path_pattern}\" \"${fm_name_pattern}\" \"${fm_exclude_path_pattern}\" \
+\"${fm_exclude_name_pattern}\" \"${fm_exclude_file_system}\" \
+\"${fm_max_depth}\" \"${fm_file_type}\" \"${fm_min_file_size}\" \
+\"${fm_max_file_size}\" \"${fm_permissions}\" \"${fm_ignore_date_range}\" \
+\"${fm_root_output_directory}\" \"${fm_output_directory}\" \
+\"${fm_output_file}\" \"${fm_stderr_output_file}\"\n"
+  }
+
   hash_collector()
   {
     hm_path="${1:-}"
@@ -134,13 +137,16 @@ setup_test() {
     hm_output_directory="${1:-}"
     shift
     hm_output_file="${1:-}"
+    shift
+    hm_stderr_output_file="${1:-}"
 
     printf %b "hash_collector \"${hm_path}\" \"${hm_is_file_list}\" \
 \"${hm_path_pattern}\" \"${hm_name_pattern}\" \"${hm_exclude_path_pattern}\" \
 \"${hm_exclude_name_pattern}\" \"${hm_exclude_file_system}\" \
 \"${hm_max_depth}\" \"${hm_file_type}\" \"${hm_min_file_size}\" \
 \"${hm_max_file_size}\" \"${hm_permissions}\" \"${hm_ignore_date_range}\" \
-\"${hm_root_output_directory}\" \"${hm_output_directory}\" \"${hm_output_file}\"\n"
+\"${hm_root_output_directory}\" \"${hm_output_directory}\" \
+\"${hm_output_file}\" \"${hm_stderr_output_file}\"\n"
   }
 
   stat_collector()
@@ -176,13 +182,16 @@ setup_test() {
     sm_output_directory="${1:-}"
     shift
     sm_output_file="${1:-}"
+    shift
+    sm_stderr_output_file="${1:-}"
 
     printf %b "stat_collector \"${sm_path}\" \"${sm_is_file_list}\" \
 \"${sm_path_pattern}\" \"${sm_name_pattern}\" \"${sm_exclude_path_pattern}\" \
 \"${sm_exclude_name_pattern}\" \"${sm_exclude_file_system}\" \
 \"${sm_max_depth}\" \"${sm_file_type}\" \"${sm_min_file_size}\" \
 \"${sm_max_file_size}\" \"${sm_permissions}\" \"${sm_ignore_date_range}\" \
-\"${sm_root_output_directory}\" \"${sm_output_directory}\" \"${sm_output_file}\"\n"
+\"${sm_root_output_directory}\" \"${sm_output_directory}\" \
+\"${sm_output_file}\" \"${sm_stderr_output_file}\"\n"
   }
 }
 
@@ -279,33 +288,6 @@ EOF
   assert_equals "command_collector \"ls /proc\" \"ps\" \"output_directory\" \"\" \"01.txt\" \"\" \"false\"" "${_result}"
 }
 
-test_success_on_valid_find() {
-  cat << EOF >>"${TEMP_DATA_DIR}/artifacts/01.yaml"
-artifacts:
-  -
-    description: 01
-    supported_os: [all]
-    collector: find
-    path: /usr
-    path_pattern: ["/usr/bin"]
-    name_pattern: ["*.txt"]
-    exclude_path_pattern: [/usr/lib,/usr/share]
-    exclude_name_pattern: [*.html]
-    exclude_file_system: [apfs,ntfs]
-    max_depth: 5
-    file_type: d
-    min_file_size: 1000
-    max_file_size: 5000
-    permissions: 755
-    ignore_date_range: true
-    output_directory: subdir   
-    output_file: 01.txt
-EOF
-  _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
-  assert_equals "find_collector \"/usr\" \"/usr/bin\" \"*.txt\" \"/usr/lib,/usr/share\" \"*.html\" \"apfs,ntfs\" \
-\"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \"output_directory\" \"subdir\" \"01.txt\"" "${_result}"
-}
-
 test_success_on_valid_file() {
   cat << EOF >>"${TEMP_DATA_DIR}/artifacts/01.yaml"
 artifacts:
@@ -332,6 +314,34 @@ EOF
 \"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \"output_directory\" \".files.tmp\"" "${_result}"
 }
 
+test_success_on_valid_find() {
+  cat << EOF >>"${TEMP_DATA_DIR}/artifacts/01.yaml"
+artifacts:
+  -
+    description: 01
+    supported_os: [all]
+    collector: find
+    path: /usr
+    path_pattern: ["/usr/bin"]
+    name_pattern: ["*.txt"]
+    exclude_path_pattern: [/usr/lib,/usr/share]
+    exclude_name_pattern: [*.html]
+    exclude_file_system: [apfs,ntfs]
+    max_depth: 5
+    file_type: d
+    min_file_size: 1000
+    max_file_size: 5000
+    permissions: 755
+    ignore_date_range: true
+    output_directory: subdir   
+    output_file: 01.txt
+    stderr_output_file: 01.stderr
+EOF
+  _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
+  assert_equals "find_collector \"/usr\" \"/usr/bin\" \"*.txt\" \"/usr/lib,/usr/share\" \"*.html\" \"apfs,ntfs\" \
+\"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \"output_directory\" \"subdir\" \"01.txt\" \"01.stderr\"" "${_result}"
+}
+
 test_success_on_valid_hash() {
   cat << EOF >>"${TEMP_DATA_DIR}/artifacts/01.yaml"
 artifacts:
@@ -354,10 +364,11 @@ artifacts:
     ignore_date_range: true
     output_directory: subdir   
     output_file: 01.txt
+    stderr_output_file: 01.stderr
 EOF
   _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
   assert_equals "hash_collector \"/usr\" \"true\" \"/usr/bin\" \"*.txt\" \"/usr/lib,/usr/share\" \"*.html\" \"apfs,ntfs\" \
-\"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \"output_directory\" \"subdir\" \"01.txt\"" "${_result}"
+\"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \"output_directory\" \"subdir\" \"01.txt\" \"01.stderr\"" "${_result}"
 }
 
 test_success_on_valid_stat() {
@@ -382,8 +393,9 @@ artifacts:
     ignore_date_range: true
     output_directory: subdir   
     output_file: 01.txt
+    stderr_output_file: 01.stderr
 EOF
   _result=`parse_artifacts_file "${TEMP_DATA_DIR}/artifacts/01.yaml" "output_directory"`
   assert_equals "stat_collector \"/usr\" \"true\" \"/usr/bin\" \"*.txt\" \"/usr/lib,/usr/share\" \"*.html\" \"apfs,ntfs\" \
-\"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \"output_directory\" \"subdir\" \"01.txt\"" "${_result}"
+\"5\" \"d\" \"1000\" \"5000\" \"755\" \"true\" \"output_directory\" \"subdir\" \"01.txt\" \"01.stderr\"" "${_result}"
 }
