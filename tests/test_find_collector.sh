@@ -52,8 +52,29 @@ test_path() {
   assert_matches_file_content "${MOUNT_POINT}/etc/issue" "${TEMP_DATA_DIR}/root_directory/path_output_file.txt"
 }
 
+test_empty_stderr_file_exists() {
+  assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.stderr"
+}
+
 test_stderr_file_exists() {
-  assert_file_exists "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.stderr"
+  find_collector \
+    "/__invalidpath" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "root_directory" \
+    "" \
+    "__invalidpath.txt" \
+    ""
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/__invalidpath.txt.stderr"
 }
 
 test_empty_path() {
@@ -447,7 +468,7 @@ test_ignore_date_range() {
     "ignore_date_range_output_file.txt" \
     ""
   if ${FIND_MTIME_SUPPORT}; then
-    assert_not_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+    assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
   else
     assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
   fi
@@ -498,7 +519,7 @@ test_output_directory() {
 
 test_stderr_output_file() {
   find_collector \
-    "/" \
+    "/__invalidpath" \
     "" \
     "" \
     "" \
@@ -512,7 +533,7 @@ test_stderr_output_file() {
     "" \
     "root_directory" \
     "" \
-    "stderr_output_file.txt" \
+    "__invalidpath.txt" \
     "custom_stderr_output_file.stderr"
     assert_file_exists "${TEMP_DATA_DIR}/root_directory/custom_stderr_output_file.stderr"
 }

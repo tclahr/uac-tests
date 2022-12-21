@@ -46,12 +46,17 @@ test_simple_command_output_file_matches_content() {
   assert_matches_file_content "kthreadd" "${TEMP_DATA_DIR}/root_directory/ps.txt"
 }
 
+test_simple_command_empty_stderr_file() {
+  assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/ps.txt.stderr"
+}
+
 test_simple_command_stderr_file_exists() {
-  assert_file_exists "${TEMP_DATA_DIR}/root_directory/ps.txt.stderr"
+  command_collector "" "__invalidcommand" "root_directory" "" "__invalidcommand.txt" "" ""
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/__invalidcommand.txt.stderr"
 }
 
 test_simple_command_compressed_output_file() {
-  assert "command_collector \"\" \"__uname\" \"root_directory\" \"\" \"uname.txt\" \"custom.stderr\" \"true\""
+  assert "command_collector \"\" \"__uname\" \"root_directory\" \"\" \"uname.txt\" \"\" \"true\""
 }
 
 test_simple_command_compressed_output_file_exists() {
@@ -59,6 +64,7 @@ test_simple_command_compressed_output_file_exists() {
 }
 
 test_simple_command_custom_stderr_file_exists() {
+  command_collector "" "__invalidcommand" "root_directory" "" "__invalidcommand.txt" "custom.stderr" ""
   assert_file_exists "${TEMP_DATA_DIR}/root_directory/custom.stderr"
 }
 
@@ -89,10 +95,11 @@ test_loop_command_compressed_output_file_exists() {
 }
 
 test_loop_command_custom_stderr_file_exists() {
+  command_collector "ls -l \"${MOUNT_POINT}\"/proc/[0-9]*/cmd | awk -F\"/proc/|/cmd\" '{print \$2}'" "cat \"${MOUNT_POINT}\"/proc/%line%/cmd1" "root_directory" "proc/%line%" "proc_%line%_cmd.txt" "custom_%line%.stderr" "true"
   assert_file_exists "${TEMP_DATA_DIR}/root_directory/proc/1/custom_1.stderr"
 }
 
 test_replace_output_file_variable_in_command() {
-  command_collector "" "touch %output_file%" "root_directory" "" "replace_output_file_variable.txt" "" ""
+  command_collector "" "cp \"${MOUNT_POINT}/bin/cp\" %output_file%" "root_directory" "" "replace_output_file_variable.txt" "" ""
   assert_file_exists "${TEMP_DATA_DIR}/root_directory/replace_output_file_variable.txt"
 }

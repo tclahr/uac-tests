@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# shellcheck disable=SC2006,SC2034
+# shellcheck disable=SC2006,SC2034,SC2317
 
 fail()
 {
@@ -157,7 +157,7 @@ run_tests()
       after_each_test
       exit "${rt_status}"
     )
-    # shellcheck disable=SC2003
+    # shellcheck disable=SC2003,SC2086
     rt_failure=`expr $? \| ${rt_failure}`
   done
   return "${rt_failure}"
@@ -170,6 +170,7 @@ _usage()
 
 Optional Arguments:
   -h, --help        Display this help and exit.
+      --debug       Enable debug mode.
 
 Positional Arguments:
   UAC_DIR           UAC source code directory.
@@ -223,6 +224,7 @@ HOME="${HOME}"
 HOSTNAME="${HOSTNAME}"
 
 # local vars
+uu_debug_mode=false
 uu_CURRENT_TEST=""
 uu_CURRENT_TEST_NUMBER=0
 
@@ -232,6 +234,9 @@ while [ "${1:-}" != "" ]; do
     "-h"|"--help")
       _usage
       exit 1
+      ;;
+    "--debug")
+      uu_debug_mode=true
       ;;
     # invalid arguments
     -*)
@@ -349,6 +354,8 @@ done
 # shellcheck disable=SC1091
 . "./lib/setup_unit_test.sh" && setup_unit_test
 
+${uu_debug_mode} && set -x
+
 uu_failure=0
 printf %b "1..${uu_total_number_of_tests}\n"
 for uu_test_file in "${@}"; do
@@ -359,10 +366,12 @@ for uu_test_file in "${@}"; do
   set +e
   setup_test
   run_tests "${uu_test_file}" || uu_failure=$?
-  # shellcheck disable=SC2003
+  # shellcheck disable=SC2003,SC2086
   uu_failure=`expr $? \| ${uu_failure}`
   shutdown_test
 done
+
+${uu_debug_mode} && set +x
 
 # shellcheck disable=SC1091
 . "./lib/shutdown_unit_test.sh" && shutdown_unit_test

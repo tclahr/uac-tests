@@ -55,8 +55,32 @@ test_path() {
   fi
 }
 
+test_empty_stderr_file_exists() {
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.stderr"
+  fi
+}
+
 test_stderr_file_exists() {
-  assert_file_exists "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.stderr"
+  stat_collector \
+    "/__invalidpath" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "root_directory" \
+    "" \
+    "__invalidpath.txt" \
+    ""
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/__invalidpath.txt.stderr"
 }
 
 test_empty_path() {
@@ -560,7 +584,7 @@ test_ignore_date_range() {
     ""
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
     if ${FIND_MTIME_SUPPORT}; then
-      assert_not_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+      assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
     else
       assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
     fi
@@ -618,7 +642,7 @@ test_output_directory() {
 
 test_stderr_output_file() {
   stat_collector \
-    "/" \
+    "/__invalidpath" \
     "" \
     "" \
     "" \
@@ -633,7 +657,7 @@ test_stderr_output_file() {
     "" \
     "root_directory" \
     "" \
-    "stderr_output_file.txt" \
+    "__invalidpath.txt" \
     "custom_stderr_output_file.stderr"
   assert_file_exists "${TEMP_DATA_DIR}/root_directory/custom_stderr_output_file.stderr"
 }

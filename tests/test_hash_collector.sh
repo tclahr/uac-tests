@@ -56,7 +56,25 @@ test_path() {
 }
 
 test_stderr_file_exists() {
-  assert_file_exists "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.stderr"
+  hash_collector \
+    "/__invalidpath" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "root_directory" \
+    "" \
+    "__invalidpath.txt" \
+    ""
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/__invalidpath.txt.stderr"
 }
 
 test_empty_path() {
@@ -391,7 +409,7 @@ test_type() {
     "" \
     "type_output_file.txt" \
     ""
-  assert_not_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/type_output_file.txt.md5"
+  assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/type_output_file.txt.md5"
 }
 
 test_min_file_size() {
@@ -505,7 +523,7 @@ test_ignore_date_range() {
     "ignore_date_range_output_file.txt" \
     ""
   if ${FIND_MTIME_SUPPORT}; then
-    assert_not_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt.md5"
+    assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt.md5"
   else
     assert_matches_file_content "8b152d34433d29c0f678034b8f2f358a" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt.md5"
   fi
@@ -610,7 +628,7 @@ test_sha256_algorithm() {
 
 test_stderr_output_file() {
   hash_collector \
-    "/" \
+    "/__invalidpath" \
     "" \
     "" \
     "" \
@@ -625,7 +643,7 @@ test_stderr_output_file() {
     "" \
     "root_directory" \
     "" \
-    "stderr_output_file.txt" \
+    "__invalidpath.txt" \
     "custom_stderr_output_file.stderr"
   assert_file_exists "${TEMP_DATA_DIR}/root_directory/custom_stderr_output_file.stderr"
 }
