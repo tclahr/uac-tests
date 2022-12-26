@@ -1,7 +1,7 @@
 #!/bin/sh
 
 setup_test() {
-  TEMP_DATA_DIR="${TEMP_DIR}/test_parse_artifact_list"
+  TEMP_DATA_DIR="${TEMP_DIR}/test_create_artifact_list"
   mkdir -p "${TEMP_DATA_DIR}"
 }
 
@@ -17,8 +17,8 @@ after_each_test() {
   return 0
 }
 
-test_parse_artifact_list() {
-  assert "parse_artifact_list \"live_response/process/ps.yaml,live_response/process/lsof.yaml,live_response/process/*,!bodyfile/bodyfile.yaml,chkrootkit/*.yaml,!live_response/process/lsof.yaml,live_response/process/lsof.yaml,hash_executables/hash_executables.yaml,\" >\"${TEMP_DATA_DIR}/.artifacts.tmp\""
+test_create_artifact_list() {
+  assert "create_artifact_list \"live_response/process/ps.yaml,live_response/process/lsof.yaml,live_response/process/*,!bodyfile/bodyfile.yaml,chkrootkit/*.yaml,!live_response/process/lsof.yaml,live_response/process/lsof.yaml,hash_executables/hash_executables.yaml,live_response/hardware/*,!live_response/hardware/alog.yaml,\" >\"${TEMP_DATA_DIR}/.artifacts.tmp\""
 }
 
 test_artifact_added() {
