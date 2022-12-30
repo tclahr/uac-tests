@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# shellcheck disable=SC2034
+# shellcheck disable=SC2034,SC2317
 
 setup_test() {
   TEMP_DATA_DIR="${TEMP_DIR}/test_command_collector"
