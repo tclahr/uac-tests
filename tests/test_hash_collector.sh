@@ -409,7 +409,10 @@ test_type() {
     "" \
     "type_output_file.txt" \
     ""
-  assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/type_output_file.txt.md5"
+  # csum -h MD5 hashes directories
+  if [ -f "${TEMP_DATA_DIR}/root_directory/type_output_file.txt.md5" ]; then
+    assert_not_matches_file_content "ed9fbd6b98461aeb46c310c94c83c325" "${TEMP_DATA_DIR}/root_directory/type_output_file.txt.md5"
+  fi
 }
 
 test_min_file_size() {
