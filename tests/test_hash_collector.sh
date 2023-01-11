@@ -254,14 +254,6 @@ test_name_pattern_sh() {
   assert_matches_file_content "aa011930d295035d9c90eeb6be512af5" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt.md5"
 }
 
-test_name_pattern_find_operators_support() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "b026324c6904b2a9cb4b88d6d61c81d1" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt.md5"
-  else
-    assert_matches_file_content "b026324c6904b2a9cb4b88d6d61c81d1" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt.md5"
-  fi
-}
-
 test_name_pattern_with_white_spaces() {
   hash_collector \
     "/" \

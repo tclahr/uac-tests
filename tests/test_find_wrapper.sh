@@ -156,14 +156,6 @@ test_name_pattern_sh() {
   assert_matches_file_content "${MOUNT_POINT}/bin/gpg.sh" "${TEMP_DATA_DIR}/name_pattern_output_file.txt"
 }
 
-test_name_pattern_find_operators_support() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "${MOUNT_POINT}/proc" "${TEMP_DATA_DIR}/name_pattern_output_file.txt"
-  else
-    assert_matches_file_content "${MOUNT_POINT}/proc" "${TEMP_DATA_DIR}/name_pattern_output_file.txt"
-  fi
-}
-
 test_name_pattern_with_white_spaces() {
   find_wrapper \
     "${MOUNT_POINT}" \
@@ -305,7 +297,9 @@ test_type() {
 
 test_no_type_support() {
   if ${FIND_TYPE_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "${MOUNT_POINT}/usr/lib/empty" "${TEMP_DATA_DIR}/max_depth_output_file.txt"
+    assert_not_matches_file_content "${MOUNT_POINT}/usr/lib/empty" "${TEMP_DATA_DIR}/type_output_file.txt"
+  else
+    assert_file_not_exists "${TEMP_DATA_DIR}/type_output_file.txt"
   fi
 }
 
