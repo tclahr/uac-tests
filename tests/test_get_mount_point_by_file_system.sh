@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# shellcheck disable=SC2006
+# shellcheck disable=SC2006,SC2317
 
 setup_test() {
   case "${OPERATING_SYSTEM}" in

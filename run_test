@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# shellcheck disable=SC2006,SC2034
+# shellcheck disable=SC2006,SC2034,SC2317
 
 fail()
 {
@@ -57,10 +57,14 @@ assert_matches_file_content()
   mf_regex="${1}"
   mf_file="${2}"
 
-  if grep -q -E "${mf_regex}" "${mf_file}"; then
-    true
+  if [ -f "${mf_file}" ]; then
+    if grep -q -E "${mf_regex}" "${mf_file}"; then
+      true
+    else
+      fail "# expected regex [${mf_regex}] to match file content [${mf_file}]"
+    fi
   else
-    fail "# expected regex [${mf_regex}] to match file content [${mf_file}]"
+    fail "# expected file not found [${mf_file}]"
   fi
 }
 
@@ -69,8 +73,12 @@ assert_not_matches_file_content()
   nf_regex="${1}"
   nf_file="${2}"
 
-  if grep -q -E "${nf_regex}" "${nf_file}"; then
-    fail "# expected regex [${nf_regex}] should not match but matched file content [${nf_file}]"
+  if [ -f "${nf_file}" ]; then
+    if grep -q -E "${nf_regex}" "${nf_file}"; then
+      fail "# expected regex [${nf_regex}] should not match but matched file content [${nf_file}]"
+    fi
+  else
+    fail "# expected file not found [${nf_file}]"
   fi
 }
 
@@ -113,7 +121,7 @@ assert_file_exists()
   fe_file="${1}"
 
   if [ ! -f "${fe_file}" ]; then
-    fail "# expected file to exist [${fe_file}]"
+    fail "# expected file do exist [${fe_file}]"
   fi
 }
 
@@ -122,7 +130,7 @@ assert_file_not_exists()
   fe_file="${1}"
 
   if [ -f "${fe_file}" ]; then
-    fail "# expected file to not exist [${fe_file}]"
+    fail "# expected file do not exist [${fe_file}]"
   fi
 }
 
@@ -149,7 +157,7 @@ run_tests()
       after_each_test
       exit "${rt_status}"
     )
-    # shellcheck disable=SC2003
+    # shellcheck disable=SC2003,SC2086
     rt_failure=`expr $? \| ${rt_failure}`
   done
   return "${rt_failure}"
@@ -162,6 +170,7 @@ _usage()
 
 Optional Arguments:
   -h, --help        Display this help and exit.
+      --debug       Enable debug mode.
 
 Positional Arguments:
   UAC_DIR           UAC source code directory.
@@ -215,6 +224,7 @@ HOME="${HOME}"
 HOSTNAME="${HOSTNAME}"
 
 # local vars
+uu_debug_mode=false
 uu_CURRENT_TEST=""
 uu_CURRENT_TEST_NUMBER=0
 
@@ -224,6 +234,9 @@ while [ "${1:-}" != "" ]; do
     "-h"|"--help")
       _usage
       exit 1
+      ;;
+    "--debug")
+      uu_debug_mode=true
       ;;
     # invalid arguments
     -*)
@@ -341,6 +354,8 @@ done
 # shellcheck disable=SC1091
 . "./lib/setup_unit_test.sh" && setup_unit_test
 
+${uu_debug_mode} && set -x
+
 uu_failure=0
 printf %b "1..${uu_total_number_of_tests}\n"
 for uu_test_file in "${@}"; do
@@ -351,10 +366,12 @@ for uu_test_file in "${@}"; do
   set +e
   setup_test
   run_tests "${uu_test_file}" || uu_failure=$?
-  # shellcheck disable=SC2003
+  # shellcheck disable=SC2003,SC2086
   uu_failure=`expr $? \| ${uu_failure}`
   shutdown_test
 done
+
+${uu_debug_mode} && set +x
 
 # shellcheck disable=SC1091
 . "./lib/shutdown_unit_test.sh" && shutdown_unit_test

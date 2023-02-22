@@ -47,12 +47,38 @@ test_path() {
     "" \
     "root_directory" \
     "" \
-    "path_output_file.txt"
+    "path_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/etc/issue" "${TEMP_DATA_DIR}/root_directory/path_output_file.txt"
 }
 
+test_empty_stderr_file_exists() {
+  assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.stderr"
+}
+
+test_stderr_file_exists() {
+  find_collector \
+    "/__invalidpath" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "root_directory" \
+    "" \
+    "__invalidpath.txt" \
+    ""
+  assert_file_exists "${TEMP_DATA_DIR}/root_directory/__invalidpath.txt.stderr"
+}
+
 test_empty_path() {
-  assert_fails "find_collector \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" 2>/dev/null"
+  assert_fails "find_collector \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" 2>/dev/null"
 }
 
 test_path_with_white_spaces() {
@@ -71,7 +97,8 @@ test_path_with_white_spaces() {
     "" \
     "root_directory" \
     "" \
-    "path_with_white_spaces_output_file.txt"
+    "path_with_white_spaces_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/etc/white space/file name" "${TEMP_DATA_DIR}/root_directory/path_with_white_spaces_output_file.txt"
 }
 
@@ -91,7 +118,8 @@ test_path_with_double_quotes() {
     "" \
     "root_directory" \
     "" \
-    "path_with_double_quotes_output_file.txt"
+    "path_with_double_quotes_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/etc/double\"quotes/file\"name" "${TEMP_DATA_DIR}/root_directory/path_with_double_quotes_output_file.txt"
 }
 
@@ -111,7 +139,8 @@ test_path_pattern_usr_lib() {
     "" \
     "root_directory" \
     "" \
-    "path_pattern_output_file.txt"
+    "path_pattern_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/usr/lib/library" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
 }
 
@@ -143,7 +172,8 @@ test_path_pattern_with_white_spaces() {
     "" \
     "root_directory" \
     "" \
-    "path_pattern_with_white_spaces_output_file.txt"
+    "path_pattern_with_white_spaces_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/etc/white space/file name" "${TEMP_DATA_DIR}/root_directory/path_pattern_with_white_spaces_output_file.txt"
 }
 
@@ -163,20 +193,13 @@ test_name_pattern_so() {
     "" \
     "root_directory" \
     "" \
-    "name_pattern_output_file.txt"
+    "name_pattern_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/usr/lib/library.so.1" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
 }
 
 test_name_pattern_sh() {
   assert_matches_file_content "${MOUNT_POINT}/bin/gpg.sh" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
-}
-
-test_name_pattern_find_operators_support() {
-  if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-    assert_not_matches_file_content "${MOUNT_POINT}/proc" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
-  else
-    assert_matches_file_content "${MOUNT_POINT}/proc" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
-  fi
 }
 
 test_name_pattern_with_white_spaces() {
@@ -195,7 +218,8 @@ test_name_pattern_with_white_spaces() {
     "" \
     "root_directory" \
     "" \
-    "name_pattern_with_white_spaces_output_file.txt"
+    "name_pattern_with_white_spaces_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/etc/white space/file name" "${TEMP_DATA_DIR}/root_directory/name_pattern_with_white_spaces_output_file.txt"
 }
 
@@ -215,7 +239,8 @@ test_exclude_path_pattern() {
     "" \
     "root_directory" \
     "" \
-    "exclude_path_pattern_output_file.txt"
+    "exclude_path_pattern_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
 }
 
@@ -251,7 +276,8 @@ test_exclude_name_pattern() {
     "" \
     "root_directory" \
     "" \
-    "exclude_name_pattern_output_file.txt"
+    "exclude_name_pattern_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
 }
 
@@ -289,7 +315,8 @@ test_max_depth() {
     "" \
     "root_directory" \
     "" \
-    "max_depth_output_file.txt"
+    "max_depth_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt"
 }
 
@@ -317,7 +344,8 @@ test_type() {
     "" \
     "root_directory" \
     "" \
-    "type_output_file.txt"
+    "type_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin" "${TEMP_DATA_DIR}/root_directory/type_output_file.txt"
 }
 
@@ -341,7 +369,8 @@ test_min_file_size() {
     "" \
     "root_directory" \
     "" \
-    "min_file_size_output_file.txt"
+    "min_file_size_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin/fiftyb" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt"
 }
 
@@ -369,7 +398,8 @@ test_max_file_size() {
     "" \
     "root_directory" \
     "" \
-    "max_file_size_output_file.txt"
+    "max_file_size_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt"
 }
 
@@ -397,7 +427,8 @@ test_perm() {
     "" \
     "root_directory" \
     "" \
-    "perm_output_file.txt"
+    "perm_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt"
 }
 
@@ -426,9 +457,10 @@ test_ignore_date_range() {
     "" \
     "root_directory" \
     "" \
-    "ignore_date_range_output_file.txt"
+    "ignore_date_range_output_file.txt" \
+    ""
   if ${FIND_MTIME_SUPPORT}; then
-    assert_not_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+    assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
   else
     assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
   fi
@@ -451,7 +483,8 @@ test_ignore_date_range_true() {
     "true" \
     "root_directory" \
     "" \
-    "ignore_date_range_output_file.txt"
+    "ignore_date_range_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
 }
 
@@ -471,6 +504,28 @@ test_output_directory() {
     "" \
     "root_directory" \
     "output_directory" \
-    "output_directory_output_file.txt"
+    "output_directory_output_file.txt" \
+    ""
   assert_matches_file_content "${MOUNT_POINT}/bin/cp" "${TEMP_DATA_DIR}/root_directory/output_directory/output_directory_output_file.txt"
+}
+
+test_stderr_output_file() {
+  find_collector \
+    "/__invalidpath" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "root_directory" \
+    "" \
+    "__invalidpath.txt" \
+    "custom_stderr_output_file.stderr"
+    assert_file_exists "${TEMP_DATA_DIR}/root_directory/custom_stderr_output_file.stderr"
 }

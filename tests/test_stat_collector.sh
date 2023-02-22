@@ -32,97 +32,133 @@ after_each_test() {
 }
 
 test_path() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "path_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "path_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_output_file.txt"
   fi
 }
 
+test_empty_stderr_file_exists() {
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/path_output_file.txt.stderr"
+  fi
+}
+
+test_stderr_file_exists() {
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/__invalidpath" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "__invalidpath.txt" \
+      ""
+    assert_file_exists "${TEMP_DATA_DIR}/root_directory/__invalidpath.txt.stderr"
+  fi
+}
+
 test_empty_path() {
-  assert_fails "stat_collector \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" 2>/dev/null"
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    assert_fails "stat_collector \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" 2>/dev/null"
+  fi
 }
 
 test_path_with_white_spaces() {
-  stat_collector \
-    "/etc/\"white space\"" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "path_with_white_spaces_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/etc/\"white space\"" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "path_with_white_spaces_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_with_white_spaces_output_file.txt"
   fi
 }
 
 test_path_with_double_quotes() {
-  stat_collector \
-    "/etc/double\\\"quotes" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "path_with_double_quotes_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/etc/double\\\"quotes" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "path_with_double_quotes_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/etc/double\"quotes\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_with_double_quotes_output_file.txt"
   fi
 }
 
 test_file_list_absolute_path() {
-  stat_collector \
-    "${TEMP_DATA_DIR}/source_file.txt" \
-    "true" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "file_list_absolute_path_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "${TEMP_DATA_DIR}/source_file.txt" \
+      "true" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "file_list_absolute_path_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/file_list_absolute_path_output_file.txt"
   fi
 }
@@ -131,47 +167,49 @@ test_file_list_relative_path() {
   echo "${MOUNT_POINT}/etc/issue" >>"${TEMP_DATA_DIR}/root_directory/source_file.txt"
   echo "${MOUNT_POINT}/etc/default/keyboard" >>"${TEMP_DATA_DIR}/root_directory/source_file.txt"
 
-  stat_collector \
-    "source_file.txt" \
-    "true" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "file_list_relative_path_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "source_file.txt" \
+      "true" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "file_list_relative_path_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/file_list_relative_path_output_file.txt"
   fi
 }
 
 test_path_pattern_usr_lib() {
-  stat_collector \
-    "/" \
-    "" \
-    "*/usr/lib/*,*/etc/*" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "path_pattern_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "*/usr/lib/*,*/etc/*" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "path_pattern_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_output_file.txt"
   fi
 }
@@ -193,47 +231,49 @@ test_path_pattern_find_operators_support() {
 }
 
 test_path_pattern_with_white_spaces() {
-  stat_collector \
-    "/" \
-    "" \
-    "*white space*" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "path_pattern_with_white_spaces_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "*white space*" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "path_pattern_with_white_spaces_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/path_pattern_with_white_spaces_output_file.txt"
   fi
 }
 
 test_name_pattern_so() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "*.so.*,*.sh" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "name_pattern_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "*.so.*,*.sh" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "name_pattern_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib/library.so.1\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
   fi
 }
@@ -244,58 +284,50 @@ test_name_pattern_sh() {
   fi
 }
 
-test_name_pattern_find_operators_support() {
-  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
-    if ${FIND_OPERATORS_SUPPORT} || ${PERL_TOOL_AVAILABLE}; then
-      assert_not_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
-    else
-      assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_output_file.txt"
-    fi
-  fi
-}
-
 test_name_pattern_with_white_spaces() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "file name" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "name_pattern_with_white_spaces_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "file name" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "name_pattern_with_white_spaces_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/etc/white space/file name\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/name_pattern_with_white_spaces_output_file.txt"
   fi
 }
 
 test_exclude_path_pattern() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "*/usr/lib/*,*/etc/*" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "exclude_path_pattern_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "*/usr/lib/*,*/etc/*" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "exclude_path_pattern_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_path_pattern_output_file.txt"
   fi
 }
@@ -321,24 +353,25 @@ test_exclude_path_pattern_find_operators_support_etc() {
 }
 
 test_exclude_name_pattern() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "*.so.*,*.sh" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "exclude_name_pattern_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "*.so.*,*.sh" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "exclude_name_pattern_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/exclude_name_pattern_output_file.txt"
   fi
 }
@@ -364,24 +397,25 @@ test_exclude_name_pattern_find_operators_support_sh() {
 }
 
 test_max_depth() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "2" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "max_depth_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "2" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "max_depth_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_depth_output_file.txt"
   fi
 }
@@ -397,47 +431,49 @@ test_no_max_depth_support() {
 }
 
 test_type() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "d" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "type_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "d" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "type_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/usr/lib\|[0-9]*\|d.........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/type_output_file.txt"
   fi
 }
 
 test_min_file_size() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "40" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "min_file_size_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "40" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "min_file_size_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/bin/fiftyb\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/min_file_size_output_file.txt"
   fi
 }
@@ -453,24 +489,25 @@ test_min_file_size_no_smaller_than_40b() {
 }
 
 test_max_file_size() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "40" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "max_file_size_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "40" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "max_file_size_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/max_file_size_output_file.txt"
   fi
 }
@@ -486,24 +523,25 @@ test_min_file_size_no_greater_than_40b() {
 }
 
 test_perm() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "777" \
-    "" \
-    "root_directory" \
-    "" \
-    "perm_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "777" \
+      "" \
+      "root_directory" \
+      "" \
+      "perm_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/bin/cp\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/perm_output_file.txt"
   fi
 }
@@ -520,26 +558,27 @@ test_no_perm_support() {
 
 test_ignore_date_range() {
   END_DATE_DAYS="10"
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "" \
-    "ignore_date_range_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "ignore_date_range_output_file.txt" \
+      ""
     if ${FIND_MTIME_SUPPORT}; then
-      assert_not_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
+      assert_file_not_exists "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
     else
       assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
     fi
@@ -548,47 +587,73 @@ test_ignore_date_range() {
 
 test_ignore_date_range_true() {
   END_DATE_DAYS="10"
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "true" \
-    "root_directory" \
-    "" \
-    "ignore_date_range_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "true" \
+      "root_directory" \
+      "" \
+      "ignore_date_range_output_file.txt" \
+      ""    
     assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/ignore_date_range_output_file.txt"
   fi
 }
 
 test_output_directory() {
-  stat_collector \
-    "/" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "" \
-    "root_directory" \
-    "output_directory" \
-    "output_directory_output_file.txt"
   if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "output_directory" \
+      "output_directory_output_file.txt" \
+      ""
     assert_matches_file_content "^0\|${MOUNT_POINT}/etc/issue\|[0-9]*\|..........\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*\|[0-9]*" "${TEMP_DATA_DIR}/root_directory/output_directory/output_directory_output_file.txt"
+  fi
+}
+
+test_stderr_output_file() {
+  if ${STAT_TOOL_AVAILABLE} || ${STATX_TOOL_AVAILABLE} || ${PERL_TOOL_AVAILABLE}; then
+    stat_collector \
+      "/__invalidpath" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "" \
+      "root_directory" \
+      "" \
+      "__invalidpath.txt" \
+      "custom_stderr_output_file.stderr"
+    assert_file_exists "${TEMP_DATA_DIR}/root_directory/custom_stderr_output_file.stderr"
   fi
 }
