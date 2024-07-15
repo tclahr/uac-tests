@@ -43,8 +43,9 @@ test_create_acquisition_log_success()
     "${__TEST_TEMP_DIR}/create_acquisition_log_success.log" \
     "START_DATE" \
     "END_DATE" \
-    "md5 checksum: HASH_FILE
-sha256 checksum: HASH_FILE"
+    "HASH_FILE" \
+    "" \
+    "HASH_FILE"
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/create_acquisition_log_success.log"`
   assertEquals "Created by UAC (Unix-like Artifacts Collector) UAC_VERSION
@@ -71,8 +72,8 @@ File: OUTPUT_BASE_NAME.OUTPUT_EXTENSION
 Format: OUTPUT_FORMAT
 
 [Computed Hashes]
-md5 checksum: HASH_FILE
-sha256 checksum: HASH_FILE" "${__test_actual}"
+MD5 checksum: HASH_FILE
+SHA256 checksum: HASH_FILE" "${__test_actual}"
 
 }
 
@@ -84,8 +85,9 @@ test_create_acquisition_log_output_format_none_success()
     "${__TEST_TEMP_DIR}/create_acquisition_log_output_format_none_success.log" \
     "START_DATE" \
     "END_DATE" \
-    "md5 checksum: HASH_FILE
-sha256 checksum: HASH_FILE"
+    "HASH_FILE" \
+    "" \
+    "HASH_FILE"
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/create_acquisition_log_output_format_none_success.log"`
   assertEquals "Created by UAC (Unix-like Artifacts Collector) UAC_VERSION
@@ -121,8 +123,9 @@ test_create_acquisition_log_output_format_zip_success()
     "${__TEST_TEMP_DIR}/create_acquisition_log_output_format_zip_success.log" \
     "START_DATE" \
     "END_DATE" \
-    "md5 checksum: HASH_FILE
-sha256 checksum: HASH_FILE"
+    "HASH_FILE" \
+    "" \
+    "HASH_FILE"
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/create_acquisition_log_output_format_zip_success.log"`
   assertEquals "Created by UAC (Unix-like Artifacts Collector) UAC_VERSION
@@ -149,8 +152,8 @@ File: OUTPUT_BASE_NAME.OUTPUT_EXTENSION
 Format: zip
 
 [Computed Hashes]
-md5 checksum: HASH_FILE
-sha256 checksum: HASH_FILE" "${__test_actual}"
+MD5 checksum: HASH_FILE
+SHA256 checksum: HASH_FILE" "${__test_actual}"
 
 }
 
@@ -163,8 +166,9 @@ test_create_acquisition_log_zip_password_success()
     "${__TEST_TEMP_DIR}/create_acquisition_log_zip_password_success.log" \
     "START_DATE" \
     "END_DATE" \
-    "md5 checksum: HASH_FILE
-sha256 checksum: HASH_FILE"
+    "HASH_FILE" \
+    "" \
+    "HASH_FILE"
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/create_acquisition_log_zip_password_success.log"`
   assertEquals "Created by UAC (Unix-like Artifacts Collector) UAC_VERSION
@@ -192,7 +196,7 @@ Format: zip
 Password: \"OUTPUT_PASSWORD\"
 
 [Computed Hashes]
-md5 checksum: HASH_FILE
-sha256 checksum: HASH_FILE" "${__test_actual}"
+MD5 checksum: HASH_FILE
+SHA256 checksum: HASH_FILE" "${__test_actual}"
 
 }
