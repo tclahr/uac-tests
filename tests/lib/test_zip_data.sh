@@ -44,8 +44,12 @@ test_zip_data_success()
   if commandExists "zip"; then
     assertTrue "_zip_data \"${__TEST_TEMP_DIR}/file_list.txt\" \"${__TEST_TEMP_DIR}/success.zip\""
     assertFileExists "${__TEST_TEMP_DIR}/success.zip"
-    assertTrue "_zip_data \"${__TEST_TEMP_DIR}/file_list.txt\" \"${__TEST_TEMP_DIR}/success_new_password.zip\" \"new_password\""
-    assertFileExists "${__TEST_TEMP_DIR}/success_new_password.zip"
+    if zip --password infected - "${__TEST_TEMP_DIR}/file_list.txt" >/dev/null 2>/dev/null; then
+      assertTrue "_zip_data \"${__TEST_TEMP_DIR}/file_list.txt\" \"${__TEST_TEMP_DIR}/success_new_password.zip\" \"new_password\""
+      assertFileExists "${__TEST_TEMP_DIR}/success_new_password.zip"
+    else
+      skipTest "zip does not support --password argument"
+    fi
   else
     skipTest "no such file or directory: 'zip'"
   fi

@@ -16,6 +16,11 @@ oneTimeSetUp()
       2>/dev/null
   }
 
+  _verbose_msg()
+  {
+    return 0
+  }
+
   __TEST_TEMP_DIR="${USHUNIT_TEMP_DIR}/remove_non_regular_files"
 
   mkdir -p "${__TEST_TEMP_DIR}/mount-point"
@@ -23,6 +28,8 @@ oneTimeSetUp()
   __UAC_TEMP_DATA_DIR="${__TEST_TEMP_DIR}"
 
   __UAC_TOOL_XARGS_MAX_PROCS_PARAM=""
+
+  __UAC_VERBOSE_CMD_PREFIX=" > "
 
   mkdir -p "${__TEST_TEMP_DIR}/mount-point/etc/default"
   echo "issue" >"${__TEST_TEMP_DIR}/mount-point/etc/issue"
