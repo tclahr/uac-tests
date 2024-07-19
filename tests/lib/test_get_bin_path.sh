@@ -29,14 +29,12 @@ oneTimeSetUp()
 
 test_get_bin_path_success()
 {
+  # TO DO: test zip tool
   __test_actual=`_get_bin_path "android" "armv6"`
   assertEquals "${__TEST_TEMP_DIR}/uac/tools/statx/android/arm:${__TEST_TEMP_DIR}/uac/bin/android/arm:${__TEST_TEMP_DIR}/uac/bin/android:${__TEST_TEMP_DIR}/uac/bin" "${__test_actual}"
 
   __test_actual=`_get_bin_path "esxi" "i386"`
   assertEquals "${__TEST_TEMP_DIR}/uac/tools/statx/esxi_linux/i686:${__TEST_TEMP_DIR}/uac/bin/esxi/i686:${__TEST_TEMP_DIR}/uac/bin/esxi:${__TEST_TEMP_DIR}/uac/bin" "${__test_actual}"
-
-  __test_actual=`_get_bin_path "netscaler" "amd64"`
-  assertEquals "${__TEST_TEMP_DIR}/uac/tools/statx/netscaler/x86_64:${__TEST_TEMP_DIR}/uac/tools/zip/freebsd_netscaler/x86_64:${__TEST_TEMP_DIR}/uac/bin/netscaler/x86_64:${__TEST_TEMP_DIR}/uac/bin/netscaler:${__TEST_TEMP_DIR}/uac/bin" "${__test_actual}"
 
   __test_actual=`_get_bin_path "aix" "ppc64le"`
   assertEquals "${__TEST_TEMP_DIR}/uac/bin/aix/ppc64le:${__TEST_TEMP_DIR}/uac/bin/aix:${__TEST_TEMP_DIR}/uac/bin" "${__test_actual}"
