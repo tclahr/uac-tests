@@ -214,7 +214,6 @@ test_load_config_file_enable_find_mtime_true_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/enable_find_mtime_true_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_mtime: true
 EOF
 
@@ -227,7 +226,6 @@ test_load_config_file_enable_find_mtime_false_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/enable_find_mtime_false_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_mtime: false
 EOF
 
@@ -240,7 +238,6 @@ test_load_config_file_invalid_enable_find_mtime_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/invalid_enable_find_mtime_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_mtime: invalid
 EOF
 
@@ -253,7 +250,6 @@ test_load_config_file_enable_find_atime_true_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/enable_find_atime_true_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_atime: true
 EOF
 
@@ -266,7 +262,6 @@ test_load_config_file_enable_find_atime_false_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/enable_find_atime_false_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_atime: false
 EOF
 
@@ -279,7 +274,6 @@ test_load_config_file_invalid_enable_find_atime_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/invalid_enable_find_atime_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_atime: invalid
 EOF
 
@@ -292,7 +286,6 @@ test_load_config_file_enable_find_ctime_true_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/enable_find_ctime_true_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_ctime: true
 EOF
 
@@ -305,7 +298,6 @@ test_load_config_file_enable_find_ctime_false_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/enable_find_ctime_false_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_ctime: false
 EOF
 
@@ -318,7 +310,6 @@ test_load_config_file_invalid_enable_find_ctime_success()
   cat <<EOF >"${__TEST_TEMP_DIR}/config/invalid_enable_find_ctime_success.conf"
 hash_algorithm: [md5, sha1]
 max_depth: 0
-xargs_max_procs: 2
 enable_find_ctime: invalid
 EOF
 
