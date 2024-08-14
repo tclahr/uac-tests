@@ -27,8 +27,6 @@ oneTimeSetUp()
 
   __UAC_TEMP_DATA_DIR="${__TEST_TEMP_DIR}"
 
-  __UAC_TOOL_XARGS_MAX_PROCS_PARAM=""
-
   __UAC_VERBOSE_CMD_PREFIX=" > "
 
   mkdir -p "${__TEST_TEMP_DIR}/mount-point/etc/default"
