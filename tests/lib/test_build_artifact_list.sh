@@ -45,15 +45,41 @@ artifacts:
   -
     description: example
     supported_os: [ all ]
+    modifier: false
 EOF
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/directory/artifact06.yaml"
 version: 1.0
+modifier: false
 artifacts:
   -
     description: example
     supported_os: [ all ]
 EOF
 
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/artifact07.yaml"
+version: 1.0
+modifier: true
+artifacts:
+  -
+    description: example
+    supported_os: [ linux ]
+EOF
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/artifact08.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ linux ]
+    modifier: true
+EOF
+
+}
+
+setUp()
+{
+  __UAC_ENABLE_MODIFIERS=false
+  __UAC_IGNORE_OPERATING_SYSTEM=false
 }
 
 test_build_artifact_list_all_success()
@@ -75,7 +101,9 @@ ${__TEST_TEMP_DIR}/artifacts/artifact02.yaml
 ${__TEST_TEMP_DIR}/artifacts/artifact03.yaml
 ${__TEST_TEMP_DIR}/artifacts/artifact04.yaml
 ${__TEST_TEMP_DIR}/artifacts/directory/artifact05.yaml
-${__TEST_TEMP_DIR}/artifacts/directory/artifact06.yaml" "linux"`
+${__TEST_TEMP_DIR}/artifacts/directory/artifact06.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact07.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact08.yaml" "linux"`
   assertEquals "${__TEST_TEMP_DIR}/artifacts/artifact01.yaml
 ${__TEST_TEMP_DIR}/artifacts/artifact02.yaml
 ${__TEST_TEMP_DIR}/artifacts/artifact03.yaml
@@ -114,4 +142,26 @@ ${__TEST_TEMP_DIR}/artifacts/artifact03.yaml
 ${__TEST_TEMP_DIR}/artifacts/artifact04.yaml
 ${__TEST_TEMP_DIR}/artifacts/directory/artifact05.yaml
 ${__TEST_TEMP_DIR}/artifacts/directory/artifact06.yaml" "${__test_actual}"
+}
+
+test_build_artifact_list_enable_mods_success()
+{
+  __UAC_ENABLE_MODIFIERS=true
+
+  __test_actual=`_build_artifact_list "${__TEST_TEMP_DIR}/artifacts/artifact01.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact02.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact03.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact04.yaml
+${__TEST_TEMP_DIR}/artifacts/directory/artifact05.yaml
+${__TEST_TEMP_DIR}/artifacts/directory/artifact06.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact07.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact08.yaml" "linux"`
+  assertEquals "${__TEST_TEMP_DIR}/artifacts/artifact01.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact02.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact03.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact04.yaml
+${__TEST_TEMP_DIR}/artifacts/directory/artifact05.yaml
+${__TEST_TEMP_DIR}/artifacts/directory/artifact06.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact07.yaml
+${__TEST_TEMP_DIR}/artifacts/artifact08.yaml" "${__test_actual}"
 }

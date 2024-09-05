@@ -991,6 +991,42 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_min_file_size_fail.yaml\""
 }
 
+test_validate_artifact_empty_modifier_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_modifier_fail.yaml"
+version: 1.0
+modifier: 
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_modifier_fail.yaml\""
+}
+
+test_validate_artifact_invalid_modifier_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_modifier_fail.yaml"
+version: 1.0
+modifier: invalid
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_modifier_fail.yaml\""
+}
+
 test_validate_artifact_empty_name_pattern_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_name_pattern_fail.yaml"
@@ -1718,6 +1754,24 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_min_file_size_property_fail.yaml\""
 }
 
+test_validate_artifact_command_collector_invalid_modifier_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_modifier_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: command
+    command: ls
+    modifier: true
+    output_file: test.txt
+    output_directory: tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_modifier_property_fail.yaml\""
+}
+
 test_validate_artifact_command_collector_invalid_name_pattern_property_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_name_pattern_property_fail.yaml"
@@ -1860,6 +1914,24 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/hash_collector_invalid_foreach_property_fail.yaml\""
 }
 
+test_validate_artifact_hash_collector_invalid_modifier_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/hash_collector_invalid_modifier_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: hash
+    path: /etc
+    modifier: true
+    output_file: test.txt
+    output_directory: tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/hash_collector_invalid_modifier_property_fail.yaml\""
+}
+
 test_validate_artifact_hash_collector_missing_output_file_property_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/hash_collector_missing_output_file_property_fail.yaml"
@@ -1910,6 +1982,7 @@ test_validate_artifact_file_collector_success()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/file_collector_success.yaml"
 version: 1.0
+modifier: true
 artifacts:
   -
     description: test
@@ -1939,6 +2012,7 @@ test_validate_artifact_find_collector_success()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/find_collector_success.yaml"
 version: 1.0
+modifier: false
 artifacts:
   -
     description: test
