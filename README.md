@@ -10,7 +10,7 @@ UAC source code is available here: [github.com/tclahr/uac](https://github.com/tc
 ## Dependencies
 
  - The [UAC](https://github.com/tclahr/uac) code
- - The [ushunit](github.com/tclahr/ushunit) unit testing framework
+ - The [ushunit](https://github.com/tclahr/ushunit) unit testing framework
 
 ## Getting Started
 
