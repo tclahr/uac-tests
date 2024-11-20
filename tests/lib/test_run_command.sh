@@ -46,12 +46,15 @@ test_run_command_command_success()
   assertContains "${__test_container}" "kthreadd"
 }
 
-test_run_command_command_ignore_stderr_success()
+test_run_command_command_redirect_stderr_to_stdout_success()
 {
-  assertFalse "_run_command \"__unknown_command\" false"
-  __test_container=`cat "${__TEST_TEMP_DIR}/test.log"`
+  __test_container=`_run_command "__unknown_command"`
   assertNotContains "${__test_container}" "unknown command error"
+  
+  __test_container=`_run_command "__unknown_command" true`
+  assertContains "${__test_container}" "unknown command error"
 }
+
 
 test_run_command_command_unknown_command_success()
 {
