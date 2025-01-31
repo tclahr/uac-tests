@@ -1483,9 +1483,33 @@ test_validate_artifact_empty_version_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_version_fail.yaml"
 version: 
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: hash
+    path: /etc
+    output_directory: tmp
+    output_file: test.txt
 EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_version_fail.yaml\""
+}
+
+test_validate_artifact_missing_version_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/missing_version_fail.yaml"
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: hash
+    path: /etc
+    output_directory: tmp
+    output_file: test.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/missing_version_fail.yaml\""
 }
 
 test_validate_artifact_missing_artifacts_mapping_fail()

@@ -1,4 +1,4 @@
-## UAC (Unix-like Artifacts Collector) Tests
+# UAC (Unix-like Artifacts Collector) Tests
 
 [![ShellCheck](https://github.com/tclahr/uac-unit-test/actions/workflows/shellcheck.yaml/badge.svg)](https://github.com/tclahr/uac-unit-test/actions/workflows/shellcheck.yaml)
 [![GitHub](https://img.shields.io/github/license/tclahr/uac-unit-test?style=flat)](LICENSE)
@@ -9,8 +9,8 @@ UAC source code is available here: [github.com/tclahr/uac](https://github.com/tc
 
 ## Dependencies
 
- - The [UAC](https://github.com/tclahr/uac) code
- - The [ushunit](https://github.com/tclahr/ushunit) unit testing framework
+- The [UAC](https://github.com/tclahr/uac) code
+- The [ushunit](https://github.com/tclahr/ushunit) unit testing framework
 
 ## Getting Started
 
@@ -35,12 +35,16 @@ UAC_DIR="../uac" ./ushunit -i ../uac-tests/tests/lib/* ../uac-tests/tests/*
 
 ## Support
 
-For additional help, you can use one of the channels to ask a question:
+For general help using UAC, please refer to the [project documentation page](https://tclahr.github.io/uac-docs). For additional help, you can use one of the following channels:
 
 - [Discord](https://discord.com/invite/digitalforensics) (For live discussion with the community and UAC team)
-- [GitHub](https://github.com/tclahr/uac-unit-test/issues) (Bug reports and contributions)
+- [GitHub](https://github.com/tclahr/uac/issues) (Bug reports and contributions)
 - [Twitter](https://twitter.com/tclahr) (Get the news fast)
+
+## Support the Project
+
+If you find UAC helpful, please give us a ⭐ on [GitHub](https://github.com/tclahr/uac)! This helps others discover the project and motivates us to improve it further.
 
 ## License
 
-The project uses the [Apache License Version 2.0](LICENSE) software license.
+The UAC project uses the [Apache License Version 2.0](LICENSE) software license.
