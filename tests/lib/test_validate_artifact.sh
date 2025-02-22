@@ -1174,6 +1174,78 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_array_name_pattern_fail.yaml\""
 }
 
+test_validate_artifact_empty_no_group_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_no_group_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    no_group: 
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_no_group_fail.yaml\""
+}
+
+test_validate_artifact_invalid_no_group_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_no_group_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    no_group: invalid
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_no_group_fail.yaml\""
+}
+
+test_validate_artifact_empty_no_user_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_no_user_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    no_user: 
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_no_user_fail.yaml\""
+}
+
+test_validate_artifact_invalid_no_user_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_no_user_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    no_user: invalid
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_no_user_fail.yaml\""
+}
+
 test_validate_artifact_output_directory_success()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/output_directory_success.yaml"
@@ -1907,6 +1979,42 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_name_pattern_property_fail.yaml\""
 }
 
+test_validate_artifact_command_collector_invalid_no_group_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_no_group_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: command
+    command: ls
+    no_group: true
+    output_file: test.txt
+    output_directory: tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_no_group_property_fail.yaml\""
+}
+
+test_validate_artifact_command_collector_invalid_no_user_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_no_user_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: command
+    command: ls
+    no_user: true
+    output_file: test.txt
+    output_directory: tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_no_user_property_fail.yaml\""
+}
+
 test_validate_artifact_command_collector_invalid_path_property_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_path_property_fail.yaml"
@@ -2210,6 +2318,8 @@ artifacts:
     max_file_size: 1000
     min_file_size: 500
     name_pattern: ["*.txt"]
+    no_group: true
+    no_user: false
     path: /etc
     path_pattern: ["/etc/default"]
     permissions: [4444]
@@ -2240,6 +2350,8 @@ artifacts:
     max_file_size: 1000
     min_file_size: 500
     name_pattern: ["*.txt"]
+    no_group: true
+    no_user: false
     output_directory: /tmp
     output_file: test.txt
     path: /etc
@@ -2271,6 +2383,8 @@ artifacts:
     max_file_size: 1000
     min_file_size: 500
     name_pattern: ["*.txt"]
+    no_group: true
+    no_user: false
     output_directory: /tmp
     output_file: test.txt
     path: /etc
@@ -2302,6 +2416,8 @@ artifacts:
     max_file_size: 1000
     min_file_size: 500
     name_pattern: ["*.txt"]
+    no_group: true
+    no_user: false
     output_directory: /tmp
     output_file: test.txt
     path: /etc
