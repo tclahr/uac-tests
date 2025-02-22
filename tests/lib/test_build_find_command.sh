@@ -45,7 +45,7 @@ oneTimeSetUp()
   }
 
   __TEST_TEMP_DIR="${USHUNIT_TEMP_DIR}/test_build_find_command"
- 
+
   mkdir -p "${__TEST_TEMP_DIR}/mount-point"
 
 }
@@ -64,6 +64,8 @@ setUp()
   __UAC_TOOL_FIND_TYPE_SUPPORT=true
   __UAC_TOOL_FIND_SIZE_SUPPORT=true
   __UAC_TOOL_FIND_PERM_SUPPORT=true
+  __UAC_TOOL_FIND_NOGROUP_SUPPORT=true
+  __UAC_TOOL_FIND_NOUSER_SUPPORT=true
   __UAC_TOOL_FIND_MTIME_SUPPORT=true
   __UAC_TOOL_FIND_ATIME_SUPPORT=true
   __UAC_TOOL_FIND_CTIME_SUPPORT=true
@@ -74,6 +76,8 @@ test_build_find_command_path_success()
 {
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -105,6 +109,8 @@ test_build_find_command_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print" "${__test_actual}"
@@ -112,6 +118,8 @@ test_build_find_command_path_pattern_success()
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
     "/usr|/etc/default|/proc" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -130,6 +138,8 @@ test_build_find_command_path_pattern_success()
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
     "/usr|/etc/default|/proc" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -162,6 +172,8 @@ test_build_find_command_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -173,6 +185,8 @@ test_build_find_command_path_pattern_success()
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
     "/usr|/etc/default|/proc" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -208,6 +222,8 @@ test_build_find_command_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -name \"*.txt\" -print" "${__test_actual}"
@@ -216,6 +232,8 @@ test_build_find_command_name_pattern_success()
     "${__TEST_TEMP_DIR}/mount-point" \
     "" \
     "*.txt|*.html|z*" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -234,6 +252,8 @@ test_build_find_command_name_pattern_success()
     "${__TEST_TEMP_DIR}/mount-point" \
     "" \
     "*.txt|*.html|z*" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -268,6 +288,8 @@ test_build_find_command_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" \) -prune -o -print" "${__test_actual}"
@@ -277,6 +299,8 @@ test_build_find_command_exclude_path_pattern_success()
     "" \
     "" \
     "/usr|/etc/default|/proc" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -303,6 +327,8 @@ test_build_find_command_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -316,6 +342,8 @@ test_build_find_command_exclude_path_pattern_success()
     "" \
     "" \
     "/usr|/etc/default|/proc" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -346,6 +374,8 @@ test_build_find_command_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -359,6 +389,8 @@ test_build_find_command_exclude_path_pattern_success()
     "" \
     "" \
     "/usr|/etc/default|/proc" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -392,6 +424,8 @@ test_build_find_command_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -name \"*.txt\" \) -prune -o -print" "${__test_actual}"
@@ -402,6 +436,8 @@ test_build_find_command_exclude_name_pattern_success()
     "" \
     "" \
     "*.txt|*.html|z*" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -427,6 +463,8 @@ test_build_find_command_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -441,6 +479,8 @@ test_build_find_command_exclude_name_pattern_success()
     "" \
     "" \
     "*.txt|*.html|z*" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -473,6 +513,8 @@ test_build_find_command_path_pattern_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -name \"*.txt\" -print" "${__test_actual}"
@@ -481,6 +523,8 @@ test_build_find_command_path_pattern_name_pattern_success()
     "${__TEST_TEMP_DIR}/mount-point" \
     "/usr|/etc" \
     "*.txt" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -507,6 +551,8 @@ test_build_find_command_path_pattern_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) \( -name \"*.txt\" -o -name \"*.html\" \) -print" "${__test_actual}"
@@ -516,6 +562,8 @@ test_build_find_command_path_pattern_name_pattern_success()
     "${__TEST_TEMP_DIR}/mount-point" \
     "/usr|/etc" \
     "*.txt|*.html" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -550,6 +598,8 @@ test_build_find_command_path_pattern_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" \( -name \"*.txt\" \) -prune -o -print" "${__test_actual}"
@@ -567,6 +617,8 @@ test_build_find_command_path_pattern_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) \( -name \"*.txt\" \) -prune -o -print" "${__test_actual}"
@@ -577,6 +629,8 @@ test_build_find_command_path_pattern_exclude_name_pattern_success()
     "" \
     "" \
     "*.txt|*.html" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -602,6 +656,8 @@ test_build_find_command_path_pattern_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -617,6 +673,8 @@ test_build_find_command_path_pattern_exclude_name_pattern_success()
     "" \
     "" \
     "*.txt|*.html" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -649,6 +707,8 @@ test_build_find_command_name_pattern_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" \) -prune -o -name \"*.txt\" -print" "${__test_actual}"
@@ -666,6 +726,8 @@ test_build_find_command_name_pattern_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) -prune -o -name \"*.txt\" -print" "${__test_actual}"
@@ -675,6 +737,8 @@ test_build_find_command_name_pattern_exclude_path_pattern_success()
     "" \
     "*.txt|*.html" \
     "/usr|/etc" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -701,6 +765,8 @@ test_build_find_command_name_pattern_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -715,6 +781,8 @@ test_build_find_command_name_pattern_exclude_path_pattern_success()
     "" \
     "*.txt|*.html" \
     "/usr|/etc" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -748,6 +816,8 @@ test_build_find_command_exclude_path_pattern_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" \) -prune -o \( -name \"*.txt\" \) -prune -o -print" "${__test_actual}"
@@ -758,6 +828,8 @@ test_build_find_command_exclude_path_pattern_exclude_name_pattern_success()
     "" \
     "/usr|/etc" \
     "*.txt" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -782,6 +854,8 @@ test_build_find_command_exclude_path_pattern_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" \) -prune -o -print" "${__test_actual}"
@@ -794,6 +868,8 @@ test_build_find_command_exclude_path_pattern_exclude_name_pattern_success()
     "" \
     "/usr|/etc" \
     "*.txt|*.html" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -826,6 +902,8 @@ test_build_find_command_path_pattern_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -path \"/etc\" \) -prune -o -path \"/usr\" -print" "${__test_actual}"
@@ -835,6 +913,8 @@ test_build_find_command_path_pattern_exclude_path_pattern_success()
     "/usr|/etc/default|/proc" \
     "" \
     "/proc|/run" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -853,6 +933,8 @@ test_build_find_command_path_pattern_exclude_path_pattern_success()
     "/usr|/etc/default|/proc" \
     "" \
     "/proc|/run" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -883,6 +965,8 @@ test_build_find_command_path_pattern_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -896,6 +980,8 @@ test_build_find_command_path_pattern_exclude_path_pattern_success()
     "/usr|/etc/default|/proc" \
     "" \
     "/proc|/run" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -929,6 +1015,8 @@ test_build_find_command_name_pattern_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point \( -name \"*.gz\" \) -prune -o -name \"*.txt\" -print" "${__test_actual}"
@@ -939,6 +1027,8 @@ test_build_find_command_name_pattern_exclude_name_pattern_success()
     "*.txt|*.html|z*" \
     "" \
     "*.gz|*.zip" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -957,6 +1047,8 @@ test_build_find_command_name_pattern_exclude_name_pattern_success()
     "*.txt|*.html|z*" \
     "" \
     "*.gz|*.zip" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -989,6 +1081,8 @@ test_build_find_command_file_type_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -type f -print" "${__test_actual}" 
@@ -1001,6 +1095,8 @@ test_build_find_command_file_type_success()
     "" \
     "" \
     "f|d" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1019,6 +1115,8 @@ test_build_find_command_file_type_success()
     "" \
     "" \
     "f|d" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1046,6 +1144,8 @@ test_build_find_command_file_type_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -1062,6 +1162,8 @@ test_build_find_command_file_type_success()
     "" \
     "" \
     "f|d" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1092,6 +1194,8 @@ test_build_find_command_min_file_size_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -size +100c -print" "${__test_actual}" 
@@ -1106,6 +1210,8 @@ test_build_find_command_min_file_size_success()
     "" \
     "" \
     "100" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1135,6 +1241,8 @@ test_build_find_command_max_file_size_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -size -200c -print" "${__test_actual}" 
@@ -1150,6 +1258,8 @@ test_build_find_command_max_file_size_success()
     "" \
     "" \
     "200" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1177,6 +1287,8 @@ test_build_find_command_min_and_max_file_size_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -size +100c -size -200c -print" "${__test_actual}" 
@@ -1192,6 +1304,8 @@ test_build_find_command_min_and_max_file_size_success()
     "" \
     "100" \
     "200" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1220,6 +1334,8 @@ test_build_find_command_perm_success()
     "777" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   assertEquals "find ${__TEST_TEMP_DIR}/mount-point -perm 777 -print" "${__test_actual}" 
@@ -1235,6 +1351,8 @@ test_build_find_command_perm_success()
     "" \
     "" \
     "777|444" \
+    "" \
+    "" \
     "" \
     "" \
     ""`
@@ -1253,6 +1371,8 @@ test_build_find_command_perm_success()
     "" \
     "" \
     "777|444" \
+    "" \
+    "" \
     "" \
     "" \
     ""`
@@ -1277,6 +1397,8 @@ test_build_find_command_perm_success()
     "777|444" \
     "" \
     "" \
+    "" \
+    "" \
     ""`
 
   if commandExists "perl"; then
@@ -1286,10 +1408,106 @@ test_build_find_command_perm_success()
   fi
 }
 
+test_build_find_command_no_group_success()
+{
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -nogroup -print" "${__test_actual}"
+
+  __UAC_TOOL_FIND_NOGROUP_SUPPORT=false
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  if commandExists "perl"; then
+    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -nogroup -print" "${__test_actual}"
+  else
+    assertEquals "find ${__TEST_TEMP_DIR}/mount-point -nogroup -print" "${__test_actual}" 
+  fi
+  
+}
+
+test_build_find_command_no_user_success()
+{
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -nouser -print" "${__test_actual}"
+
+  __UAC_TOOL_FIND_NOUSER_SUPPORT=false
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "" \
+    ""`
+
+  if commandExists "perl"; then
+    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -nouser -print" "${__test_actual}"
+  else
+    assertEquals "find ${__TEST_TEMP_DIR}/mount-point -nouser -print" "${__test_actual}" 
+  fi
+  
+}
+
 test_build_find_command_print0_success()
 {
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1308,6 +1526,8 @@ test_build_find_command_print0_success()
   __UAC_TOOL_FIND_PRINT0_SUPPORT=false
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1346,6 +1566,8 @@ test_build_find_command_mtime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     ""`
 
@@ -1353,6 +1575,8 @@ test_build_find_command_mtime_success()
   
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1380,6 +1604,8 @@ test_build_find_command_mtime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     "20"`
 
@@ -1388,6 +1614,8 @@ test_build_find_command_mtime_success()
   __UAC_TOOL_FIND_MTIME_SUPPORT=false
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1421,6 +1649,8 @@ test_build_find_command_mtime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "20"`
 
   if commandExists "perl"; then
@@ -1431,6 +1661,8 @@ test_build_find_command_mtime_success()
 
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1469,6 +1701,8 @@ test_build_find_command_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     ""`
 
@@ -1476,6 +1710,8 @@ test_build_find_command_atime_success()
   
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1503,6 +1739,8 @@ test_build_find_command_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     "20"`
 
@@ -1511,6 +1749,8 @@ test_build_find_command_atime_success()
   __UAC_TOOL_FIND_ATIME_SUPPORT=false
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1544,6 +1784,8 @@ test_build_find_command_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "20"`
 
   if commandExists "perl"; then
@@ -1554,6 +1796,8 @@ test_build_find_command_atime_success()
 
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1592,6 +1836,8 @@ test_build_find_command_ctime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     ""`
 
@@ -1599,6 +1845,8 @@ test_build_find_command_ctime_success()
   
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1626,6 +1874,8 @@ test_build_find_command_ctime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     "20"`
 
@@ -1634,6 +1884,8 @@ test_build_find_command_ctime_success()
   __UAC_TOOL_FIND_CTIME_SUPPORT=false
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1667,6 +1919,8 @@ test_build_find_command_ctime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "20"`
 
   if commandExists "perl"; then
@@ -1677,6 +1931,8 @@ test_build_find_command_ctime_success()
 
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1714,6 +1970,8 @@ test_build_find_command_mtime_ctime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     ""`
 
@@ -1721,6 +1979,8 @@ test_build_find_command_mtime_ctime_success()
   
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1748,6 +2008,8 @@ test_build_find_command_mtime_ctime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     "20"`
 
@@ -1756,6 +2018,8 @@ test_build_find_command_mtime_ctime_success()
   __UAC_TOOL_FIND_CTIME_SUPPORT=false
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1789,6 +2053,8 @@ test_build_find_command_mtime_ctime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "20"`
 
   if commandExists "perl"; then
@@ -1799,6 +2065,8 @@ test_build_find_command_mtime_ctime_success()
 
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1836,6 +2104,8 @@ test_build_find_command_mtime_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     ""`
 
@@ -1843,6 +2113,8 @@ test_build_find_command_mtime_atime_success()
   
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1870,6 +2142,8 @@ test_build_find_command_mtime_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     "20"`
 
@@ -1878,6 +2152,8 @@ test_build_find_command_mtime_atime_success()
   __UAC_TOOL_FIND_ATIME_SUPPORT=false
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1910,6 +2186,8 @@ test_build_find_command_mtime_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "20"`
 
   if commandExists "perl"; then
@@ -1920,6 +2198,8 @@ test_build_find_command_mtime_atime_success()
 
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1957,6 +2237,8 @@ test_build_find_command_ctime_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     ""`
 
@@ -1964,6 +2246,8 @@ test_build_find_command_ctime_atime_success()
   
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -1991,6 +2275,8 @@ test_build_find_command_ctime_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "10" \
     "20"`
 
@@ -1999,6 +2285,8 @@ test_build_find_command_ctime_atime_success()
   __UAC_TOOL_FIND_ATIME_SUPPORT=false
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -2031,6 +2319,8 @@ test_build_find_command_ctime_atime_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "20"`
 
   if commandExists "perl"; then
@@ -2041,6 +2331,8 @@ test_build_find_command_ctime_atime_success()
 
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
