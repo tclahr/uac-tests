@@ -5,6 +5,7 @@
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/find_based_collector.sh"
+  . "${UAC_DIR}/lib/sanitize_output_file.sh"
 
   _build_find_command()
   {
@@ -64,11 +65,6 @@ oneTimeSetUp()
   }
 
   _sanitize_output_directory()
-  {
-    printf %s "${1:-}"
-  }
-
-  _sanitize_output_file()
   {
     printf %s "${1:-}"
   }
@@ -377,6 +373,32 @@ test_find_based_collector_simple_find_success()
     "test_find_based_collector_success_find.txt"`
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_success_find.txt"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
+}
+
+test_find_based_collector_simple_find_truncated_output_file_success()
+{
+  __test_actual=`_find_based_collector \
+    "find" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"`
+
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/(trunc)me_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"`
   assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 }
 
