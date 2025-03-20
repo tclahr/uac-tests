@@ -227,6 +227,25 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_compress_output_file_fail.yaml\""
 }
 
+test_validate_artifact_empty_redirect_stderr_to_stdour_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_redirect_stderr_to_stdour_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: command
+    command: ls
+    output_directory: /tmp
+    output_file: ls.txt
+    compress_output_file: true
+    redirect_stderr_to_stdout:
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_redirect_stderr_to_stdour_fail.yaml\""
+}
+
 test_validate_artifact_empty_global_condition_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_global_condition_fail.yaml"
@@ -901,6 +920,43 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_max_file_size_fail.yaml\""
 }
 
+test_validate_artifact_empty_file_type_max_file_size_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_file_type_max_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    max_file_size: 102400
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_file_type_max_file_size_fail.yaml\""
+}
+
+test_validate_artifact_invalid_file_type_max_file_size_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    file_type: [d]
+    max_file_size: 102400
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml\""
+}
+
 test_validate_artifact_empty_min_file_size_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_min_file_size_fail.yaml"
@@ -991,6 +1047,43 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_min_file_size_fail.yaml\""
 }
 
+test_validate_artifact_empty_file_type_min_file_size_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_file_type_min_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    min_file_size: 102400
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_file_type_min_file_size_fail.yaml\""
+}
+
+test_validate_artifact_invalid_file_type_min_file_size_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    file_type: [d]
+    min_file_size: 102400
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml\""
+}
+
 test_validate_artifact_empty_modifier_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_modifier_fail.yaml"
@@ -1079,6 +1172,78 @@ artifacts:
 EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_array_name_pattern_fail.yaml\""
+}
+
+test_validate_artifact_empty_no_group_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_no_group_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    no_group: 
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_no_group_fail.yaml\""
+}
+
+test_validate_artifact_invalid_no_group_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_no_group_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    no_group: invalid
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_no_group_fail.yaml\""
+}
+
+test_validate_artifact_empty_no_user_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_no_user_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    no_user: 
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_no_user_fail.yaml\""
+}
+
+test_validate_artifact_invalid_no_user_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_no_user_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    no_user: invalid
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_no_user_fail.yaml\""
 }
 
 test_validate_artifact_output_directory_success()
@@ -1464,9 +1629,33 @@ test_validate_artifact_empty_version_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_version_fail.yaml"
 version: 
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: hash
+    path: /etc
+    output_directory: tmp
+    output_file: test.txt
 EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_version_fail.yaml\""
+}
+
+test_validate_artifact_missing_version_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/missing_version_fail.yaml"
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: hash
+    path: /etc
+    output_directory: tmp
+    output_file: test.txt
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/missing_version_fail.yaml\""
 }
 
 test_validate_artifact_missing_artifacts_mapping_fail()
@@ -1790,6 +1979,42 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_name_pattern_property_fail.yaml\""
 }
 
+test_validate_artifact_command_collector_invalid_no_group_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_no_group_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: command
+    command: ls
+    no_group: true
+    output_file: test.txt
+    output_directory: tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_no_group_property_fail.yaml\""
+}
+
+test_validate_artifact_command_collector_invalid_no_user_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_no_user_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: command
+    command: ls
+    no_user: true
+    output_file: test.txt
+    output_directory: tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_no_user_property_fail.yaml\""
+}
+
 test_validate_artifact_command_collector_invalid_path_property_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_path_property_fail.yaml"
@@ -1842,6 +2067,28 @@ artifacts:
 EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_permissions_property_fail.yaml\""
+}
+
+test_validate_artifact_command_collector_invalid_redirect_stderr_to_stdout_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_redirect_stderr_to_stdout_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: command
+    condition: ls /tmp
+    foreach: ls /tmp
+    command: ls
+    output_directory: /tmp
+    output_file: test.txt
+    compress_output_file: true
+    exclude_nologin_users: true
+    redirect_stderr_to_stdout: invalid
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_invalid_redirect_stderr_to_stdout_fail.yaml\""
 }
 
 test_validate_artifact_hash_collector_missing_path_property_fail()
@@ -1948,6 +2195,76 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/hash_collector_missing_output_file_property_fail.yaml\""
 }
 
+test_validate_artifact_hash_collector_redirect_stderr_to_stdout_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/hash_collector_redirect_stderr_to_stdout_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: hash
+    path: /etc
+    output_directory: tmp
+    output_file: test.txt
+    redirect_stderr_to_stdout: true
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/hash_collector_redirect_stderr_to_stdout_property_fail.yaml\""
+}
+
+test_validate_artifact_file_collector_redirect_stderr_to_stdout_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/file_collector_redirect_stderr_to_stdout_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: file
+    path: /etc
+    redirect_stderr_to_stdout: true
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/file_collector_redirect_stderr_to_stdout_property_fail.yaml\""
+}
+
+test_validate_artifact_find_collector_redirect_stderr_to_stdout_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/find_collector_redirect_stderr_to_stdout_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: find
+    path: /etc
+    output_directory: tmp
+    output_file: test.txt
+    redirect_stderr_to_stdout: true
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/find_collector_redirect_stderr_to_stdout_property_fail.yaml\""
+}
+
+test_validate_artifact_stat_collector_redirect_stderr_to_stdout_property_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/stat_collector_redirect_stderr_to_stdout_property_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: test
+    supported_os: [all]
+    collector: stat
+    path: /etc
+    output_directory: tmp
+    output_file: test.txt
+    redirect_stderr_to_stdout: true
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/stat_collector_redirect_stderr_to_stdout_property_fail.yaml\""
+}
+
 test_validate_artifact_invalid_property_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_property_fail.yaml"
@@ -1973,6 +2290,7 @@ artifacts:
     output_file: test.txt
     compress_output_file: true
     exclude_nologin_users: true
+    redirect_stderr_to_stdout: true
 EOF
 
   assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/command_collector_success.yaml\""
@@ -2000,6 +2318,8 @@ artifacts:
     max_file_size: 1000
     min_file_size: 500
     name_pattern: ["*.txt"]
+    no_group: true
+    no_user: false
     path: /etc
     path_pattern: ["/etc/default"]
     permissions: [4444]
@@ -2030,6 +2350,8 @@ artifacts:
     max_file_size: 1000
     min_file_size: 500
     name_pattern: ["*.txt"]
+    no_group: true
+    no_user: false
     output_directory: /tmp
     output_file: test.txt
     path: /etc
@@ -2061,6 +2383,8 @@ artifacts:
     max_file_size: 1000
     min_file_size: 500
     name_pattern: ["*.txt"]
+    no_group: true
+    no_user: false
     output_directory: /tmp
     output_file: test.txt
     path: /etc
@@ -2092,6 +2416,8 @@ artifacts:
     max_file_size: 1000
     min_file_size: 500
     name_pattern: ["*.txt"]
+    no_group: true
+    no_user: false
     output_directory: /tmp
     output_file: test.txt
     path: /etc

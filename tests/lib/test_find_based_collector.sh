@@ -5,6 +5,7 @@
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/find_based_collector.sh"
+  . "${UAC_DIR}/lib/sanitize_output_file.sh"
 
   _build_find_command()
   {
@@ -28,14 +29,18 @@ oneTimeSetUp()
     shift
     __bfc_permissions="${1:-}"
     shift
+    __bfc_no_group="${1:-false}"
+    shift
+    __bfc_no_user="${1:-false}"
+    shift
     __bfc_print0="${1:-false}"
     shift
     __bfc_start_date_days="${1:-0}"
     shift
     __bfc_end_date_days="${1:-0}"
 
-    printf %s "_build_find_command \"${__bfc_path}\" \"${__bfc_path_pattern}\" \"${__bfc_name_pattern}\" \"${__bfc_exclude_path_pattern}\" \"${__bfc_exclude_name_pattern}\" \"${__bfc_max_depth}\" \"${__bfc_file_type}\" \"${__bfc_min_file_size}\" \"${__bfc_max_file_size}\" \"${__bfc_permissions}\" \"${__bfc_print0}\" \"${__bfc_start_date_days}\" \"${__bfc_end_date_days}\""
-    _log_msg CMD "_build_find_command \"${__bfc_path}\" \"${__bfc_path_pattern}\" \"${__bfc_name_pattern}\" \"${__bfc_exclude_path_pattern}\" \"${__bfc_exclude_name_pattern}\" \"${__bfc_max_depth}\" \"${__bfc_file_type}\" \"${__bfc_min_file_size}\" \"${__bfc_max_file_size}\" \"${__bfc_permissions}\" \"${__bfc_print0}\" \"${__bfc_start_date_days}\" \"${__bfc_end_date_days}\""
+    printf %s "_build_find_command \"${__bfc_path}\" \"${__bfc_path_pattern}\" \"${__bfc_name_pattern}\" \"${__bfc_exclude_path_pattern}\" \"${__bfc_exclude_name_pattern}\" \"${__bfc_max_depth}\" \"${__bfc_file_type}\" \"${__bfc_min_file_size}\" \"${__bfc_max_file_size}\" \"${__bfc_permissions}\" ${__bfc_no_group} ${__bfc_no_user} ${__bfc_print0} \"${__bfc_start_date_days}\" \"${__bfc_end_date_days}\""
+    _log_msg CMD "_build_find_command \"${__bfc_path}\" \"${__bfc_path_pattern}\" \"${__bfc_name_pattern}\" \"${__bfc_exclude_path_pattern}\" \"${__bfc_exclude_name_pattern}\" \"${__bfc_max_depth}\" \"${__bfc_file_type}\" \"${__bfc_min_file_size}\" \"${__bfc_max_file_size}\" \"${__bfc_permissions}\" ${__bfc_no_group} ${__bfc_no_user} ${__bfc_print0} \"${__bfc_start_date_days}\" \"${__bfc_end_date_days}\""
   }
 
   _get_mount_point_by_file_system()
@@ -60,11 +65,6 @@ oneTimeSetUp()
   }
 
   _sanitize_output_directory()
-  {
-    printf %s "${1:-}"
-  }
-
-  _sanitize_output_file()
   {
     printf %s "${1:-}"
   }
@@ -136,6 +136,8 @@ test_find_based_collector_empty_collector_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
+    \"\" \
     \"\""
 }
 
@@ -143,6 +145,8 @@ test_find_based_collector_empty_path_fail()
 {
   assertFalse "_find_based_collector \
     \"find\" \
+    \"\" \
+    \"\" \
     \"\" \
     \"\" \
     \"\" \
@@ -178,6 +182,8 @@ test_find_based_collector_empty_output_directory_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
+    \"\" \
     \"\""
 }
 
@@ -186,6 +192,8 @@ test_find_based_collector_empty_output_file_fail()
   assertFalse "_find_based_collector \
     \"find\" \
     \"${__TEST_TEMP_DIR}/mount-point\" \
+    \"\" \
+    \"\" \
     \"\" \
     \"\" \
     \"\" \
@@ -219,6 +227,8 @@ test_find_based_collector_invalid_file_list_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
+    \"\" \
     \"${__TEST_TEMP_DIR}/destination_directory\" \
     \"test_find_based_collector_invalid_file_list_fail.txt\""
 
@@ -226,6 +236,8 @@ test_find_based_collector_invalid_file_list_fail()
     \"find\" \
     \"${__TEST_TEMP_DIR}/invalid_file.txt\" \
     \"true\" \
+    \"\" \
+    \"\" \
     \"\" \
     \"\" \
     \"\" \
@@ -263,6 +275,8 @@ test_find_based_collector_no_hashing_tool_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
+    \"\" \
     \"${__TEST_TEMP_DIR}/destination_directory\" \
     \"test_find_based_collector_no_hashing_tool_fail.txt\""
 
@@ -283,6 +297,8 @@ test_find_based_collector_no_hashing_tool_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
+    \"\" \
     \"${__TEST_TEMP_DIR}/destination_directory\" \
     \"test_find_based_collector_no_hashing_tool_fail.txt\""
 
@@ -291,6 +307,8 @@ test_find_based_collector_no_hashing_tool_fail()
   assertTrue "_find_based_collector \
     \"hash\" \
     \"/\" \
+    \"\" \
+    \"\" \
     \"\" \
     \"\" \
     \"\" \
@@ -326,6 +344,8 @@ test_find_based_collector_no_stat_tool_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
+    \"\" \
     \"${__TEST_TEMP_DIR}/destination_directory\" \
     \"test_find_based_collector_no_stat_tool_fail.txt\""
 }
@@ -347,11 +367,39 @@ test_find_based_collector_simple_find_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_success_find.txt"`
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_success_find.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
+}
+
+test_find_based_collector_simple_find_truncated_output_file_success()
+{
+  __test_actual=`_find_based_collector \
+    "find" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"`
+
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/(trunc)me_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 }
 
 test_find_based_collector_file_is_file_list_success()
@@ -360,6 +408,8 @@ test_find_based_collector_file_is_file_list_success()
     "file" \
     "${__TEST_TEMP_DIR}/uac/file_list.txt" \
     "true" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -392,6 +442,8 @@ test_find_based_collector_file_is_file_list_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_file_is_file_list_relative_file_path_success.txt"`
 
@@ -402,6 +454,8 @@ test_find_based_collector_file_is_file_list_success()
     "file" \
     "destination_directory/file_list.txt" \
     "true" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -437,11 +491,13 @@ test_find_based_collector_simple_file_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_success_file.txt"`
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_success_file.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 }
 
 test_find_based_collector_hash_is_file_list_success()
@@ -450,6 +506,8 @@ test_find_based_collector_hash_is_file_list_success()
     "hash" \
     "${__TEST_TEMP_DIR}/uac/file_list.txt" \
     "true" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -482,6 +540,8 @@ test_find_based_collector_hash_is_file_list_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_is_file_list_relative_file_path_success.txt"`
 
@@ -492,6 +552,8 @@ test_find_based_collector_hash_is_file_list_success()
     "hash" \
     "destination_directory/file_list.txt" \
     "true" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -528,17 +590,19 @@ test_find_based_collector_hash_print0_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_print0_success.txt"`
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_print0_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_print0_success.txt.sha1"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 sha1sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 sha1sum" "${__test_actual}"
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_print0_success.txt.sha256"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 sha256sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 sha256sum" "${__test_actual}"
 }
 
 test_find_based_collector_hash_no_print0_success()
@@ -561,17 +625,19 @@ test_find_based_collector_hash_no_print0_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_no_print0_success.txt"`
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_no_print0_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs md5sum" "${__test_actual}"
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_no_print0_success.txt.sha1"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs sha1sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs sha1sum" "${__test_actual}"
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_no_print0_success.txt.sha256"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs sha256sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs sha256sum" "${__test_actual}"
 }
 
 
@@ -581,6 +647,8 @@ test_find_based_collector_stat_is_file_list_success()
     "stat" \
     "${__TEST_TEMP_DIR}/uac/file_list.txt" \
     "true" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -613,6 +681,8 @@ test_find_based_collector_stat_is_file_list_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_is_file_list_relative_file_path_success.txt"`
 
@@ -623,6 +693,8 @@ test_find_based_collector_stat_is_file_list_success()
     "stat" \
     "destination_directory/file_list.txt" \
     "true" \
+    "" \
+    "" \
     "" \
     "" \
     "" \
@@ -659,11 +731,13 @@ test_find_based_collector_stat_print0_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_print0_success.txt"`
 
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_print0_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 
 }
 
@@ -687,11 +761,13 @@ test_find_based_collector_stat_no_print0_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_no_print0_success.txt"`
 
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_no_print0_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 
 }
 
@@ -712,10 +788,12 @@ test_find_based_collector_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_path_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_path_pattern_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"/usr|/etc/default|/proc\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"/usr|/etc/default|/proc\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -732,10 +810,12 @@ test_find_based_collector_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_path_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_path_pattern_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"/usr|/etc/default|/proc\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"/usr|/etc/default|/proc\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   _find_based_collector \
     "stat" \
@@ -752,10 +832,12 @@ test_find_based_collector_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_path_pattern_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_path_pattern_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"/usr|/etc/default|/proc\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"/usr|/etc/default|/proc\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_name_pattern_success()
@@ -775,10 +857,12 @@ test_find_based_collector_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_name_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_name_pattern_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"*.txt|*.sh\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"*.txt|*.sh\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -795,10 +879,12 @@ test_find_based_collector_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_name_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_name_pattern_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"*.txt|*.sh\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"*.txt|*.sh\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   _find_based_collector \
     "stat" \
@@ -815,10 +901,12 @@ test_find_based_collector_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_name_pattern_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_name_pattern_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"*.txt|*.sh\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"*.txt|*.sh\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_exclude_path_pattern_success()
@@ -838,10 +926,12 @@ test_find_based_collector_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_exclude_path_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_exclude_path_pattern_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/usr|/etc/default|/proc|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/usr|/etc/default|/proc|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -858,10 +948,12 @@ test_find_based_collector_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_exclude_path_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_exclude_path_pattern_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/usr|/etc/default|/proc|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/usr|/etc/default|/proc|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   __UAC_CONF_EXCLUDE_PATH_PATTERN="/tmp|/var/tmp"
   _find_based_collector \
@@ -879,10 +971,12 @@ test_find_based_collector_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_exclude_path_pattern_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_exclude_path_pattern_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/usr|/etc/default|/proc|/tmp|/var/tmp|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/usr|/etc/default|/proc|/tmp|/var/tmp|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_exclude_name_pattern_success()
@@ -902,10 +996,12 @@ test_find_based_collector_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_exclude_name_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_exclude_name_pattern_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"*.txt|*.sh\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"*.txt|*.sh\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -922,10 +1018,12 @@ test_find_based_collector_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_exclude_name_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_exclude_name_pattern_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"*.txt|*.sh\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"*.txt|*.sh\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   __UAC_CONF_EXCLUDE_NAME_PATTERN="*.jpg|*.log"
   _find_based_collector \
@@ -943,10 +1041,12 @@ test_find_based_collector_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_exclude_name_pattern_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_exclude_name_pattern_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"*.txt|*.sh|*.jpg|*.log\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"*.txt|*.sh|*.jpg|*.log\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_exclude_file_system_success()
@@ -966,10 +1066,12 @@ test_find_based_collector_exclude_file_system_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_exclude_file_system_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_exclude_file_system_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/apfs|/mnt/ntfs|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/apfs|/mnt/ntfs|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -986,10 +1088,12 @@ test_find_based_collector_exclude_file_system_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_exclude_file_system_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_exclude_file_system_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/apfs|/mnt/ntfs|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/apfs|/mnt/ntfs|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   __UAC_EXCLUDE_MOUNT_POINTS="/tmp|/run/tmp"
   _find_based_collector \
@@ -1007,10 +1111,12 @@ test_find_based_collector_exclude_file_system_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_exclude_file_system_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_exclude_file_system_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/apfs|/mnt/ntfs|/tmp|/run/tmp|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"/apfs|/mnt/ntfs|/tmp|/run/tmp|${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_maxdepth_success()
@@ -1030,10 +1136,12 @@ test_find_based_collector_maxdepth_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_maxdepth_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_maxdepth_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"10\" \"\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"10\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -1050,10 +1158,12 @@ test_find_based_collector_maxdepth_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_maxdepth_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_maxdepth_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"10\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"10\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   _find_based_collector \
     "stat" \
@@ -1070,10 +1180,12 @@ test_find_based_collector_maxdepth_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_maxdepth_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_maxdepth_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"10\" \"\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"10\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_file_type_success()
@@ -1093,10 +1205,12 @@ test_find_based_collector_file_type_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_file_type_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_file_type_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"d\" \"\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"d\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -1113,10 +1227,12 @@ test_find_based_collector_file_type_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_file_type_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_file_type_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"d\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"d\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   _find_based_collector \
     "stat" \
@@ -1133,10 +1249,12 @@ test_find_based_collector_file_type_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_file_type_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_file_type_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"d\" \"\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"d\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_min_file_size_success()
@@ -1156,10 +1274,12 @@ test_find_based_collector_min_file_size_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_min_file_size_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_min_file_size_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"1024\" \"\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"1024\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -1176,10 +1296,12 @@ test_find_based_collector_min_file_size_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_min_file_size_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_min_file_size_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"1024\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"1024\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   _find_based_collector \
     "stat" \
@@ -1196,10 +1318,12 @@ test_find_based_collector_min_file_size_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_min_file_size_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_min_file_size_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"1024\" \"\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"1024\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_max_file_size_success()
@@ -1219,10 +1343,12 @@ test_find_based_collector_max_file_size_success()
     "2048" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_max_file_size_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_max_file_size_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"2048\" \"\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"2048\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -1239,10 +1365,12 @@ test_find_based_collector_max_file_size_success()
     "2048" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_max_file_size_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_max_file_size_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"2048\" \"\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"2048\" \"\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   _find_based_collector \
     "stat" \
@@ -1259,10 +1387,12 @@ test_find_based_collector_max_file_size_success()
     "2048" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_max_file_size_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_max_file_size_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"2048\" \"\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"2048\" \"\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_permissions_success()
@@ -1282,10 +1412,12 @@ test_find_based_collector_permissions_success()
     "" \
     "755" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_permissions_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_permissions_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"755\" \"false\" \"0\" \"0\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"755\" false false false \"0\" \"0\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -1302,10 +1434,12 @@ test_find_based_collector_permissions_success()
     "" \
     "755" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_permissions_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_permissions_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"755\" \"true\" \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"755\" false false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
 
   _find_based_collector \
     "stat" \
@@ -1322,10 +1456,150 @@ test_find_based_collector_permissions_success()
     "" \
     "755" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_permissions_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_permissions_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"755\" \"true\" \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"755\" false false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+}
+
+test_find_based_collector_no_group_success()
+{
+  _find_based_collector \
+    "find" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_find_no_group_success.txt"
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_no_group_success.txt"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" true false false \"0\" \"0\"" "${__test_actual}"
+
+  _find_based_collector \
+    "hash" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_hash_no_group_success.txt"
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_no_group_success.txt.md5"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" true false true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+
+  _find_based_collector \
+    "stat" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_stat_no_group_success.txt"
+  __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_no_group_success.txt"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" true false true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+}
+
+test_find_based_collector_no_user_success()
+{
+  _find_based_collector \
+    "find" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_find_no_user_success.txt"
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_no_user_success.txt"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false true false \"0\" \"0\"" "${__test_actual}"
+
+  _find_based_collector \
+    "hash" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_hash_no_user_success.txt"
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_no_user_success.txt.md5"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false true true \"0\" \"0\" | xargs -0 md5sum" "${__test_actual}"
+
+  _find_based_collector \
+    "stat" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "true" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_stat_no_user_success.txt"
+  __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_no_user_success.txt"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false true true \"0\" \"0\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }
 
 test_find_based_collector_ignore_date_range_success()
@@ -1347,10 +1621,12 @@ test_find_based_collector_ignore_date_range_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_ignore_date_range_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_ignore_date_range_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"false\" \"20\" \"10\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"20\" \"10\"" "${__test_actual}"
 
   _find_based_collector \
     "hash" \
@@ -1367,10 +1643,12 @@ test_find_based_collector_ignore_date_range_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_ignore_date_range_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_ignore_date_range_success.txt.md5"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"20\" \"10\" | xargs -0 md5sum" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"20\" \"10\" | xargs -0 md5sum" "${__test_actual}"
 
   _find_based_collector \
     "stat" \
@@ -1387,8 +1665,10 @@ test_find_based_collector_ignore_date_range_success()
     "" \
     "" \
     "" \
+    "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_ignore_date_range_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_ignore_date_range_success.txt"`
-  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" \"true\" \"20\" \"10\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"20\" \"10\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
 }

@@ -5,6 +5,7 @@
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/command_collector.sh"
+  . "${UAC_DIR}/lib/sanitize_output_file.sh"
 
   command_exists()
   {
@@ -47,11 +48,6 @@ oneTimeSetUp()
   }
 
   _sanitize_output_directory()
-  {
-    printf %b "${1:-}"
-  }
-  
-  _sanitize_output_file()
   {
     printf %b "${1:-}"
   }
@@ -124,6 +120,18 @@ test_command_collector_single_command_success()
   assertContains "${__test_container}" "kthreadd"
 }
 
+test_command_collector_single_command_truncated_output_file_success()
+{
+  _command_collector \
+    "" \
+    "__ps" \
+    "${__TEST_TEMP_DIR}/single_command_truncated_output_file_success" \
+    "very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"
+
+  __test_container=`cat "${__TEST_TEMP_DIR}/single_command_truncated_output_file_success/(trunc)me_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"`
+  assertContains "${__test_container}" "kthreadd"
+}
+
 test_command_collector_multiple_command_success()
 {
   _command_collector \
@@ -135,6 +143,23 @@ __virsh_list" \
     "multiple_command.txt"
 
   __test_container=`cat "${__TEST_TEMP_DIR}/multiple_command_success/multiple_command.txt"`
+  assertContains "${__test_container}" "kthreadd"
+  assertContains "${__test_container}" "libkrb5support"
+  assertContains "${__test_container}" "vm-02"
+}
+
+test_command_collector_multiple_command_truncated_output_file_success()
+{
+  _command_collector \
+    "" \
+    "__ps
+__lsof
+__virsh_list" \
+    "${__TEST_TEMP_DIR}/multiple_command_truncated_output_file_success" \
+    "very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"
+
+  __test_container=`cat "${__TEST_TEMP_DIR}/multiple_command_truncated_output_file_success/(trunc)me_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"`
+
   assertContains "${__test_container}" "kthreadd"
   assertContains "${__test_container}" "libkrb5support"
   assertContains "${__test_container}" "vm-02"
@@ -153,6 +178,22 @@ test_command_collector_command_compress_output_file_success()
     assertFileExists "${__TEST_TEMP_DIR}/command_compress_output_file_success/ps.txt.gz"
   else
     assertFileExists "${__TEST_TEMP_DIR}/command_compress_output_file_success/ps.txt"
+  fi
+}
+
+test_command_collector_command_compress_truncated_output_file_success()
+{
+  _command_collector \
+    "" \
+    "__ps" \
+    "${__TEST_TEMP_DIR}/command_compress_truncated_output_file_success" \
+    "very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt" \
+    true
+
+  if commandExists "gzip"; then
+    assertFileExists "${__TEST_TEMP_DIR}/command_compress_truncated_output_file_success/(trunc)me_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt.gz"
+  else
+    assertFileExists "${__TEST_TEMP_DIR}/command_compress_truncated_output_file_success/(trunc)me_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"
   fi
 }
 
@@ -221,6 +262,23 @@ test_command_collector_foreach_command_compress_output_file_success()
     assertFileExists "${__TEST_TEMP_DIR}/foreach_command_compress_output_file_success/vm-01.txt.gz"
   else
     assertFileExists "${__TEST_TEMP_DIR}/foreach_command_compress_output_file_success/vm-01.txt"
+  fi
+  
+}
+
+test_command_collector_foreach_command_compress_truncated_output_file_success()
+{
+  _command_collector \
+    "__virsh_list" \
+    "__virsh_nodeinfo %line%" \
+    "${__TEST_TEMP_DIR}/foreach_command_compress_truncated_output_file_success" \
+    "very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_%line%.txt" \
+    true
+
+  if commandExists "gzip"; then
+    assertFileExists "${__TEST_TEMP_DIR}/foreach_command_compress_truncated_output_file_success/(trunc)t_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_vm-01.txt.gz"
+  else
+    assertFileExists "${__TEST_TEMP_DIR}/foreach_command_compress_truncated_output_file_success/(trunc)t_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_vm-01.txt"
   fi
   
 }

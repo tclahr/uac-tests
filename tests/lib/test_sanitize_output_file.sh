@@ -120,3 +120,18 @@ test_sanitize_output_file_empty_filename_success()
   __test_actual=`_sanitize_output_file ""`
   assertEquals "_" "${__test_actual}"
 }
+
+test_sanitize_output_file_no_truncation_success()
+{
+  __test_file_name="file.sh"
+  __test_actual=`_sanitize_output_file "${__test_file_name}"`
+  assertEquals "file.sh" "${__test_actual}"
+}
+
+test_sanitize_output_file_truncation_success()
+{
+  __test_file_name="very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt"
+  __test_actual=`_sanitize_output_file "${__test_file_name}"`
+  
+  assertEquals "(trunc)me_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters.txt" "${__test_actual}"
+}

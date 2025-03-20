@@ -182,9 +182,32 @@ test_uac_hash_collected_success()
   
 }
 
+test_uac_truncated_output_file_output_format_none_success()
+{
+  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -p test -v -u --output-base-name \"very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_none\" --output-format none \"${__TEST_TEMP_DIR}\""
+  assertDirectoryExists "${__TEST_TEMP_DIR}/(trunc)oing_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_none"
+  assertFileExists "${__TEST_TEMP_DIR}/(trunc)oing_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_none.log"
+}
+
+test_uac_truncated_output_file_output_format_tar_success()
+{
+  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -p test -v -u --output-base-name \"very_long_directory_name_with_many_characters_that_exceeds_the_standard_limit_of_filesystem_paths_another_very_long_directory_name_with_even_more_characters_that_pushes_the_limit_further_super_long_filename_that_keeps_going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_tar\" --output-format tar \"${__TEST_TEMP_DIR}\""
+  if commandExists "gzip"; then
+    assertFileExists "${__TEST_TEMP_DIR}/(trunc)going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_tar.tar.gz"
+    assertFileExists "${__TEST_TEMP_DIR}/(trunc)going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_tar.log"
+    gzip -d "${__TEST_TEMP_DIR}/(trunc)going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_tar.tar.gz"
+  else
+    assertFileExists "${__TEST_TEMP_DIR}/(trunc)going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_tar.tar"
+    assertFileExists "${__TEST_TEMP_DIR}/(trunc)going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_tar.log"
+  fi
+  __test_container=`tar -tf "${__TEST_TEMP_DIR}/(trunc)going_and_going_until_it_reaches_and_exceeds_the_255_character_limit_and_some_more_characters_output_format_tar.tar"`
+  assertContains "${__test_container}" "uac.log"
+  assertContains "${__test_container}" "live_response/storage/df.txt"
+}
+
 test_uac_start_and_end_date_success()
 {
-  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --start-date 2024-01-01 --output-base-name \"test_uac_start_date_success\" \"${__TEST_TEMP_DIR}\""
-  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --end-date 2024-01-31 --output-base-name \"test_uac_end_date_success\" \"${__TEST_TEMP_DIR}\""
-  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --start-date 2024-01-01 --end-date 2024-01-31 --output-base-name \"test_uac_start_and_end_date_success\" \"${__TEST_TEMP_DIR}\""
+  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --start-date 1999-01-01 --output-base-name \"test_uac_start_date_success\" \"${__TEST_TEMP_DIR}\""
+  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --end-date 1999-01-31 --output-base-name \"test_uac_end_date_success\" \"${__TEST_TEMP_DIR}\""
+  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --start-date 1999-01-01 --end-date 1999-01-31 --output-base-name \"test_uac_start_and_end_date_success\" \"${__TEST_TEMP_DIR}\""
 }
