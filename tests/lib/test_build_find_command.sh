@@ -1066,6 +1066,116 @@ test_build_find_command_name_pattern_exclude_name_pattern_success()
 
 }
 
+test_build_find_command_max_depth_success()
+{
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "2" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 2 -print" "${__test_actual}"
+
+  __UAC_CONF_MAX_DEPTH=4
+
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 4 -print" "${__test_actual}"
+
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "2" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 4 -print" "${__test_actual}"
+
+  __UAC_CONF_MAX_DEPTH=3
+
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "6" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 3 -print" "${__test_actual}"
+  
+  __UAC_CONF_MAX_DEPTH=0
+  __UAC_TOOL_FIND_MAXDEPTH_SUPPORT=false
+
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "6" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  if commandExists "perl"; then
+    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -maxdepth 6 -print" "${__test_actual}"
+  else
+    assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
+  fi
+
+}
+
 test_build_find_command_file_type_success()
 {
   __test_actual=`_build_find_command \
@@ -1198,7 +1308,7 @@ test_build_find_command_min_file_size_success()
     "" \
     ""`
 
-  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -size +100c -print" "${__test_actual}" 
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -size +100c -print" "${__test_actual}"
   
   __UAC_TOOL_FIND_SIZE_SUPPORT=false
   __test_actual=`_build_find_command \
