@@ -1125,9 +1125,7 @@ test_build_find_command_max_depth_success()
     "" \
     ""`
 
-  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 4 -print" "${__test_actual}"
-
-  __UAC_CONF_MAX_DEPTH=3
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 2 -print" "${__test_actual}"
 
   __test_actual=`_build_find_command \
     "${__TEST_TEMP_DIR}/mount-point" \
@@ -1146,7 +1144,7 @@ test_build_find_command_max_depth_success()
     "" \
     ""`
 
-  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 3 -print" "${__test_actual}"
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 6 -print" "${__test_actual}"
   
   __UAC_CONF_MAX_DEPTH=0
   __UAC_TOOL_FIND_MAXDEPTH_SUPPORT=false
