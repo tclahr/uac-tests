@@ -341,6 +341,21 @@ test_parse_command_line_arguments_notes_success()
   assertEquals "Heuristically programmed ALgorithmic computer" "${__UAC_EVIDENCE_NOTES}"
 }
 
+test_parse_command_line_arguments_sftp_ssh_option_success()
+{
+  __UAC_SFTP_SSH_OPTIONS=""
+  _parse_command_line_arguments --sftp-ssh-option "StrictHostKeyChecking=no"
+  assertEquals " -o StrictHostKeyChecking=no" "${__UAC_SFTP_SSH_OPTIONS}"
+
+  _parse_command_line_arguments --sftp-ssh-option "UserKnownHostsFile=/dev/null"
+  assertEquals " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" "${__UAC_SFTP_SSH_OPTIONS}"
+}
+
+test_parse_command_line_arguments_no_such_sftp_ssh_option_fail()
+{
+  assertFalse "_parse_command_line_arguments --sftp-ssh-option"
+}
+
 test_parse_command_line_arguments_invalid_option_fail()
 {
   assertFalse "_parse_command_line_arguments -invalid-option"
