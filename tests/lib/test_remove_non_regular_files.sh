@@ -64,6 +64,7 @@ test_remove_non_regular_files_success()
 
   assertEquals "${__TEST_TEMP_DIR}/mount-point/bin/lsof
 ${__TEST_TEMP_DIR}/mount-point/bin/netstat
+${__TEST_TEMP_DIR}/mount-point/bin/ss
 ${__TEST_TEMP_DIR}/mount-point/etc/default/keyboard
 ${__TEST_TEMP_DIR}/mount-point/etc/issue" "${__test_actual}"
 
@@ -78,6 +79,7 @@ test_remove_non_regular_files_no_find_type_support_success()
 
   assertEquals "${__TEST_TEMP_DIR}/mount-point/bin/lsof
 ${__TEST_TEMP_DIR}/mount-point/bin/netstat
+${__TEST_TEMP_DIR}/mount-point/bin/ss
 ${__TEST_TEMP_DIR}/mount-point/etc/default/keyboard
 ${__TEST_TEMP_DIR}/mount-point/etc/issue" "${__test_actual}"
 
