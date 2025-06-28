@@ -1304,6 +1304,56 @@ artifacts:
 EOF
 
   assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/path_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /etc /bin /tmp
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/path_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: """
+      /etc
+      /usr/local/bin
+      /tmp
+    """
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/path_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: """
+      /etc /home
+      /usr/local/bin
+      /tmp
+    """
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
 }
 
 test_validate_artifact_empty_path_fail()
@@ -1316,6 +1366,21 @@ artifacts:
     supported_os: [all]
     collector: hash
     path: 
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_path_fail.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_path_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: """
+    """
     output_file: hash.txt
     output_directory: /tmp
 EOF
@@ -1338,6 +1403,43 @@ artifacts:
 EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/relative_path_fail.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/relative_path_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: """
+      /tmp
+      etc
+      /usr/bin
+    """
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/relative_path_fail.yaml\""
+}
+
+test_validate_artifact_missing_closing_multi_line_path_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/missing_closing_multi_line_path_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: """
+      /tmp
+      etc
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/missing_closing_multi_line_path_fail.yaml\""
 }
 
 test_validate_artifact_empty_path_pattern_fail()
