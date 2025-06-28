@@ -391,6 +391,40 @@ artifacts:
   -
     description: example
     supported_os: [ aix, linux, macos, solaris ]
+    collector: find
+    path: /%start_date% /%start_date_epoch% /%end_date% /%end_date_epoch%
+    output_directory: replace_exposed_variables_success
+    output_file: replace_exposed_variables_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
+  assertEquals "_find_based_collector \"find\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
+    collector: find
+    path: """
+      /%start_date%
+      /%start_date_epoch% /%end_date%
+      /%end_date_epoch%
+    """
+    output_directory: replace_exposed_variables_success
+    output_file: replace_exposed_variables_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
+  assertEquals "_find_based_collector \"find\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
     collector: command
     command: ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory%
     output_directory: replace_exposed_variables_success
@@ -708,11 +742,10 @@ EOF
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/user_home_success.yaml"`
   assertEquals "_find_based_collector \"find\" \"home/uac\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/home/uac_uac\" \"home/uac_uac.txt\"
 _find_based_collector \"find\" \"home/john\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/home/john_john\" \"home/john_john.txt\"" "${__test_actual}"
-  
 
 }
 
-test_parse_artifact_find_based_collector_success()
+test_parse_artifact_find_collector_success()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
 version: 1.0
@@ -739,6 +772,61 @@ EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
   assertEquals "_find_based_collector \"find\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
+    collector: find
+    path: /usr/lib /usr/local/bin
+    path_pattern: ['/usr/local','/etc']
+    name_pattern: ['*.so', '*.txt']
+    exclude_path_pattern: ['/run', '/proc']
+    exclude_name_pattern: ['*.sh']
+    exclude_file_system: ['ntfs', 'ext4', 'btrfs']
+    max_depth: 5
+    file_type: [f, s, d]
+    min_file_size: 200
+    max_file_size: 500
+    permissions: [755, 644, 444]
+    ignore_date_range: true
+    output_directory: find_collector_success
+    output_file: find_collector_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
+  assertEquals "_find_based_collector \"find\" \"/usr/lib /usr/local/bin\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
+    collector: find
+    path: """
+      /usr/lib
+      /usr/local/bin
+    """
+    path_pattern: ['/usr/local','/etc']
+    name_pattern: ['*.so', '*.txt']
+    exclude_path_pattern: ['/run', '/proc']
+    exclude_name_pattern: ['*.sh']
+    exclude_file_system: ['ntfs', 'ext4', 'btrfs']
+    max_depth: 5
+    file_type: [f, s, d]
+    min_file_size: 200
+    max_file_size: 500
+    permissions: [755, 644, 444]
+    ignore_date_range: true
+    output_directory: find_collector_success
+    output_file: find_collector_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
+  assertEquals "_find_based_collector \"find\" \"/usr/lib /usr/local/bin\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
 }
 
 test_parse_artifact_file_collector_success()
