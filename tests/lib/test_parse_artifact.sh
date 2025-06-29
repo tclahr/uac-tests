@@ -411,13 +411,14 @@ artifacts:
       /%start_date%
       /%start_date_epoch% /%end_date%
       /%end_date_epoch%
+      /%end_date_epoch%
     """
     output_directory: replace_exposed_variables_success
     output_file: replace_exposed_variables_success.txt
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"find\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200 /1675123200\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
 version: 1.0
