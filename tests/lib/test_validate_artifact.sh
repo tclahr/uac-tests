@@ -1319,41 +1319,6 @@ EOF
 
   assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
 
-  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/path_success.yaml"
-version: 1.0
-artifacts:
-  -
-    description: example 1
-    supported_os: [all]
-    collector: hash
-    path: """
-      /etc
-      /usr/local/bin
-      /tmp
-    """
-    output_file: hash.txt
-    output_directory: /tmp
-EOF
-
-  assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
-
-  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/path_success.yaml"
-version: 1.0
-artifacts:
-  -
-    description: example 1
-    supported_os: [all]
-    collector: hash
-    path: """
-      /etc /home
-      /usr/local/bin
-      /tmp
-    """
-    output_file: hash.txt
-    output_directory: /tmp
-EOF
-
-  assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
 }
 
 test_validate_artifact_empty_path_fail()

@@ -407,12 +407,7 @@ artifacts:
     description: example
     supported_os: [ aix, linux, macos, solaris ]
     collector: find
-    path: """
-      /%start_date%
-      /%start_date_epoch% /%end_date%
-      /%end_date_epoch%
-      /%end_date_epoch%
-    """
+    path: /%start_date% /%start_date_epoch% /%end_date% /%end_date_epoch% /%end_date_epoch%
     output_directory: replace_exposed_variables_success
     output_file: replace_exposed_variables_success.txt
 EOF
@@ -807,10 +802,7 @@ artifacts:
     description: example
     supported_os: [ aix, linux, macos, solaris ]
     collector: find
-    path: """
-      /usr/lib
-      /usr/local/bin
-    """
+    path: /usr/lib /usr/local/bin
     path_pattern: ['/usr/local','/etc']
     name_pattern: ['*.so', '*.txt']
     exclude_path_pattern: ['/run', '/proc']
