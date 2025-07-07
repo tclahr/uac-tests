@@ -53,12 +53,27 @@ setUp()
   echo "${__TEST_TEMP_DIR}/mount-point/bin/lsof" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
   echo "${__TEST_TEMP_DIR}/mount-point/bin/netstat" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
   echo "${__TEST_TEMP_DIR}/mount-point/bin/ss" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
-  echo "/dev/null" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
   echo "${__TEST_TEMP_DIR}/mount-point/usr/bin" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
 }
 
 test_remove_non_regular_files_success()
 {
+  _remove_non_regular_files "${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  __test_actual=`cat "${__UAC_TEMP_DATA_DIR}/file_collector.tmp"`
+
+  assertEquals "${__TEST_TEMP_DIR}/mount-point/bin/lsof
+${__TEST_TEMP_DIR}/mount-point/bin/netstat
+${__TEST_TEMP_DIR}/mount-point/bin/ss
+${__TEST_TEMP_DIR}/mount-point/etc/default/keyboard
+${__TEST_TEMP_DIR}/mount-point/etc/issue" "${__test_actual}"
+
+  if [ -c "/dev/char/mem/null" ]; then # esxi
+    echo "/dev/char/mem/null" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  elif [ -c "/devices/pseudo/mm@0:null" ]; then # solaris
+    echo "/devices/pseudo/mm@0:null" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  else
+    echo "/dev/null" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  fi
   _remove_non_regular_files "${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
   __test_actual=`cat "${__UAC_TEMP_DATA_DIR}/file_collector.tmp"`
 
@@ -75,6 +90,22 @@ test_remove_non_regular_files_no_find_type_support_success()
   __UAC_TOOL_FIND_TYPE_SUPPORT=false
 
   _remove_non_regular_files "${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  __test_actual=`cat "${__UAC_TEMP_DATA_DIR}/file_collector.tmp"`
+
+  assertEquals "${__TEST_TEMP_DIR}/mount-point/bin/lsof
+${__TEST_TEMP_DIR}/mount-point/bin/netstat
+${__TEST_TEMP_DIR}/mount-point/bin/ss
+${__TEST_TEMP_DIR}/mount-point/etc/default/keyboard
+${__TEST_TEMP_DIR}/mount-point/etc/issue" "${__test_actual}"
+
+if [ -c "/dev/char/mem/null" ]; then # esxi
+    echo "/dev/char/mem/null" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  elif [ -c "/devices/pseudo/mm@0:null" ]; then # solaris
+    echo "/devices/pseudo/mm@0:null" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  else
+    echo "/dev/null" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  fi
+_remove_non_regular_files "${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
   __test_actual=`cat "${__UAC_TEMP_DATA_DIR}/file_collector.tmp"`
 
   assertEquals "${__TEST_TEMP_DIR}/mount-point/bin/lsof
