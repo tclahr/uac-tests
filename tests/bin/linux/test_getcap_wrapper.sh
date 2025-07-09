@@ -5,7 +5,7 @@
 oneTimeSetUp()
 {
 
-  __TEST_TEMP_DIR="${USHUNIT_TEMP_DIR}/test_getcap"
+  __TEST_TEMP_DIR="${USHUNIT_TEMP_DIR}/test_getcap_wrapper"
 
   # Create top-level directories
   for d in bin boot dev etc home var usr tmp lib proc sys run mnt opt media srv; do
@@ -50,7 +50,7 @@ oneTimeSetUp()
 
 }
 
-test_getcap_empty_exclude_paths_success()
+test_getcap_wrapper_empty_exclude_paths_success()
 {
   __test_container=`"${UAC_DIR}"/bin/linux/getcap_wrapper.sh "${__UAC_MOUNT_POINT}"`
   assertEquals "getcap \"${__UAC_MOUNT_POINT}\"/*
@@ -73,7 +73,7 @@ getcap -r \"${__UAC_MOUNT_POINT}/usr\"/*
 getcap -r \"${__UAC_MOUNT_POINT}/var\"/*" "${__test_container}"
 }
 
-test_getcap_exclude_paths_success()
+test_getcap_wrapper_exclude_paths_success()
 {
   __test_container=`"${UAC_DIR}"/bin/linux/getcap_wrapper.sh "${__UAC_MOUNT_POINT}" "${__UAC_MOUNT_POINT}/proc"`
   assertEquals "getcap \"${__UAC_MOUNT_POINT}\"/*
@@ -181,6 +181,24 @@ getcap -r \"${__UAC_MOUNT_POINT}/usr/local/include\"/*
 getcap -r \"${__UAC_MOUNT_POINT}/usr/local/lib\"/*
 getcap -r \"${__UAC_MOUNT_POINT}/usr/local/share\"/*
 getcap -r \"${__UAC_MOUNT_POINT}/usr/sbin\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/var\"/*" "${__test_container}"
+
+__test_container=`"${UAC_DIR}"/bin/linux/getcap_wrapper.sh "${__UAC_MOUNT_POINT}" "${__UAC_MOUNT_POINT}/proc|${__UAC_MOUNT_POINT}/usr/lib/modules|${__UAC_MOUNT_POINT}/usr/local/bin|${__UAC_MOUNT_POINT}/usr"`
+  assertEquals "getcap \"${__UAC_MOUNT_POINT}\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/bin\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/boot\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/dev\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/dir with spaces\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/etc\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/home\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/lib\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/media\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/mnt\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/opt\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/run\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/srv\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/sys\"/*
+getcap -r \"${__UAC_MOUNT_POINT}/tmp\"/*
 getcap -r \"${__UAC_MOUNT_POINT}/var\"/*" "${__test_container}"
 
 }
