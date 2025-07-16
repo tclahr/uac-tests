@@ -920,6 +920,40 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_max_file_size_fail.yaml\""
 }
 
+test_validate_artifact_invalid_file_type_max_file_size_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    max_file_size: 1024
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    file_type: [l]
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    max_file_size: 1024
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml\""
+}
+
 test_validate_artifact_empty_min_file_size_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_min_file_size_fail.yaml"
@@ -1009,6 +1043,41 @@ EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_min_file_size_fail.yaml\""
 }
+
+test_validate_artifact_invalid_file_type_min_file_size_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    min_file_size: 1024
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    file_type: [l]
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    min_file_size: 1024
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml\""
+}
+
 
 test_validate_artifact_empty_modifier_fail()
 {
