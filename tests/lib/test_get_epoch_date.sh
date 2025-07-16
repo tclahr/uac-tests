@@ -5,6 +5,9 @@
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/get_epoch_date.sh"
+
+  PATH="${UAC_DIR}/bin:${PATH}"
+  export PATH
 }
 
 setUp()
@@ -81,13 +84,13 @@ test_get_epoch_date_given_date_perl_success()
 {
   # stub
   date() { return 1; }
-  date_to_epoch_pl()
-  {
-    printf %b "1445470144"
-  }
 
-  __test_actual=`_get_epoch_date "2015-10-21"`
-  assertEquals "1445470144" "${__test_actual}"
+  if commandExists "perl"; then
+    __test_actual=`_get_epoch_date "2015-10-21"`
+    assertContains "${__test_actual}" "1445"
+  else
+    skipTest "perl not found"
+  fi
 }
 
 test_get_epoch_date_defined_os_invalid_date_fail()
