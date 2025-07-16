@@ -4,7 +4,7 @@
 
 oneTimeSetUp()
 {
-  PATH="${UAC_DIR}/tools/timeout:${PATH}"
+  PATH="${UAC_DIR}/bin:${PATH}"
 }
 
 test_timeout_insuficient_arguments_fail()

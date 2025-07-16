@@ -6,6 +6,9 @@ oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/setup_tools.sh"
 
+  PATH="${UAC_DIR}/bin:${PATH}"
+  export PATH
+
   _error_msg()
   {
     printf %b "${1}\n" >&2
@@ -72,11 +75,6 @@ setUp()
     return 1
   }
 
-  stat_pl()
-  {
-    return 1
-  }
-
 }
 
 test_setup_tools_statx_support()
@@ -126,16 +124,16 @@ test_setup_tools_stat_btime_support()
 
 test_setup_tools_stat_pl_support()
 {
-  stat_pl()
-  {
-    printf %b "0|/|256|drwxr-xr-x|0|0|142|1708348761|1705923260|1705923260|1678363903"
-  }
 
   _setup_tools
 
-  assertEquals "stat_pl" "${__UAC_TOOL_STAT_BIN}"
-  assertNull "${__UAC_TOOL_STAT_PARAMS}"
-  asserFalse "${__UAC_TOOL_STAT_BTIME}"
+  if commandExists "perl"; then
+    assertEquals "stat.pl" "${__UAC_TOOL_STAT_BIN}"
+    assertNull "${__UAC_TOOL_STAT_PARAMS}"
+    asserFalse "${__UAC_TOOL_STAT_BTIME}"
+  else
+    skipTest "perl not found"
+  fi
 
 }
 

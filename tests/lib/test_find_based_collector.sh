@@ -5,6 +5,7 @@
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/find_based_collector.sh"
+  . "${UAC_DIR}/lib/prepend_mount_point.sh"
   . "${UAC_DIR}/lib/sanitize_output_file.sh"
 
   _build_find_command()
@@ -374,6 +375,32 @@ test_find_based_collector_simple_find_success()
 
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_success_find.txt"`
   assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
+}
+
+test_find_based_collector_multiple_paths_success()
+{
+  __test_actual=`_find_based_collector \
+    "find" \
+    "/home /etc /\"Application Support\"/Google" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_multiple_paths_success.txt"`
+
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_multiple_paths_success.txt"`
+  assertEquals "_build_find_command \"${__TEST_TEMP_DIR}/mount-point//home ${__TEST_TEMP_DIR}/mount-point//etc ${__TEST_TEMP_DIR}/mount-point//\"Application Support\"/Google\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\"" "${__test_actual}"
 }
 
 test_find_based_collector_simple_find_truncated_output_file_success()

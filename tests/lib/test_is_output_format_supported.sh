@@ -5,6 +5,8 @@
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/is_output_format_supported.sh"
+  PATH="${UAC_DIR}/bin:${PATH}"
+  export PATH
 
   _error_msg()
   {
@@ -71,7 +73,7 @@ test_is_output_format_supported_tar_format_fail()
 
 test_is_output_format_supported_zip_format_success()
 {
-  if commandExists "zip"; then
+  if commandExists "zip" && zip --version >/dev/null 2>/dev/null; then
     assertTrue "_is_output_format_supported \"zip\" \"\""
     __test_actual=`_is_output_format_supported "zip" ""`
     assertEquals "zip" "${__test_actual}"
@@ -82,7 +84,7 @@ test_is_output_format_supported_zip_format_success()
 
 test_is_output_format_supported_zip_format_fail()
 {
-  if commandExists "zip"; then
+  if commandExists "zip" && zip --version >/dev/null 2>/dev/null; then
     skipTest "'zip' command available"
   else
     assertFalse "_is_output_format_supported \"zip\" \"\""
