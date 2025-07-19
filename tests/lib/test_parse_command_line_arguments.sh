@@ -206,7 +206,7 @@ test_parse_command_line_arguments_config_file_success()
 {
   __UAC_CONFIG_FILE=""
   _parse_command_line_arguments --config "${__TEST_TEMP_DIR}/test.conf"
-  assertEquals "${__TEST_TEMP_DIR}/test.conf" "${__UAC_CONFIG_FILE}"
+  assertEquals "${__TEST_TEMP_DIR}/test.conf" "${__UAC_CUSTOM_CONFIG_FILE}"
 }
 
 test_parse_command_line_arguments_no_such_mount_point_fail()
