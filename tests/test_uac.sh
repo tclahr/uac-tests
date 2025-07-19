@@ -44,6 +44,10 @@ artifacts:
   - ${__TEST_TEMP_DIR}/external_artifact.yaml
 EOF
 
+  cat <<EOF >"${__TEST_TEMP_DIR}/external_config.conf"
+exclude_path_pattern: [ "/usr", "/etc" ]
+EOF
+
 }
 
 test_uac_test_profile_success()
@@ -210,4 +214,14 @@ test_uac_start_and_end_date_success()
   assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --start-date 1999-01-01 --output-base-name \"test_uac_start_date_success\" \"${__TEST_TEMP_DIR}\""
   assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --end-date 1999-01-31 --output-base-name \"test_uac_end_date_success\" \"${__TEST_TEMP_DIR}\""
   assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -a ./artifacts/files/system/etc.yaml -m \"${__TEST_TEMP_DIR}/mount-point\" -v -u --start-date 1999-01-01 --end-date 1999-01-31 --output-base-name \"test_uac_start_and_end_date_success\" \"${__TEST_TEMP_DIR}\""
+}
+
+test_uac_test_config_file_success()
+{
+  assertTrue "cd \"${UAC_DIR}\" && /bin/sh ./uac -p test -c \"${__TEST_TEMP_DIR}/external_config.conf\" -u \"${__TEST_TEMP_DIR}\""
+}
+
+test_uac_test_config_file_fail()
+{
+  assertFalse "cd \"${UAC_DIR}\" && /bin/sh ./uac -p test -c \"${__TEST_TEMP_DIR}/invalid_external_config.conf\" -u \"${__TEST_TEMP_DIR}\""
 }
