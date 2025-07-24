@@ -16,5 +16,5 @@ test_error_msg_success()
 test_error_msg_empty_message_success()
 {
   __test_actual=`_error_msg 2>&1`
-  assertEquals "unexpected error" "${__test_actual}"
+  assertEquals "Unexpected error" "${__test_actual}"
 }
