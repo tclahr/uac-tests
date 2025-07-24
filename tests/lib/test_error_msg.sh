@@ -10,11 +10,11 @@ oneTimeSetUp()
 test_error_msg_success()
 {
   __test_actual=`_error_msg "error message test" 2>&1`
-  assertEquals "uac: error message test" "${__test_actual}"
+  assertEquals "error message test" "${__test_actual}"
 }
 
 test_error_msg_empty_message_success()
 {
   __test_actual=`_error_msg 2>&1`
-  assertEquals "uac: unexpected error" "${__test_actual}"
+  assertEquals "unexpected error" "${__test_actual}"
 }
