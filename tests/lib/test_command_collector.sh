@@ -1,12 +1,13 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/command_collector.sh"
   . "${UAC_DIR}/lib/sanitize_output_file.sh"
 
+  # shellcheck disable=SC2329
   command_exists()
   {
     __co_command="${1:-}"
@@ -25,6 +26,7 @@ oneTimeSetUp()
 
   }
   
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"
@@ -35,6 +37,7 @@ oneTimeSetUp()
       2>/dev/null
   }
 
+  # shellcheck disable=SC2329
   _run_command()
   {
     __rc_command=`printf %b "${1}" | awk 'BEGIN {ORS="/n"} {print $0}' | sed -e 's|  *| |g' -e 's|/n$||'`
@@ -42,16 +45,19 @@ oneTimeSetUp()
     eval "${1:-}" 2>/dev/null
   }
 
+  # shellcheck disable=SC2329
   _verbose_msg()
   {
     return 0
   }
 
+  # shellcheck disable=SC2329
   _sanitize_output_directory()
   {
     printf %b "${1:-}"
   }
 
+  # shellcheck disable=SC2329
   __ps()
   {
     cat << EOF
@@ -62,6 +68,7 @@ root           3       2  0 07:54 ?        00:00:00 [rcu_gp]
 EOF
   }
 
+  # shellcheck disable=SC2329
   __lsof()
   {
     cat << EOF
@@ -71,6 +78,7 @@ lsof      123687                  uac  mem       REG               0,29         
 EOF
   }
 
+  # shellcheck disable=SC2329
   __virsh_list()
   {
     cat << EOF
@@ -80,21 +88,25 @@ vm-03
 EOF
   }
 
+  # shellcheck disable=SC2329
   __virsh_nodeinfo()
   {
     printf %b "nodeinfo: ${1:-}"
   }
 
+  # shellcheck disable=SC2329
   __unknown_command()
   {
     printf %b "unknown command error\nplease try again later\n" >&2
   }
 
+  # shellcheck disable=SC2329
   __unknown_foreach_command()
   {
     printf %b "unknown command error\nplease try again later\n" >&2
   }
 
+  # shellcheck disable=SC2329
   __avml()
   {
     printf %b "avml" >>"${1:-/dev/null}"
