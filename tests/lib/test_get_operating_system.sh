@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
@@ -10,6 +10,7 @@ oneTimeSetUp()
 test_get_operating_system_aix_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "AIX"
@@ -22,6 +23,7 @@ test_get_operating_system_aix_success()
 test_get_operating_system_freebsd_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "FreeBSD"
@@ -34,6 +36,7 @@ test_get_operating_system_freebsd_success()
 test_get_operating_system_netscaler_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     if [ "${1}" = "-s" ]; then
@@ -50,6 +53,7 @@ test_get_operating_system_netscaler_success()
 test_get_operating_system_linux_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "Linux"
@@ -62,6 +66,7 @@ test_get_operating_system_linux_success()
 test_get_operating_system_macos_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "Darwin"
@@ -74,6 +79,7 @@ test_get_operating_system_macos_success()
 test_get_operating_system_netbsd_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "NetBSD"
@@ -86,6 +92,7 @@ test_get_operating_system_netbsd_success()
 test_get_operating_system_openbsd_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "OpenBSD"
@@ -98,6 +105,7 @@ test_get_operating_system_openbsd_success()
 test_get_operating_system_solaris_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "SunOS"
@@ -110,6 +118,7 @@ test_get_operating_system_solaris_success()
 test_get_operating_system_esxi_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "VMkernel"
@@ -122,6 +131,7 @@ test_get_operating_system_esxi_success()
 test_get_operating_system_unknown_operating_system_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname()
   {
     printf %b "Unknown"

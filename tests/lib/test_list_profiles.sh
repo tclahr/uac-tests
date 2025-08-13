@@ -1,11 +1,12 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/list_profiles.sh"
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2

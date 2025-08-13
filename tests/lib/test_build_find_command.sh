@@ -1,11 +1,12 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/build_find_command.sh"
 
+  # shellcheck disable=SC2329
   command_exists()
   {
     __co_command="${1:-}"
@@ -24,6 +25,7 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _is_psv()
   {
     __ip_string="${1:-}"
@@ -34,6 +36,7 @@ oneTimeSetUp()
     return 1
   }
 
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"

@@ -1,11 +1,12 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2129,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/remove_non_regular_files.sh"
 
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"
@@ -16,6 +17,7 @@ oneTimeSetUp()
       2>/dev/null
   }
 
+  # shellcheck disable=SC2329
   _verbose_msg()
   {
     return 0
@@ -47,6 +49,7 @@ setUp()
   __UAC_TOOL_FIND_TYPE_SUPPORT=true
 
   echo "${__TEST_TEMP_DIR}/mount-point/etc/issue" >"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
+  # shellcheck disable=SC2129
   echo "${__TEST_TEMP_DIR}/mount-point/etc/default/keyboard" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
   echo "${__TEST_TEMP_DIR}/mount-point/empty" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
   echo "${__TEST_TEMP_DIR}/mount-point/sbin" >>"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"

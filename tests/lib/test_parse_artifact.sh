@@ -1,11 +1,13 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2153,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
+    # shellcheck disable=SC2153
   . "${UAC_DIR}/lib/parse_artifact.sh"
 
+  # shellcheck disable=SC2329
   _is_in_list()
   {
     __il_element="${1:-}"
@@ -20,6 +22,7 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"
@@ -30,11 +33,13 @@ oneTimeSetUp()
       2>/dev/null
   }
 
+  # shellcheck disable=SC2329
   _verbose_msg()
   {
     return 0
   }
 
+  # shellcheck disable=SC2329
   _run_command()
   {
     __rc_command=`printf %b "${1}" | awk 'BEGIN {ORS="/n"} {print $0}' | sed -e 's|  *| |g' -e 's|/n$||'`
@@ -42,6 +47,7 @@ oneTimeSetUp()
     eval "${1:-}"
   }
 
+  # shellcheck disable=SC2329
   _array_to_psv()
   {
     # remove leading and trailing brackets [ ]
@@ -69,6 +75,7 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _command_collector() {
     __cc_foreach="${1:-}"
     __cc_command="${2:-}"
@@ -81,6 +88,7 @@ oneTimeSetUp()
     _log_msg CMD "_command_collector \"${__cc_foreach}\" \"${__cc_command}\" \"${__cc_output_directory}\" \"${__cc_output_file}\" ${__cc_compress_output_file} ${__cc_redirect_stderr_to_stdout}"
   }
 
+  # shellcheck disable=SC2329
   _find_based_collector() {
     __fc_collector="${1:-}"
     shift

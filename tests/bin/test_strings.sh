@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2002,SC2006
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {

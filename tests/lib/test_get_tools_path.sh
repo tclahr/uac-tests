@@ -1,11 +1,13 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2153,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
+    # shellcheck disable=SC2153
   . "${UAC_DIR}/lib/get_tools_path.sh"
 
+  # shellcheck disable=SC2329
   _get_system_arch_bin_path()
   {
     __gy_arch="${1:-x86_64}"

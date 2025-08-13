@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
@@ -16,6 +16,7 @@ setUp()
 test_get_system_arch_all_os_success()
 {
   # stub
+  # shellcheck disable=SC2329
   uname() { printf %b "x86_64"; }
 
   __test_actual=`_get_system_arch aix`
@@ -41,6 +42,7 @@ test_get_system_arch_all_os_success()
 test_get_system_arch_unknown_os_fail()
 {
   # stub
+  # shellcheck disable=SC2329
   uname() { printf %b "x86_64"; }
 
   __test_actual=`_get_system_arch non-existent-os`

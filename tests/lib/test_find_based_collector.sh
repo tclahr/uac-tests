@@ -1,13 +1,15 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317,SC2153
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
+  # shellcheck disable=SC2153
   . "${UAC_DIR}/lib/find_based_collector.sh"
   . "${UAC_DIR}/lib/prepend_mount_point.sh"
   . "${UAC_DIR}/lib/sanitize_output_file.sh"
 
+  # shellcheck disable=SC2329
   _build_find_command()
   {
     __bfc_path="${1:-}"
@@ -44,11 +46,13 @@ oneTimeSetUp()
     _log_msg CMD "_build_find_command \"${__bfc_path}\" \"${__bfc_path_pattern}\" \"${__bfc_name_pattern}\" \"${__bfc_exclude_path_pattern}\" \"${__bfc_exclude_name_pattern}\" \"${__bfc_max_depth}\" \"${__bfc_file_type}\" \"${__bfc_min_file_size}\" \"${__bfc_max_file_size}\" \"${__bfc_permissions}\" ${__bfc_no_group} ${__bfc_no_user} ${__bfc_print0} \"${__bfc_start_date_days}\" \"${__bfc_end_date_days}\""
   }
 
+  # shellcheck disable=SC2329
   _get_mount_point_by_file_system()
   {
     printf %s "/apfs|/mnt/ntfs"
   }
 
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"
@@ -59,22 +63,26 @@ oneTimeSetUp()
       2>/dev/null
   }
 
+  # shellcheck disable=SC2329
   _run_command()
   {
     printf %s "${1}"
     _log_msg CMD "${1}"
   }
 
+  # shellcheck disable=SC2329
   _sanitize_output_directory()
   {
     printf %s "${1:-}"
   }
 
+  # shellcheck disable=SC2329
   _sanitize_path()
   {
     printf %s "${1:-}"
   }
 
+  # shellcheck disable=SC2329
   _verbose_msg()
   {
     return 0

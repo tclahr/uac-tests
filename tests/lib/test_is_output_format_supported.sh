@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
@@ -8,11 +8,13 @@ oneTimeSetUp()
   PATH="${UAC_DIR}/bin:${PATH}"
   export PATH
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2
   }
 
+  # shellcheck disable=SC2329
   command_exists()
   {
     __co_command="${1:-}"

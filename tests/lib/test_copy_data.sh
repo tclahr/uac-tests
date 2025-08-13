@@ -1,16 +1,18 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2129,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/copy_data.sh"
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2
   }
 
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"
@@ -21,6 +23,7 @@ oneTimeSetUp()
       2>/dev/null
   }
 
+  # shellcheck disable=SC2329
   _run_command()
   {
     __rc_command=`printf %b "${1}" | awk 'BEGIN {ORS="/n"} {print $0}' | sed -e 's|  *| |g' -e 's|/n$||'`
@@ -37,6 +40,7 @@ oneTimeSetUp()
   echo "lsof" >"${__TEST_TEMP_DIR}/mount-point/bin/lsof"
   echo "netstat" >"${__TEST_TEMP_DIR}/mount-point/bin/netstat"
 
+  # shellcheck disable=SC2129
   echo "${__TEST_TEMP_DIR}/mount-point/etc/issue" >>"${__TEST_TEMP_DIR}/file_list.txt"
   echo "${__TEST_TEMP_DIR}/mount-point/etc/default/keyboard" >>"${__TEST_TEMP_DIR}/file_list.txt"
   echo "${__TEST_TEMP_DIR}/mount-point/bin/lsof" >>"${__TEST_TEMP_DIR}/file_list.txt"

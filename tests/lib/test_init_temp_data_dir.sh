@@ -6,6 +6,7 @@ oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/init_temp_data_dir.sh"
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2
@@ -24,6 +25,7 @@ setUp()
 test_init_temp_data_dir_cannot_remove_old_data_fail()
 {
   # stub
+  # shellcheck disable=SC2329
   rm()
   {
     return 1

@@ -1,19 +1,22 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317,SC2153
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
+    # shellcheck disable=SC2153
   . "${UAC_DIR}/lib/setup_tools.sh"
 
   PATH="${UAC_DIR}/bin:${PATH}"
   export PATH
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2
   }
 
+  # shellcheck disable=SC2329
   command_exists()
   {
     __co_command="${1:-}"
@@ -32,11 +35,13 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _get_mount_point_by_file_system()
   {
     printf %b "/mount-point-by-file-system"
   }
 
+  # shellcheck disable=SC2329
   _get_user_home_list()
   {
     printf %b "uac:/home/uac"
@@ -65,11 +70,13 @@ setUp()
   __UAC_TOOL_SHA1_BIN=""
   __UAC_TOOL_SHA256_BIN=""
 
+  # shellcheck disable=SC2329
   statx()
   {
     return 1
   }
 
+  # shellcheck disable=SC2329
   stat()
   {
     return 1
@@ -79,6 +86,7 @@ setUp()
 
 test_setup_tools_statx_support()
 {
+  # shellcheck disable=SC2329
   statx()
   {
     printf %b "0|/|256|drwxr-xr-x|0|0|142|1708348761|1705923260|1705923260|1678363903"
@@ -94,6 +102,7 @@ test_setup_tools_statx_support()
 
 test_setup_tools_stat_support()
 {
+  # shellcheck disable=SC2329
   stat()
   {
     printf %b "0|/|256|drwxr-xr-x|0|0|142|1708348761|1705923260|1705923260|0"
@@ -109,6 +118,7 @@ test_setup_tools_stat_support()
 
 test_setup_tools_stat_btime_support()
 {
+  # shellcheck disable=SC2329
   stat()
   {
     printf %b "0|/|256|drwxr-xr-x|0|0|142|1708348761|1705923260|1705923260|1678363903"

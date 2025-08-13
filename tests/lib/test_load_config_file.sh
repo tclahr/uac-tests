@@ -1,16 +1,18 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2317
+# shellcheck disable=SC1091
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/load_config_file.sh"
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2
   }
 
+  # shellcheck disable=SC2329
   _is_in_list()
   {
     __il_element="${1:-}"
@@ -30,6 +32,7 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _is_digit()
   {
     __id_number="${1:-empty}"
@@ -40,6 +43,7 @@ oneTimeSetUp()
     return 1
   }
 
+  # shellcheck disable=SC2329
   _array_to_psv()
   {
     # remove leading and trailing brackets [ ]

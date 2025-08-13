@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
@@ -36,6 +36,7 @@ EOF
 test_get_hostname_run_hostname_success()
 {
   # stub
+  # shellcheck disable=SC2329
   hostname() { printf %b "johnsnow"; }
 
   __test_actual=`_get_hostname`
@@ -45,7 +46,9 @@ test_get_hostname_run_hostname_success()
 test_get_hostname_run_uname_success()
 {
   # stubs
+  # shellcheck disable=SC2329
   hostname() { return 1; }
+  # shellcheck disable=SC2329
   uname() { printf %b "johnsnow"; }
 
   __test_actual=`_get_hostname`
@@ -55,7 +58,9 @@ test_get_hostname_run_uname_success()
 test_get_hostname_HOSTNAME_var_success()
 {
   # stubs
+  # shellcheck disable=SC2329
   hostname() { return 1; }
+  # shellcheck disable=SC2329
   uname() { return 1; }
   HOSTNAME="johnsnow"
 
@@ -66,7 +71,9 @@ test_get_hostname_HOSTNAME_var_success()
 test_get_hostname_mount_point_etc_hostname_success()
 {
   # stubs
+  # shellcheck disable=SC2329
   hostname() { return 1; }
+  # shellcheck disable=SC2329
   uname() { return 1; }
   rm -f "${__TEST_TEMP_DIR}/etc/rc.conf"
   rm -f "${__TEST_TEMP_DIR}/etc/myname"
@@ -79,7 +86,9 @@ test_get_hostname_mount_point_etc_hostname_success()
 test_get_hostname_mount_point_etc_rc_conf_success()
 {
   # stubs
+  # shellcheck disable=SC2329
   hostname() { return 1; }
+  # shellcheck disable=SC2329
   uname() { return 1; }
   rm -f "${__TEST_TEMP_DIR}/etc/hostname"
   rm -f "${__TEST_TEMP_DIR}/etc/myname"
@@ -92,7 +101,9 @@ test_get_hostname_mount_point_etc_rc_conf_success()
 test_get_hostname_mount_point_etc_myname_success()
 {
   # stubs
+  # shellcheck disable=SC2329
   hostname() { return 1; }
+  # shellcheck disable=SC2329
   uname() { return 1; }
   rm -f "${__TEST_TEMP_DIR}/etc/hostname"
   rm -f "${__TEST_TEMP_DIR}/etc/rc.conf"
@@ -105,7 +116,9 @@ test_get_hostname_mount_point_etc_myname_success()
 test_get_hostname_mount_point_etc_nodename_success()
 {
   # stubs
+  # shellcheck disable=SC2329
   hostname() { return 1; }
+  # shellcheck disable=SC2329
   uname() { return 1; }
   rm -f "${__TEST_TEMP_DIR}/etc/hostname"
   rm -f "${__TEST_TEMP_DIR}/etc/rc.conf"
@@ -118,7 +131,9 @@ test_get_hostname_mount_point_etc_nodename_success()
 test_get_hostname_unknown_success()
 {
   # stubs
+  # shellcheck disable=SC2329
   hostname() { return 1; }
+  # shellcheck disable=SC2329
   uname() { return 1; }
   
   __test_actual=`_get_hostname "/non-existent-mount-point"`

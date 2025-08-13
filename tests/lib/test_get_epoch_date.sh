@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
@@ -20,6 +20,7 @@ setUp()
 test_get_epoch_date_current_date_perl_success()
 {
   # stub
+  # shellcheck disable=SC2329
   perl()
   {
     printf %b "1445470140"
@@ -32,7 +33,9 @@ test_get_epoch_date_current_date_perl_success()
 test_get_epoch_date_current_date_date_success()
 {
   # stub
+  # shellcheck disable=SC2329
   perl() { return 1; }
+  # shellcheck disable=SC2329
   date()
   {
     printf %b "1445470141"
@@ -45,6 +48,7 @@ test_get_epoch_date_current_date_date_success()
 test_get_epoch_date_given_date_date_d_success()
 {
   # stub
+  # shellcheck disable=SC2329
   date()
   {
     case "${1}" in
@@ -64,6 +68,7 @@ test_get_epoch_date_given_date_date_d_success()
 test_get_epoch_date_given_date_date_j_success()
 {
   # stub
+  # shellcheck disable=SC2329
   date()
   {
     case "${1}" in
@@ -83,6 +88,7 @@ test_get_epoch_date_given_date_date_j_success()
 test_get_epoch_date_given_date_perl_success()
 {
   # stub
+  # shellcheck disable=SC2329
   date() { return 1; }
 
   if commandExists "perl"; then
