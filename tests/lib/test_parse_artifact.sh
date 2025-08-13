@@ -1,11 +1,13 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2153,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
+    # shellcheck disable=SC2153
   . "${UAC_DIR}/lib/parse_artifact.sh"
 
+  # shellcheck disable=SC2329
   _is_in_list()
   {
     __il_element="${1:-}"
@@ -20,6 +22,7 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"
@@ -30,11 +33,13 @@ oneTimeSetUp()
       2>/dev/null
   }
 
+  # shellcheck disable=SC2329
   _verbose_msg()
   {
     return 0
   }
 
+  # shellcheck disable=SC2329
   _run_command()
   {
     __rc_command=`printf %b "${1}" | awk 'BEGIN {ORS="/n"} {print $0}' | sed -e 's|  *| |g' -e 's|/n$||'`
@@ -42,6 +47,7 @@ oneTimeSetUp()
     eval "${1:-}"
   }
 
+  # shellcheck disable=SC2329
   _array_to_psv()
   {
     # remove leading and trailing brackets [ ]
@@ -69,6 +75,7 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _command_collector() {
     __cc_foreach="${1:-}"
     __cc_command="${2:-}"
@@ -81,6 +88,7 @@ oneTimeSetUp()
     _log_msg CMD "_command_collector \"${__cc_foreach}\" \"${__cc_command}\" \"${__cc_output_directory}\" \"${__cc_output_file}\" ${__cc_compress_output_file} ${__cc_redirect_stderr_to_stdout}"
   }
 
+  # shellcheck disable=SC2329
   _find_based_collector() {
     __fc_collector="${1:-}"
     shift
@@ -142,6 +150,7 @@ setUp()
   __UAC_END_DATE_EPOCH=""
   __UAC_USER_HOME_LIST=""
   __UAC_VALID_SHELL_ONLY_USER_HOME_LIST=""
+  __UAC_EXCLUDE_MOUNT_POINTS=""
   __UAC_VERBOSE_CMD_PREFIX=" > "
   __UAC_DEBUG_MODE=true
 }
@@ -384,6 +393,37 @@ test_parse_artifact_replace_exposed_variables_success()
   __UAC_START_DATE_EPOCH="1672531200"
   __UAC_END_DATE="2023-01-31"
   __UAC_END_DATE_EPOCH="1675123200"
+  __UAC_EXCLUDE_MOUNT_POINTS="/proc|/sys"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
+    collector: find
+    path: /%start_date% /%start_date_epoch% /%end_date% /%end_date_epoch% %non_local_mount_points%
+    output_directory: replace_exposed_variables_success
+    output_file: replace_exposed_variables_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
+  assertEquals "_find_based_collector \"find\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200 /proc|/sys\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
+    collector: hash
+    path: /%start_date% /%start_date_epoch% /%end_date% /%end_date_epoch% /%end_date_epoch% %non_local_mount_points%
+    output_directory: replace_exposed_variables_success
+    output_file: replace_exposed_variables_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
+  assertEquals "_find_based_collector \"hash\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200 /1675123200 /proc|/sys\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
 version: 1.0
@@ -392,13 +432,13 @@ artifacts:
     description: example
     supported_os: [ aix, linux, macos, solaris ]
     collector: command
-    command: ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory%
+    command: ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory% %non_local_mount_points%
     output_directory: replace_exposed_variables_success
     output_file: replace_exposed_variables_success.txt
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
-  assertEquals "_command_collector \"\" \"ls -la 2023-01-01 1672531200 2023-01-31 1675123200 ${__UAC_MOUNT_POINT} ${__TEST_TEMP_DIR}/tmp ${__TEST_TEMP_DIR}/uac\" \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\" false false" "${__test_actual}"
+  assertEquals "_command_collector \"\" \"ls -la 2023-01-01 1672531200 2023-01-31 1675123200 ${__UAC_MOUNT_POINT} ${__TEST_TEMP_DIR}/tmp ${__TEST_TEMP_DIR}/uac /proc|/sys\" \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\" false false" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
 version: 1.0
@@ -408,7 +448,7 @@ artifacts:
     supported_os: [ aix, linux, macos, solaris ]
     collector: command
     command: """
-      ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory%
+      ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory% %non_local_mount_points%
       cat /dev/null
       """
     output_directory: replace_exposed_variables_success
@@ -416,7 +456,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
-  assertEquals "_command_collector \"\" \"ls -la 2023-01-01 1672531200 2023-01-31 1675123200 ${__UAC_MOUNT_POINT} ${__TEST_TEMP_DIR}/tmp ${__TEST_TEMP_DIR}/uac
+  assertEquals "_command_collector \"\" \"ls -la 2023-01-01 1672531200 2023-01-31 1675123200 ${__UAC_MOUNT_POINT} ${__TEST_TEMP_DIR}/tmp ${__TEST_TEMP_DIR}/uac /proc|/sys
 cat /dev/null\" \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\" false false" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
@@ -426,14 +466,14 @@ artifacts:
     description: example
     supported_os: [ aix, linux, macos, solaris ]
     collector: command
-    foreach: ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory%
+    foreach: ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory% %non_local_mount_points%
     command: ls -la
     output_directory: replace_exposed_variables_success
     output_file: replace_exposed_variables_success.txt
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
-  assertEquals "_command_collector \"ls -la 2023-01-01 1672531200 2023-01-31 1675123200 ${__UAC_MOUNT_POINT} ${__TEST_TEMP_DIR}/tmp ${__TEST_TEMP_DIR}/uac\" \"ls -la\" \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\" false false" "${__test_actual}"
+  assertEquals "_command_collector \"ls -la 2023-01-01 1672531200 2023-01-31 1675123200 ${__UAC_MOUNT_POINT} ${__TEST_TEMP_DIR}/tmp ${__TEST_TEMP_DIR}/uac /proc|/sys\" \"ls -la\" \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\" false false" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
 version: 1.0
@@ -443,7 +483,7 @@ artifacts:
     supported_os: [ aix, linux, macos, solaris ]
     collector: command
     foreach: """
-      ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory%
+      ls -la %start_date% %start_date_epoch% %end_date% %end_date_epoch% %mount_point% %temp_directory% %uac_directory% %non_local_mount_points%
       cat /dev/null
       """
     command: ls -la
@@ -452,7 +492,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
-  assertEquals "_command_collector \"ls -la 2023-01-01 1672531200 2023-01-31 1675123200 ${__UAC_MOUNT_POINT} ${__TEST_TEMP_DIR}/tmp ${__TEST_TEMP_DIR}/uac
+  assertEquals "_command_collector \"ls -la 2023-01-01 1672531200 2023-01-31 1675123200 ${__UAC_MOUNT_POINT} ${__TEST_TEMP_DIR}/tmp ${__TEST_TEMP_DIR}/uac /proc|/sys
 cat /dev/null\" \"ls -la\" \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\" false false" "${__test_actual}"
 }
 
@@ -708,11 +748,10 @@ EOF
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/user_home_success.yaml"`
   assertEquals "_find_based_collector \"find\" \"home/uac\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/home/uac_uac\" \"home/uac_uac.txt\"
 _find_based_collector \"find\" \"home/john\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/home/john_john\" \"home/john_john.txt\"" "${__test_actual}"
-  
 
 }
 
-test_parse_artifact_find_based_collector_success()
+test_parse_artifact_find_collector_success()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
 version: 1.0
@@ -739,6 +778,58 @@ EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
   assertEquals "_find_based_collector \"find\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
+    collector: find
+    path: /usr/lib /usr/local/bin
+    path_pattern: ['/usr/local','/etc']
+    name_pattern: ['*.so', '*.txt']
+    exclude_path_pattern: ['/run', '/proc']
+    exclude_name_pattern: ['*.sh']
+    exclude_file_system: ['ntfs', 'ext4', 'btrfs']
+    max_depth: 5
+    file_type: [f, s, d]
+    min_file_size: 200
+    max_file_size: 500
+    permissions: [755, 644, 444]
+    ignore_date_range: true
+    output_directory: find_collector_success
+    output_file: find_collector_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
+  assertEquals "_find_based_collector \"find\" \"/usr/lib /usr/local/bin\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
+    collector: find
+    path: /usr/lib /usr/local/bin
+    path_pattern: ['/usr/local','/etc']
+    name_pattern: ['*.so', '*.txt']
+    exclude_path_pattern: ['/run', '/proc']
+    exclude_name_pattern: ['*.sh']
+    exclude_file_system: ['ntfs', 'ext4', 'btrfs']
+    max_depth: 5
+    file_type: [f, s, d]
+    min_file_size: 200
+    max_file_size: 500
+    permissions: [755, 644, 444]
+    ignore_date_range: true
+    output_directory: find_collector_success
+    output_file: find_collector_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
+  assertEquals "_find_based_collector \"find\" \"/usr/lib /usr/local/bin\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
 }
 
 test_parse_artifact_file_collector_success()

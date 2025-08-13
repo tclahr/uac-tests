@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2317
+# shellcheck disable=SC1091
 
 oneTimeSetUp()
 {
@@ -24,6 +24,7 @@ test_command_exists_type_success()
 test_command_exists_command_success()
 {
   # stub
+  # shellcheck disable=SC2329
   type()
   {
     return 1
@@ -39,10 +40,12 @@ test_command_exists_command_success()
 test_command_exists_which_success()
 {
   # stub
+  # shellcheck disable=SC2329
   type()
   {
     return 1
   }
+  # shellcheck disable=SC2329
   command()
   {
     return 1

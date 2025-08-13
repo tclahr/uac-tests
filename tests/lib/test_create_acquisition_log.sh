@@ -1,11 +1,12 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/create_acquisition_log.sh"
 
+  # shellcheck disable=SC2329
   _hash_file()
   {
     printf "HASH_FILE"

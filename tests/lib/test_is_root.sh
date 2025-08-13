@@ -10,6 +10,7 @@ oneTimeSetUp()
 test_is_root_id_success()
 {
   # stub
+  # shellcheck disable=SC2329
   id()
   {
     printf %b "0"
@@ -21,6 +22,7 @@ test_is_root_id_success()
 test_is_root_id_fail()
 {
   # stub
+  # shellcheck disable=SC2329
   id()
   {
     printf %b "1000"
@@ -32,6 +34,7 @@ test_is_root_id_fail()
 test_is_root_defined_os_etc_passwd_success()
 {
   # stub
+  # shellcheck disable=SC2329
   id()
   {
     return 1
@@ -39,6 +42,7 @@ test_is_root_defined_os_etc_passwd_success()
 
   if [ -f "/etc/passwd" ]; then
     # stub
+    # shellcheck disable=SC2329
     _get_current_user()
     {
       grep -E ":0:0:" /etc/passwd 2>/dev/null \
@@ -54,6 +58,7 @@ test_is_root_defined_os_etc_passwd_success()
 test_is_root_defined_os_etc_passwd_fail()
 {
   # stub
+  # shellcheck disable=SC2329
   id()
   {
     return 1
@@ -61,6 +66,7 @@ test_is_root_defined_os_etc_passwd_fail()
 
   if [ -f "/etc/passwd" ]; then
     # stub
+    # shellcheck disable=SC2329
     _get_current_user()
     {
       grep -v -E ":0:0:" /etc/passwd 2>/dev/null \

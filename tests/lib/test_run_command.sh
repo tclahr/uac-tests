@@ -1,11 +1,12 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/run_command.sh"
 
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"
@@ -16,6 +17,7 @@ oneTimeSetUp()
       2>/dev/null
   }
   
+  # shellcheck disable=SC2329
   __ps()
   {
     cat << EOF
@@ -26,6 +28,7 @@ root           3       2  0 07:54 ?        00:00:00 [rcu_gp]
 EOF
   }
   
+  # shellcheck disable=SC2329
   __unknown_command()
   {
     printf %b "unknown command error\nplease try again later\n" >&2

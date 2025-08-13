@@ -1,16 +1,20 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/is_output_format_supported.sh"
+  PATH="${UAC_DIR}/bin:${PATH}"
+  export PATH
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2
   }
 
+  # shellcheck disable=SC2329
   command_exists()
   {
     __co_command="${1:-}"
@@ -71,7 +75,7 @@ test_is_output_format_supported_tar_format_fail()
 
 test_is_output_format_supported_zip_format_success()
 {
-  if commandExists "zip"; then
+  if commandExists "zip" && zip --version >/dev/null 2>/dev/null; then
     assertTrue "_is_output_format_supported \"zip\" \"\""
     __test_actual=`_is_output_format_supported "zip" ""`
     assertEquals "zip" "${__test_actual}"
@@ -82,7 +86,7 @@ test_is_output_format_supported_zip_format_success()
 
 test_is_output_format_supported_zip_format_fail()
 {
-  if commandExists "zip"; then
+  if commandExists "zip" && zip --version >/dev/null 2>/dev/null; then
     skipTest "'zip' command available"
   else
     assertFalse "_is_output_format_supported \"zip\" \"\""

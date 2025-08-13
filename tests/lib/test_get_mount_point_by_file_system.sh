@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
@@ -10,6 +10,7 @@ oneTimeSetUp()
 test_get_mount_point_by_file_system_aix_success()
 {
   # stub
+  # shellcheck disable=SC2329
   mount() {
     cat << EOF
 node       mounted        mounted over    vfs       date        options      
@@ -41,6 +42,7 @@ EOF
 test_get_mount_point_by_file_system_esxi_success()
 {
   # stub
+  # shellcheck disable=SC2329
   df() {
     cat << EOF
 Filesystem       Bytes        Used   Available Use% Mounted on
@@ -60,6 +62,7 @@ EOF
 test_get_mount_point_by_file_system_freebsd_macos_netscaler_success()
 {
   # stub
+  # shellcheck disable=SC2329
   mount() {
     cat << EOF
 /dev/disk1s5s1 on / (apfs, sealed, local, read-only, journaled)
@@ -88,6 +91,7 @@ EOF
 test_get_mount_point_by_file_system_linux_netbsd_openbsd_success()
 {
   # stub
+  # shellcheck disable=SC2329
   mount() {
     cat << EOF
 sys on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
@@ -120,6 +124,7 @@ EOF
 test_get_mount_point_by_file_system_solaris_success()
 {
   # stub
+  # shellcheck disable=SC2329
   df() {
     cat << EOF
 /                  : ufs     
@@ -146,6 +151,7 @@ EOF
 test_get_mount_point_by_file_system_invalid_file_system_fail()
 {
   # stub
+  # shellcheck disable=SC2329
   df() {
     cat << EOF
 /                  : ufs     

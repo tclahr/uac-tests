@@ -60,7 +60,7 @@ test_sanitize_output_file_replace_invalid_character_star_success()
   __test_actual=`_sanitize_output_file "abc*txt"`
   assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "abc**txt"`
-  assertEquals "abc__txt" "${__test_actual}"
+  assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "*abc*txt*"`
   assertEquals "_abc_txt_" "${__test_actual}"
 }
@@ -70,7 +70,7 @@ test_sanitize_output_file_replace_invalid_character_question_mark_success()
   __test_actual=`_sanitize_output_file "abc?txt"`
   assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "abc??txt"`
-  assertEquals "abc__txt" "${__test_actual}"
+  assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "?abc?txt?"`
   assertEquals "_abc_txt_" "${__test_actual}"
 }
@@ -80,7 +80,7 @@ test_sanitize_output_file_replace_invalid_character_colon_success()
   __test_actual=`_sanitize_output_file "abc:txt"`
   assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "abc::txt"`
-  assertEquals "abc__txt" "${__test_actual}"
+  assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file ":abc:txt:"`
   assertEquals "_abc_txt_" "${__test_actual}"
 }
@@ -90,7 +90,7 @@ test_sanitize_output_file_replace_invalid_character_double_quote_success()
   __test_actual=`_sanitize_output_file "abc\"txt"`
   assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "abc\"\"txt"`
-  assertEquals "abc__txt" "${__test_actual}"
+  assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "\"abc\"txt\""`
   assertEquals "_abc_txt_" "${__test_actual}"
 }
@@ -100,7 +100,7 @@ test_sanitize_output_file_replace_invalid_character_left_single_angle_quotation_
   __test_actual=`_sanitize_output_file "abc<txt"`
   assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "abc<<txt"`
-  assertEquals "abc__txt" "${__test_actual}"
+  assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "<abc<txt<"`
   assertEquals "_abc_txt_" "${__test_actual}"
 }
@@ -110,7 +110,7 @@ test_sanitize_output_file_replace_invalid_character_right_single_angle_quotation
   __test_actual=`_sanitize_output_file "abc>txt"`
   assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file "abc>>txt"`
-  assertEquals "abc__txt" "${__test_actual}"
+  assertEquals "abc_txt" "${__test_actual}"
   __test_actual=`_sanitize_output_file ">abc>txt>"`
   assertEquals "_abc_txt_" "${__test_actual}"
 }

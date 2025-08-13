@@ -1,16 +1,18 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/validate_artifact.sh"
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2
   }
 
+  # shellcheck disable=SC2329
   _is_in_list()
   {
     __il_element="${1:-}"
@@ -25,6 +27,7 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _is_digit()
   {
     __id_number="${1:-empty}"
@@ -35,6 +38,7 @@ oneTimeSetUp()
     return 1
   }
 
+  # shellcheck disable=SC2329
   _array_to_psv()
   {
     # remove leading and trailing brackets [ ]
@@ -319,6 +323,7 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_multi_line_condition_fail.yaml\""
 }
 
+# shellcheck disable=SC2329
 test_validate_artifact_missing_closing_multi_line_foreach_fail()
 {
   is_in_list()
@@ -664,6 +669,7 @@ EOF
 
 test_validate_artifact_missing_closing_multi_line_foreach_fail()
 {
+  # shellcheck disable=SC2329
   is_in_list()
   {
     return 0
@@ -920,24 +926,6 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_max_file_size_fail.yaml\""
 }
 
-test_validate_artifact_empty_file_type_max_file_size_fail()
-{
-  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_file_type_max_file_size_fail.yaml"
-version: 1.0
-artifacts:
-  -
-    description: example 1
-    supported_os: [all]
-    collector: hash
-    path: /tmp
-    output_directory: /tmp
-    output_file: hash_tmp.txt
-    max_file_size: 102400
-EOF
-
-  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_file_type_max_file_size_fail.yaml\""
-}
-
 test_validate_artifact_invalid_file_type_max_file_size_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml"
@@ -950,8 +938,23 @@ artifacts:
     path: /tmp
     output_directory: /tmp
     output_file: hash_tmp.txt
-    file_type: [d]
-    max_file_size: 102400
+    max_file_size: 1024
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    file_type: [l]
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    max_file_size: 1024
 EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_max_file_size_fail.yaml\""
@@ -1047,24 +1050,6 @@ EOF
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_min_file_size_fail.yaml\""
 }
 
-test_validate_artifact_empty_file_type_min_file_size_fail()
-{
-  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_file_type_min_file_size_fail.yaml"
-version: 1.0
-artifacts:
-  -
-    description: example 1
-    supported_os: [all]
-    collector: hash
-    path: /tmp
-    output_directory: /tmp
-    output_file: hash_tmp.txt
-    min_file_size: 102400
-EOF
-
-  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_file_type_min_file_size_fail.yaml\""
-}
-
 test_validate_artifact_invalid_file_type_min_file_size_fail()
 {
   cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml"
@@ -1077,12 +1062,28 @@ artifacts:
     path: /tmp
     output_directory: /tmp
     output_file: hash_tmp.txt
-    file_type: [d]
-    min_file_size: 102400
+    min_file_size: 1024
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /tmp
+    file_type: [l]
+    output_directory: /tmp
+    output_file: hash_tmp.txt
+    min_file_size: 1024
 EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/invalid_file_type_min_file_size_fail.yaml\""
 }
+
 
 test_validate_artifact_empty_modifier_fail()
 {
@@ -1378,6 +1379,21 @@ artifacts:
 EOF
 
   assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/path_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: /etc /bin /tmp
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/path_success.yaml\""
+
 }
 
 test_validate_artifact_empty_path_fail()
@@ -1390,6 +1406,21 @@ artifacts:
     supported_os: [all]
     collector: hash
     path: 
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/empty_path_fail.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/empty_path_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: """
+    """
     output_file: hash.txt
     output_directory: /tmp
 EOF
@@ -1412,6 +1443,43 @@ artifacts:
 EOF
 
   assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/relative_path_fail.yaml\""
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/relative_path_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: """
+      /tmp
+      etc
+      /usr/bin
+    """
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/relative_path_fail.yaml\""
+}
+
+test_validate_artifact_missing_closing_multi_line_path_fail()
+{
+  cat <<EOF >"${__TEST_TEMP_DIR}/artifacts/missing_closing_multi_line_path_fail.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example 1
+    supported_os: [all]
+    collector: hash
+    path: """
+      /tmp
+      etc
+    output_file: hash.txt
+    output_directory: /tmp
+EOF
+
+  assertFalse "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/missing_closing_multi_line_path_fail.yaml\""
 }
 
 test_validate_artifact_empty_path_pattern_fail()

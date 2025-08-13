@@ -1,16 +1,19 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2153,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
+    # shellcheck disable=SC2153
   . "${UAC_DIR}/lib/parse_command_line_arguments.sh"
 
+  # shellcheck disable=SC2329
   _error_msg()
   {
     printf %b "${1}\n" >&2
   }
 
+  # shellcheck disable=SC2329
   _exit_success()
   {
     exit 0
@@ -24,6 +27,7 @@ oneTimeSetUp()
 test_parse_command_line_arguments_help_success()
 {
   # stub
+  # shellcheck disable=SC2329
   _usage()
   {
     printf %b "help message"
@@ -53,6 +57,7 @@ test_parse_command_line_arguments_list_profiles_success()
   # stub
   __UAC_DIR="${__TEST_TEMP_DIR}"
 
+  # shellcheck disable=SC2329
   _list_profiles()
   {
     printf %b "list profiles"
@@ -70,6 +75,7 @@ test_parse_command_line_arguments_no_such_profile_name_fail()
   # stub
   __UAC_DIR="${__TEST_TEMP_DIR}"
 
+  # shellcheck disable=SC2329
   _get_profile_by_name()
   {
     printf %b ""
@@ -84,6 +90,7 @@ test_parse_command_line_arguments_list_artifacts_success()
   # stub
   __UAC_DIR="${__TEST_TEMP_DIR}"
 
+  # shellcheck disable=SC2329
   _list_artifacts()
   {
     printf %b "list artifacts"
@@ -101,6 +108,7 @@ test_parse_command_line_arguments_list_artifacts_success()
 test_parse_command_line_arguments_validate_artifact_success()
 {
   # stub
+  # shellcheck disable=SC2329
   _validate_artifact()
   {
     return 0
@@ -112,6 +120,7 @@ test_parse_command_line_arguments_validate_artifact_success()
 test_parse_command_line_arguments_validate_artifact_no_such_file_fail()
 {
   # stub
+  # shellcheck disable=SC2329
   _validate_artifact()
   {
     return 1
@@ -123,6 +132,7 @@ test_parse_command_line_arguments_validate_artifact_no_such_file_fail()
 test_parse_command_line_arguments_validate_profile_success()
 {
   # stub
+  # shellcheck disable=SC2329
   _validate_profile()
   {
     return 0
@@ -134,6 +144,7 @@ test_parse_command_line_arguments_validate_profile_success()
 test_parse_command_line_arguments_validate_profile_no_such_file_fail()
 {
   # stub
+  # shellcheck disable=SC2329
   _validate_profile()
   {
     return 1
@@ -145,16 +156,19 @@ test_parse_command_line_arguments_validate_profile_no_such_file_fail()
 test_parse_command_line_arguments_artifact_list_success()
 {
   # stub
+  # shellcheck disable=SC2329
   _parse_profile()
   {
     printf %b "live_response/process/ps.yaml,live_response/process/lsof.yaml,live_response/process/*,!bodyfile/bodyfile.yaml,files/*"
   }
 
+  # shellcheck disable=SC2329
   _get_profile_by_name()
   {
     printf %b "test"
   }
 
+  # shellcheck disable=SC2329
   _validate_profile()
   {
     return 0
@@ -206,7 +220,7 @@ test_parse_command_line_arguments_config_file_success()
 {
   __UAC_CONFIG_FILE=""
   _parse_command_line_arguments --config "${__TEST_TEMP_DIR}/test.conf"
-  assertEquals "${__TEST_TEMP_DIR}/test.conf" "${__UAC_CONFIG_FILE}"
+  assertEquals "${__TEST_TEMP_DIR}/test.conf" "${__UAC_CUSTOM_CONFIG_FILE}"
 }
 
 test_parse_command_line_arguments_no_such_mount_point_fail()
@@ -339,6 +353,21 @@ test_parse_command_line_arguments_notes_success()
   __UAC_EVIDENCE_NOTES=""
   _parse_command_line_arguments --notes "Heuristically programmed ALgorithmic computer"
   assertEquals "Heuristically programmed ALgorithmic computer" "${__UAC_EVIDENCE_NOTES}"
+}
+
+test_parse_command_line_arguments_sftp_ssh_option_success()
+{
+  __UAC_SFTP_SSH_OPTIONS=""
+  _parse_command_line_arguments --sftp-ssh-option "StrictHostKeyChecking=no"
+  assertEquals " -o StrictHostKeyChecking=no" "${__UAC_SFTP_SSH_OPTIONS}"
+
+  _parse_command_line_arguments --sftp-ssh-option "UserKnownHostsFile=/dev/null"
+  assertEquals " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" "${__UAC_SFTP_SSH_OPTIONS}"
+}
+
+test_parse_command_line_arguments_no_such_sftp_ssh_option_fail()
+{
+  assertFalse "_parse_command_line_arguments --sftp-ssh-option"
 }
 
 test_parse_command_line_arguments_invalid_option_fail()

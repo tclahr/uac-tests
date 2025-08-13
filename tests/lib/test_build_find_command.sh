@@ -1,11 +1,12 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/build_find_command.sh"
 
+  # shellcheck disable=SC2329
   command_exists()
   {
     __co_command="${1:-}"
@@ -24,6 +25,7 @@ oneTimeSetUp()
 
   }
 
+  # shellcheck disable=SC2329
   _is_psv()
   {
     __ip_string="${1:-}"
@@ -34,6 +36,7 @@ oneTimeSetUp()
     return 1
   }
 
+  # shellcheck disable=SC2329
   _log_msg()
   {
     __lm_level="${1:-INF}"
@@ -153,7 +156,7 @@ test_build_find_command_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/etc/default\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/proc\" -print; " "${__test_actual}"
   fi
@@ -177,7 +180,7 @@ test_build_find_command_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print" "${__test_actual}"
   fi
@@ -200,7 +203,7 @@ test_build_find_command_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/etc/default\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/proc\" -print; " "${__test_actual}"
   fi
@@ -266,7 +269,7 @@ test_build_find_command_name_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -name \"*.txt\" -o -name \"*.html\" -o -name \"z*\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -name \"*.txt\" -o -name \"*.html\" -o -name \"z*\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -name \"*.txt\" -print; find ${__TEST_TEMP_DIR}/mount-point -name \"*.html\" -print; find ${__TEST_TEMP_DIR}/mount-point -name \"z*\" -print; " "${__test_actual}"
   fi
@@ -332,7 +335,7 @@ test_build_find_command_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -355,7 +358,7 @@ test_build_find_command_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -379,7 +382,7 @@ test_build_find_command_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -402,7 +405,7 @@ test_build_find_command_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -468,7 +471,7 @@ test_build_find_command_exclude_name_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -name \"*.txt\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -name \"*.txt\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -491,7 +494,7 @@ test_build_find_command_exclude_name_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -name \"*.txt\" -o -name \"*.html\" -o -name \"z*\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -name \"*.txt\" -o -name \"*.html\" -o -name \"z*\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -576,7 +579,7 @@ test_build_find_command_path_pattern_name_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) \( -name \"*.txt\" -o -name \"*.html\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) \( -name \"*.txt\" -o -name \"*.html\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -name \"*.txt\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -name \"*.html\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/etc\" -name \"*.txt\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/etc\" -name \"*.html\" -print; " "${__test_actual}"
   fi
@@ -661,7 +664,7 @@ test_build_find_command_path_pattern_exclude_name_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) \( -name \"*.txt\" -o -name \"*.html\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) \( -name \"*.txt\" -o -name \"*.html\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/etc\" -print; " "${__test_actual}"
   fi
@@ -685,7 +688,7 @@ test_build_find_command_path_pattern_exclude_name_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) \( -name \"*.txt\" -o -name \"*.html\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) \( -name \"*.txt\" -o -name \"*.html\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/etc\" -print; " "${__test_actual}"
   fi
@@ -770,7 +773,7 @@ test_build_find_command_name_pattern_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -name \"*.txt\" -print; find ${__TEST_TEMP_DIR}/mount-point -name \"*.html\" -print; " "${__test_actual}"
   fi
@@ -794,7 +797,7 @@ test_build_find_command_name_pattern_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -name \"*.txt\" -print; find ${__TEST_TEMP_DIR}/mount-point -name \"*.html\" -print; " "${__test_actual}"
   fi
@@ -880,7 +883,7 @@ test_build_find_command_exclude_path_pattern_exclude_name_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" \) -prune -o -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/usr\" -o -path \"/etc\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" \) -prune -o -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -946,7 +949,7 @@ test_build_find_command_path_pattern_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/proc\" -o -path \"/run\" \) -prune -o \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/proc\" -o -path \"/run\" \) -prune -o \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/etc/default\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/proc\" -print; " "${__test_actual}"
   fi
@@ -970,7 +973,7 @@ test_build_find_command_path_pattern_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/proc\" \) -prune -o -path \"/usr\" -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/proc\" \) -prune -o -path \"/usr\" -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print" "${__test_actual}"
   fi
@@ -993,7 +996,7 @@ test_build_find_command_path_pattern_exclude_path_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/proc\" -o -path \"/run\" \) -prune -o \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -path \"/proc\" -o -path \"/run\" \) -prune -o \( -path \"/usr\" -o -path \"/etc/default\" -o -path \"/proc\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -path \"/usr\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/etc/default\" -print; find ${__TEST_TEMP_DIR}/mount-point -path \"/proc\" -print; " "${__test_actual}"
   fi
@@ -1059,9 +1062,117 @@ test_build_find_command_name_pattern_exclude_name_pattern_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -name \"*.gz\" -o -name \"*.zip\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" -o -name \"z*\" \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -name \"*.gz\" -o -name \"*.zip\" \) -prune -o \( -name \"*.txt\" -o -name \"*.html\" -o -name \"z*\" \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -name \"*.txt\" -print; find ${__TEST_TEMP_DIR}/mount-point -name \"*.html\" -print; find ${__TEST_TEMP_DIR}/mount-point -name \"z*\" -print; " "${__test_actual}"
+  fi
+
+}
+
+test_build_find_command_max_depth_success()
+{
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "2" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 2 -print" "${__test_actual}"
+
+  __UAC_CONF_MAX_DEPTH=4
+
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 4 -print" "${__test_actual}"
+
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "2" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 2 -print" "${__test_actual}"
+
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "6" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -maxdepth 6 -print" "${__test_actual}"
+  
+  __UAC_CONF_MAX_DEPTH=0
+  __UAC_TOOL_FIND_MAXDEPTH_SUPPORT=false
+
+  __test_actual=`_build_find_command \
+    "${__TEST_TEMP_DIR}/mount-point" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "6" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    ""`
+
+  if commandExists "perl"; then
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -maxdepth 6 -print" "${__test_actual}"
+  else
+    assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
 
 }
@@ -1125,7 +1236,7 @@ test_build_find_command_file_type_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -type f -o -type d \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -type f -o -type d \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -type f -print; find ${__TEST_TEMP_DIR}/mount-point -type d -print; " "${__test_actual}"
   fi
@@ -1149,7 +1260,7 @@ test_build_find_command_file_type_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -type f -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -type f -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -1172,7 +1283,7 @@ test_build_find_command_file_type_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -type f -o -type d \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -type f -o -type d \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}"
   fi
@@ -1198,7 +1309,7 @@ test_build_find_command_min_file_size_success()
     "" \
     ""`
 
-  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -size +100c -print" "${__test_actual}" 
+  assertEquals "find ${__TEST_TEMP_DIR}/mount-point -size +100c -print" "${__test_actual}"
   
   __UAC_TOOL_FIND_SIZE_SUPPORT=false
   __test_actual=`_build_find_command \
@@ -1219,7 +1330,7 @@ test_build_find_command_min_file_size_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -size +100c -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -size +100c -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1266,7 +1377,7 @@ test_build_find_command_max_file_size_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -size -200c -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -size -200c -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1312,7 +1423,7 @@ test_build_find_command_min_and_max_file_size_success()
     ""`
   
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -size +100c -size -200c -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -size +100c -size -200c -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1378,7 +1489,7 @@ test_build_find_command_perm_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -perm 777 -o -perm 444 \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -perm 777 -o -perm 444 \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -perm 777 -print; find ${__TEST_TEMP_DIR}/mount-point -perm 444 -print; " "${__test_actual}"
   fi
@@ -1402,7 +1513,7 @@ test_build_find_command_perm_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( -perm 777 -o -perm 444 \) -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( -perm 777 -o -perm 444 \) -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -perm 777 -print; find ${__TEST_TEMP_DIR}/mount-point -perm 444 -print; " "${__test_actual}"
   fi
@@ -1448,7 +1559,7 @@ test_build_find_command_no_group_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -nogroup -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -nogroup -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -nogroup -print" "${__test_actual}" 
   fi
@@ -1495,7 +1606,7 @@ test_build_find_command_no_user_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -nouser -print" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -nouser -print" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -nouser -print" "${__test_actual}" 
   fi
@@ -1542,7 +1653,7 @@ test_build_find_command_print0_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -print0" "${__test_actual}"
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -print0" "${__test_actual}"
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1630,7 +1741,7 @@ test_build_find_command_mtime_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -mtime -10 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -mtime -10 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1654,7 +1765,7 @@ test_build_find_command_mtime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -mtime +20 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -mtime +20 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1677,7 +1788,7 @@ test_build_find_command_mtime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -mtime -10 -mtime +20 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -mtime -10 -mtime +20 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1765,7 +1876,7 @@ test_build_find_command_atime_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -atime -10 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -atime -10 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1789,7 +1900,7 @@ test_build_find_command_atime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -atime +20 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -atime +20 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1812,7 +1923,7 @@ test_build_find_command_atime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -atime -10 -atime +20 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -atime -10 -atime +20 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1900,7 +2011,7 @@ test_build_find_command_ctime_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -ctime -10 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -ctime -10 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1924,7 +2035,7 @@ test_build_find_command_ctime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -ctime +20 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -ctime +20 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -1947,7 +2058,7 @@ test_build_find_command_ctime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point -ctime -10 -ctime +20 -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point -ctime -10 -ctime +20 -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -print" "${__test_actual}" 
   fi
@@ -2034,7 +2145,7 @@ test_build_find_command_mtime_ctime_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime -10 \) -o \( -ctime -10 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime -10 \) -o \( -ctime -10 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -mtime -10 -print" "${__test_actual}" 
   fi
@@ -2058,7 +2169,7 @@ test_build_find_command_mtime_ctime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime +20 \) -o \( -ctime +20 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime +20 \) -o \( -ctime +20 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -mtime +20 -print" "${__test_actual}" 
   fi
@@ -2081,7 +2192,7 @@ test_build_find_command_mtime_ctime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime -10 -mtime +20 \) -o \( -ctime -10 -ctime +20 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime -10 -mtime +20 \) -o \( -ctime -10 -ctime +20 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -mtime -10 -mtime +20 -print" "${__test_actual}" 
   fi
@@ -2168,7 +2279,7 @@ test_build_find_command_mtime_atime_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime -10 \) -o \( -atime -10 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime -10 \) -o \( -atime -10 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -mtime -10 -print" "${__test_actual}" 
   fi
@@ -2191,7 +2302,7 @@ test_build_find_command_mtime_atime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime +20 \) -o \( -atime +20 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime +20 \) -o \( -atime +20 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -mtime +20 -print" "${__test_actual}" 
   fi
@@ -2214,7 +2325,7 @@ test_build_find_command_mtime_atime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime -10 -mtime +20 \) -o \( -atime -10 -atime +20 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -mtime -10 -mtime +20 \) -o \( -atime -10 -atime +20 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -mtime -10 -mtime +20 -print" "${__test_actual}" 
   fi
@@ -2301,7 +2412,7 @@ test_build_find_command_ctime_atime_success()
     ""`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -ctime -10 \) -o \( -atime -10 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -ctime -10 \) -o \( -atime -10 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -ctime -10 -print" "${__test_actual}" 
   fi
@@ -2324,7 +2435,7 @@ test_build_find_command_ctime_atime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -ctime +20 \) -o \( -atime +20 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -ctime +20 \) -o \( -atime +20 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -ctime +20 -print" "${__test_actual}" 
   fi
@@ -2347,7 +2458,7 @@ test_build_find_command_ctime_atime_success()
     "20"`
 
   if commandExists "perl"; then
-    assertEquals "find_pl ${__TEST_TEMP_DIR}/mount-point \( \( -ctime -10 -ctime +20 \) -o \( -atime -10 -atime +20 \) \) -print" "${__test_actual}" 
+    assertEquals "find.pl ${__TEST_TEMP_DIR}/mount-point \( \( -ctime -10 -ctime +20 \) -o \( -atime -10 -atime +20 \) \) -print" "${__test_actual}" 
   else
     assertEquals "find ${__TEST_TEMP_DIR}/mount-point -ctime -10 -ctime +20 -print" "${__test_actual}" 
   fi

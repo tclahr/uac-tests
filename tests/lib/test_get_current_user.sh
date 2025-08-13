@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006,SC2317
+# shellcheck disable=SC1091,SC2006
 
 oneTimeSetUp()
 {
@@ -12,6 +12,7 @@ setUp()
   LOGNAME=""
   USER=""
 
+  # shellcheck disable=SC2329
   id()
   {
     printf %b "uid=1000(duncan) gid=1000(duncan) groups=1000(duncan),998(wheel)"
