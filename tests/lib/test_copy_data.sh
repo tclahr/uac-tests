@@ -48,6 +48,7 @@ oneTimeSetUp()
 
   __UAC_TEMP_DATA_DIR="${__TEST_TEMP_DIR}"
   __UAC_MOUNT_POINT="${__TEST_TEMP_DIR}/mount-point"
+  __UAC_ARTIFACTS_OUTPUT_DIR="${__UAC_TEMP_DATA_DIR}/collected"
 
   mkdir -p "${__TEST_TEMP_DIR}/[root]"
 

@@ -19,6 +19,7 @@ oneTimeSetUp()
 setUp()
 {
   __UAC_TEMP_DATA_DIR="${__TEST_TEMP_DIR}/uac-data.tmp"
+  __UAC_ARTIFACTS_OUTPUT_DIR="${__UAC_TEMP_DATA_DIR}/collected"
   __UAC_LOG_FILE="uac.log"
 }
 

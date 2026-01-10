@@ -6,6 +6,7 @@ oneTimeSetUp()
 {
     # shellcheck disable=SC2153
   . "${UAC_DIR}/lib/parse_artifact.sh"
+  . "${UAC_DIR}/lib/replace_runtime_user_defined_variables.sh"
 
   # shellcheck disable=SC2329
   _is_in_list()
@@ -137,6 +138,7 @@ oneTimeSetUp()
 
   __UAC_DIR="${__TEST_TEMP_DIR}/uac"
   __UAC_TEMP_DATA_DIR="${__TEST_TEMP_DIR}"
+  __UAC_ARTIFACTS_OUTPUT_DIR="${__UAC_TEMP_DATA_DIR}/collected"
 
 }
 
@@ -384,7 +386,8 @@ EOF
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/command_collector_multiple_command_success.yaml"`
   assertEquals "_command_collector \"\" \"ps -ef
 ls -la
-lsof\" \"${__UAC_TEMP_DATA_DIR}/collected/command_collector_multiple_command_success\" \"command_collector_multiple_command_success.txt\" false false" "${__test_actual}"
+lsof
+\" \"${__UAC_TEMP_DATA_DIR}/collected/command_collector_multiple_command_success\" \"command_collector_multiple_command_success.txt\" false false" "${__test_actual}"
 }
 
 test_parse_artifact_replace_exposed_variables_success()

@@ -99,6 +99,7 @@ oneTimeSetUp()
 
   __UAC_DIR="${__TEST_TEMP_DIR}/uac"
   __UAC_TEMP_DATA_DIR="${__TEST_TEMP_DIR}"
+  __UAC_ARTIFACTS_OUTPUT_DIR="${__UAC_TEMP_DATA_DIR}/collected"
   
 }
 
