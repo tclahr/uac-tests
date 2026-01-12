@@ -5,6 +5,8 @@
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/replace_runtime_user_defined_variables.sh"
+
+  __UAC_MOUNT_POINT="/mount-point"
 }
 
 test_replace_runtime_user_defined_variables_simple_replacement_success()
@@ -63,6 +65,10 @@ test_replace_runtime_user_defined_variables_with_special_characters_success()
   __test_string="ls && avml %number% -o output || echo abc!"
   __test_actual=`_replace_runtime_user_defined_variables "${__test_string}"`
   assertEquals "ls && avml 32 -o output || echo abc!" "${__test_actual}"
+
+  __test_string="stat --format='{\"File\": \"%n\", \"Size\": %s, \"Blocks\": %b, \"IOBlock\": %o, \"Type\": \"%F\", \"Device\": \"%D\", \"Inode\": %i, \"Permissions\": \"%a\", \"Links\": %h, \"UID\": %u, \"GID\": %g, \"Access\": \"%x\", \"Modify\": \"%y\", \"Change\": \"%z\"}' \"%mount_point%/var/db/sudo/lectured/%line%\""
+  __test_actual=`_replace_runtime_user_defined_variables "${__test_string}"`
+  assertEquals "stat --format='{\"File\": \"%n\", \"Size\": %s, \"Blocks\": %b, \"IOBlock\": %o, \"Type\": \"%F\", \"Device\": \"%D\", \"Inode\": %i, \"Permissions\": \"%a\", \"Links\": %h, \"UID\": %u, \"GID\": %g, \"Access\": \"%x\", \"Modify\": \"%y\", \"Change\": \"%z\"}' \"${__UAC_MOUNT_POINT}/var/db/sudo/lectured/%line%\"" "${__test_actual}"
 }
 
 test_replace_runtime_user_defined_variables_preserve_literal_percentage_signs_success()
