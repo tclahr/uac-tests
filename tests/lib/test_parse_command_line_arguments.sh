@@ -247,6 +247,42 @@ test_parse_command_line_arguments_operating_system_success()
   assertEquals "linux" "${__UAC_OPERATING_SYSTEM}"
 }
 
+test_parse_command_line_arguments_define_invalid_var_name_fail()
+{
+  asserFalse "_parse_command_line_arguments --define"
+  asserFalse "_parse_command_line_arguments --define 123foo=bar"
+  asserFalse "_parse_command_line_arguments --define foo="
+  asserFalse "_parse_command_line_arguments --define =bar"
+}
+
+test_parse_command_line_arguments_define_reserved_runtime_variable_fail()
+{
+  assertFalse "_parse_command_line_arguments --define hostname=foo"
+  assertFalse "_parse_command_line_arguments --define os=foo"
+  assertFalse "_parse_command_line_arguments --define timestamp=foo"
+  assertFalse "_parse_command_line_arguments --define uac_directory=foo"
+  assertFalse "_parse_command_line_arguments --define mount_point=foo"
+  assertFalse "_parse_command_line_arguments --define temp_directory=foo"
+  assertFalse "_parse_command_line_arguments --define artifacts_output_directory=foo"
+  assertFalse "_parse_command_line_arguments --define non_local_mount_points=foo"
+  assertFalse "_parse_command_line_arguments --define start_date=foo"
+  assertFalse "_parse_command_line_arguments --define start_date_epoch=foo"
+  assertFalse "_parse_command_line_arguments --define end_date=foo"
+  assertFalse "_parse_command_line_arguments --define end_date_epoch=foo"
+  assertFalse "_parse_command_line_arguments --define user=foo"
+  assertFalse "_parse_command_line_arguments --define user_home=foo"
+  assertFalse "_parse_command_line_arguments --define line=foo"
+}
+
+test_parse_command_line_arguments_define_success()
+{
+  _parse_command_line_arguments --define foo=bar --define foo2=bar2
+  # shellcheck disable=SC2154
+  assertEquals "bar" "${__UAC_USER_DEFINED_VAR_foo}"
+  # shellcheck disable=SC2154
+  assertEquals "bar2" "${__UAC_USER_DEFINED_VAR_foo2}"
+}
+
 test_parse_command_line_arguments_no_such_hostname_fail()
 {
   assertFalse "_parse_command_line_arguments --hostname"
