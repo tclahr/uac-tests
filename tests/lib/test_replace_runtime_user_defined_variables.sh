@@ -54,13 +54,16 @@ test_replace_multiple_user_defined_variables_success()
   assertEquals "1 + 2 + 3 = 6" "${__test_actual}"
 }
 
-test_replace_runtime_user_defined_variables_with_special_characters_success()
+test_replace_runtime_user_defined_variables_with_special_characters_in_value_success()
 {
   __UAC_USER_DEFINED_VAR_special_char="ls \&\& cd /tmp \|\| echo abc! \&\& ls *"
   __test_string="PATH=%special_char%"
   __test_actual=`_replace_runtime_user_defined_variables "${__test_string}"`
   assertEquals "PATH=ls && cd /tmp || echo abc! && ls *" "${__test_actual}"
+}
 
+test_replace_runtime_user_defined_variables_with_special_characters_in_string_success()
+{
   __UAC_USER_DEFINED_VAR_number="32"
   __test_string="ls && avml %number% -o output || echo abc!"
   __test_actual=`_replace_runtime_user_defined_variables "${__test_string}"`
@@ -122,4 +125,11 @@ test_replace_runtime_user_defined_variables_non_local_mount_points_success()
   __test_string="path: %non_local_mount_points% %non_local_mount_points%"
   __test_actual=`_replace_runtime_user_defined_variables "${__test_string}"`
   assertEquals "path: /proc|/sys /proc|/sys" "${__test_actual}"
+}
+
+test_replace_runtime_user_defined_variables_same_variable_multiple_times_success()
+{
+  __test_string="command: avml %same_var% %same_var=1% %same_var=2%"
+  __test_actual=`_replace_runtime_user_defined_variables "${__test_string}"`
+  assertEquals "command: avml  1 2" "${__test_actual}"
 }
