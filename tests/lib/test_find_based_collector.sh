@@ -218,6 +218,7 @@ test_find_based_collector_empty_output_file_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
     \"${__TEST_TEMP_DIR}/destination_directory\" \
     \"\""
 }
@@ -228,6 +229,7 @@ test_find_based_collector_invalid_file_list_fail()
     \"find\" \
     \"invalid_file.txt\" \
     \"true\" \
+    \"\" \
     \"\" \
     \"\" \
     \"\" \
@@ -261,6 +263,7 @@ test_find_based_collector_invalid_file_list_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
     \"${__TEST_TEMP_DIR}/destination_directory\" \
     \"test_find_based_collector_invalid_file_list_fail.txt\""
 }
@@ -272,9 +275,10 @@ test_find_based_collector_no_hashing_tool_fail()
   __UAC_TOOL_SHA256_BIN=""
   __UAC_CONF_HASH_ALGORITHM="md5|sha1|sha256"
 
-  assertTrue "_find_based_collector \
+  assertFalse "_find_based_collector \
     \"hash\" \
     \"/\" \
+    \"\" \
     \"\" \
     \"\" \
     \"\" \
@@ -294,9 +298,10 @@ test_find_based_collector_no_hashing_tool_fail()
 
   __UAC_CONF_HASH_ALGORITHM="sha1|sha256"
   
-  assertTrue "_find_based_collector \
+  assertFalse "_find_based_collector \
     \"hash\" \
     \"/\" \
+    \"\" \
     \"\" \
     \"\" \
     \"\" \
@@ -316,9 +321,10 @@ test_find_based_collector_no_hashing_tool_fail()
 
   __UAC_CONF_HASH_ALGORITHM="sha256"
   
-  assertTrue "_find_based_collector \
+  assertFalse "_find_based_collector \
     \"hash\" \
     \"/\" \
+    \"\" \
     \"\" \
     \"\" \
     \"\" \
@@ -358,6 +364,7 @@ test_find_based_collector_no_stat_tool_fail()
     \"\" \
     \"\" \
     \"\" \
+    \"\" \
     \"${__TEST_TEMP_DIR}/destination_directory\" \
     \"test_find_based_collector_no_stat_tool_fail.txt\""
 }
@@ -367,6 +374,7 @@ test_find_based_collector_simple_find_success()
   __test_actual=`_find_based_collector \
     "find" \
     "/" \
+    "" \
     "" \
     "" \
     "" \
@@ -407,6 +415,7 @@ test_find_based_collector_multiple_paths_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_multiple_paths_success.txt"`
 
@@ -419,6 +428,7 @@ test_find_based_collector_simple_find_truncated_output_file_success()
   __test_actual=`_find_based_collector \
     "find" \
     "/" \
+    "" \
     "" \
     "" \
     "" \
@@ -459,6 +469,7 @@ test_find_based_collector_file_is_file_list_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_file_is_file_list_absolute_path_success.txt"`
 
@@ -469,6 +480,7 @@ test_find_based_collector_file_is_file_list_success()
     "file" \
     "file_list.txt" \
     "true" \
+    "" \
     "" \
     "" \
     "" \
@@ -505,6 +517,7 @@ test_find_based_collector_file_is_file_list_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_file_is_file_list_relative_directory_path_success.txt"`
 
@@ -517,6 +530,7 @@ test_find_based_collector_simple_file_success()
   __test_actual=`_find_based_collector \
     "file" \
     "/" \
+    "" \
     "" \
     "" \
     "" \
@@ -557,6 +571,7 @@ test_find_based_collector_hash_is_file_list_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_is_file_list_absolute_path_success.txt"`
 
@@ -567,6 +582,7 @@ test_find_based_collector_hash_is_file_list_success()
     "hash" \
     "file_list.txt" \
     "true" \
+    "" \
     "" \
     "" \
     "" \
@@ -603,6 +619,7 @@ test_find_based_collector_hash_is_file_list_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_is_file_list_relative_directory_path_success.txt"`
 
@@ -616,6 +633,7 @@ test_find_based_collector_hash_print0_success()
   __test_actual=`_find_based_collector \
     "hash" \
     "/" \
+    "" \
     "" \
     "" \
     "" \
@@ -665,6 +683,7 @@ test_find_based_collector_hash_no_print0_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_no_print0_success.txt"`
 
@@ -685,6 +704,7 @@ test_find_based_collector_stat_is_file_list_success()
     "stat" \
     "${__TEST_TEMP_DIR}/uac/file_list.txt" \
     "true" \
+    "" \
     "" \
     "" \
     "" \
@@ -721,6 +741,7 @@ test_find_based_collector_stat_is_file_list_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_is_file_list_relative_file_path_success.txt"`
 
@@ -731,6 +752,7 @@ test_find_based_collector_stat_is_file_list_success()
     "stat" \
     "destination_directory/file_list.txt" \
     "true" \
+    "" \
     "" \
     "" \
     "" \
@@ -757,6 +779,7 @@ test_find_based_collector_stat_print0_success()
   __test_actual=`_find_based_collector \
     "stat" \
     "/" \
+    "" \
     "" \
     "" \
     "" \
@@ -801,6 +824,7 @@ test_find_based_collector_stat_no_print0_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_no_print0_success.txt"`
 
@@ -816,6 +840,7 @@ test_find_based_collector_path_pattern_success()
     "/" \
     "" \
     "/usr|/etc/default|/proc" \
+    "" \
     "" \
     "" \
     "" \
@@ -850,6 +875,7 @@ test_find_based_collector_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_path_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_path_pattern_success.txt.md5"`
@@ -860,6 +886,7 @@ test_find_based_collector_path_pattern_success()
     "/" \
     "" \
     "/usr|/etc/default|/proc" \
+    "" \
     "" \
     "" \
     "" \
@@ -897,6 +924,7 @@ test_find_based_collector_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_name_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_name_pattern_success.txt"`
@@ -919,6 +947,7 @@ test_find_based_collector_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_name_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_name_pattern_success.txt.md5"`
@@ -930,6 +959,7 @@ test_find_based_collector_name_pattern_success()
     "" \
     "" \
     "*.txt|*.sh" \
+    "" \
     "" \
     "" \
     "" \
@@ -966,6 +996,7 @@ test_find_based_collector_exclude_path_pattern_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_exclude_path_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_exclude_path_pattern_success.txt"`
@@ -978,6 +1009,7 @@ test_find_based_collector_exclude_path_pattern_success()
     "" \
     "" \
     "/usr|/etc/default|/proc" \
+    "" \
     "" \
     "" \
     "" \
@@ -1001,6 +1033,7 @@ test_find_based_collector_exclude_path_pattern_success()
     "" \
     "" \
     "/usr|/etc/default|/proc" \
+    "" \
     "" \
     "" \
     "" \
@@ -1036,6 +1069,7 @@ test_find_based_collector_exclude_name_pattern_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_exclude_name_pattern_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_exclude_name_pattern_success.txt"`
@@ -1049,6 +1083,7 @@ test_find_based_collector_exclude_name_pattern_success()
     "" \
     "" \
     "*.txt|*.sh" \
+    "" \
     "" \
     "" \
     "" \
@@ -1072,6 +1107,7 @@ test_find_based_collector_exclude_name_pattern_success()
     "" \
     "" \
     "*.txt|*.sh" \
+    "" \
     "" \
     "" \
     "" \
@@ -1106,6 +1142,7 @@ test_find_based_collector_exclude_file_system_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_exclude_file_system_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_exclude_file_system_success.txt"`
@@ -1120,6 +1157,7 @@ test_find_based_collector_exclude_file_system_success()
     "" \
     "" \
     "apfs|ntfs" \
+    "" \
     "" \
     "" \
     "" \
@@ -1143,6 +1181,7 @@ test_find_based_collector_exclude_file_system_success()
     "" \
     "" \
     "apfs|ntfs" \
+    "" \
     "" \
     "" \
     "" \
@@ -1176,6 +1215,7 @@ test_find_based_collector_maxdepth_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_maxdepth_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_maxdepth_success.txt"`
@@ -1198,6 +1238,7 @@ test_find_based_collector_maxdepth_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_maxdepth_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_maxdepth_success.txt.md5"`
@@ -1213,6 +1254,7 @@ test_find_based_collector_maxdepth_success()
     "" \
     "" \
     "10" \
+    "" \
     "" \
     "" \
     "" \
@@ -1245,6 +1287,7 @@ test_find_based_collector_file_type_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_file_type_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_file_type_success.txt"`
@@ -1267,6 +1310,7 @@ test_find_based_collector_file_type_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_file_type_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_file_type_success.txt.md5"`
@@ -1283,6 +1327,7 @@ test_find_based_collector_file_type_success()
     "" \
     "" \
     "d" \
+    "" \
     "" \
     "" \
     "" \
@@ -1314,6 +1359,7 @@ test_find_based_collector_min_file_size_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_min_file_size_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_min_file_size_success.txt"`
@@ -1336,6 +1382,7 @@ test_find_based_collector_min_file_size_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_min_file_size_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_min_file_size_success.txt.md5"`
@@ -1353,6 +1400,7 @@ test_find_based_collector_min_file_size_success()
     "" \
     "" \
     "1024" \
+    "" \
     "" \
     "" \
     "" \
@@ -1383,6 +1431,7 @@ test_find_based_collector_max_file_size_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_max_file_size_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_max_file_size_success.txt"`
@@ -1405,6 +1454,7 @@ test_find_based_collector_max_file_size_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_max_file_size_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_max_file_size_success.txt.md5"`
@@ -1423,6 +1473,7 @@ test_find_based_collector_max_file_size_success()
     "" \
     "" \
     "2048" \
+    "" \
     "" \
     "" \
     "" \
@@ -1452,6 +1503,7 @@ test_find_based_collector_permissions_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_permissions_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_permissions_success.txt"`
@@ -1474,6 +1526,7 @@ test_find_based_collector_permissions_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_permissions_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_permissions_success.txt.md5"`
@@ -1493,6 +1546,7 @@ test_find_based_collector_permissions_success()
     "" \
     "" \
     "755" \
+    "" \
     "" \
     "" \
     "" \
@@ -1521,6 +1575,7 @@ test_find_based_collector_no_group_success()
     "true" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_no_group_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_no_group_success.txt"`
@@ -1543,6 +1598,7 @@ test_find_based_collector_no_group_success()
     "true" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_no_group_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_no_group_success.txt.md5"`
@@ -1563,6 +1619,7 @@ test_find_based_collector_no_group_success()
     "" \
     "" \
     "true" \
+    "" \
     "" \
     "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
@@ -1590,6 +1647,7 @@ test_find_based_collector_no_user_success()
     "" \
     "true" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_find_no_user_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_no_user_success.txt"`
@@ -1611,6 +1669,7 @@ test_find_based_collector_no_user_success()
     "" \
     "" \
     "true" \
+    "" \
     "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_no_user_success.txt"
@@ -1634,6 +1693,7 @@ test_find_based_collector_no_user_success()
     "" \
     "true" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_no_user_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_no_user_success.txt"`
@@ -1647,6 +1707,7 @@ test_find_based_collector_ignore_date_range_success()
   _find_based_collector \
     "find" \
     "/" \
+    "" \
     "" \
     "" \
     "" \
@@ -1683,6 +1744,7 @@ test_find_based_collector_ignore_date_range_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_hash_ignore_date_range_success.txt"
   __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_hash_ignore_date_range_success.txt.md5"`
@@ -1705,8 +1767,68 @@ test_find_based_collector_ignore_date_range_success()
     "" \
     "" \
     "" \
+    "" \
     "${__TEST_TEMP_DIR}/destination_directory" \
     "test_find_based_collector_stat_ignore_date_range_success.txt"
   __test_actual=`sed -e 's:|0:|%W":g' "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_stat_ignore_date_range_success.txt"`
   assertEquals "_build_find_command \"${__test_mount_point}//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"20\" \"10\" | xargs -0 stat -c \"0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W\"" "${__test_actual}"
+}
+
+test_find_based_collector_find_command_xargs_null_delimiter_support_success()
+{
+
+  _find_based_collector \
+    "find" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "lsattr -d" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_find_command_xargs_null_delimiter_support_success.txt"
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_command_xargs_null_delimiter_support_success.txt"`
+  assertEquals "_build_find_command \"${__test_mount_point}//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false true \"0\" \"0\" | xargs -0 lsattr -d" "${__test_actual}"
+
+}
+
+test_find_based_collector_find_command_xargs_no_null_delimiter_support_success()
+{
+
+  __UAC_TOOL_FIND_PRINT0_SUPPORT=true
+  __UAC_TOOL_XARGS_NULL_DELIMITER_SUPPORT=false
+
+  _find_based_collector \
+    "find" \
+    "/" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "" \
+    "lsattr -d | sort -u" \
+    "${__TEST_TEMP_DIR}/destination_directory" \
+    "test_find_based_collector_find_command_xargs_no_null_delimiter_support_success.txt"
+  __test_actual=`cat "${__TEST_TEMP_DIR}/destination_directory/test_find_based_collector_find_command_xargs_no_null_delimiter_support_success.txt"`
+  assertEquals "_build_find_command \"${__test_mount_point}//\" \"\" \"\" \"${__TEST_TEMP_DIR}/uac|${__TEST_TEMP_DIR}\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"0\" \"0\" | sed 's|.|\\\\&|g' | xargs lsattr -d | sort -u" "${__test_actual}"
+
 }
