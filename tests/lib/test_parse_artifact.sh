@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006
+# shellcheck disable=SC1091,SC2006,SC2317
 
 oneTimeSetUp()
 {
@@ -123,12 +123,14 @@ oneTimeSetUp()
     shift
     __fc_ignore_date_range="${1:-false}"
     shift
+    __fc_command="${1:-}"
+    shift
     __fc_output_directory="${1:-}"
     shift
     __fc_output_file="${1:-}"
 
-    printf %b "_find_based_collector \"${__fc_collector}\" \"${__fc_path}\" \"${__fc_is_file_list}\" \"${__fc_path_pattern}\" \"${__fc_name_pattern}\" \"${__fc_exclude_path_pattern}\" \"${__fc_exclude_name_pattern}\" \"${__fc_exclude_file_system}\" \"${__fc_max_depth}\" \"${__fc_file_type}\" \"${__fc_min_file_size}\" \"${__fc_max_file_size}\" \"${__fc_permissions}\" ${__fc_no_group} ${__fc_no_user} ${__fc_ignore_date_range} \"${__fc_output_directory}\" \"${__fc_output_file}\"\n"
-    _log_msg CMD "_find_based_collector \"${__fc_collector}\" \"${__fc_path}\" \"${__fc_is_file_list}\" \"${__fc_path_pattern}\" \"${__fc_name_pattern}\" \"${__fc_exclude_path_pattern}\" \"${__fc_exclude_name_pattern}\" \"${__fc_exclude_file_system}\" \"${__fc_max_depth}\" \"${__fc_file_type}\" \"${__fc_min_file_size}\" \"${__fc_max_file_size}\" \"${__fc_permissions}\" ${__fc_no_group} ${__fc_no_user} ${__fc_ignore_date_range} \"${__fc_output_directory}\" \"${__fc_output_file}\""
+    printf %b "_find_based_collector \"${__fc_collector}\" \"${__fc_path}\" \"${__fc_is_file_list}\" \"${__fc_path_pattern}\" \"${__fc_name_pattern}\" \"${__fc_exclude_path_pattern}\" \"${__fc_exclude_name_pattern}\" \"${__fc_exclude_file_system}\" \"${__fc_max_depth}\" \"${__fc_file_type}\" \"${__fc_min_file_size}\" \"${__fc_max_file_size}\" \"${__fc_permissions}\" ${__fc_no_group} ${__fc_no_user} ${__fc_ignore_date_range} \"${__fc_command}\" \"${__fc_output_directory}\" \"${__fc_output_file}\"\n"
+    _log_msg CMD "_find_based_collector \"${__fc_collector}\" \"${__fc_path}\" \"${__fc_is_file_list}\" \"${__fc_path_pattern}\" \"${__fc_name_pattern}\" \"${__fc_exclude_path_pattern}\" \"${__fc_exclude_name_pattern}\" \"${__fc_exclude_file_system}\" \"${__fc_max_depth}\" \"${__fc_file_type}\" \"${__fc_min_file_size}\" \"${__fc_max_file_size}\" \"${__fc_permissions}\" ${__fc_no_group} ${__fc_no_user} ${__fc_ignore_date_range} \"${__fc_command}\" \"${__fc_output_directory}\" \"${__fc_output_file}\""
   }
 
   __TEST_TEMP_DIR="${USHUNIT_TEMP_DIR}/test_parse_artifact"
@@ -411,7 +413,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200 /proc|/sys\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"find\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200 /proc|/sys\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"\" \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
 version: 1.0
@@ -426,7 +428,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"`
-  assertEquals "_find_based_collector \"hash\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200 /1675123200 /proc|/sys\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"hash\" \"/2023-01-01 /1672531200 /2023-01-31 /1675123200 /1675123200 /proc|/sys\" \"false\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" \"\" false false false \"\" \"${__UAC_TEMP_DATA_DIR}/collected/replace_exposed_variables_success\" \"replace_exposed_variables_success.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/replace_exposed_variables_success.yaml"
 version: 1.0
@@ -692,9 +694,9 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/user_home_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"/home/uac\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|d\" \"200\" \"500\" \"755|444\" true true true \"${__UAC_TEMP_DATA_DIR}/collected//home/uac_uac\" \"/home/uac_uac.txt\"
-_find_based_collector \"find\" \"/home/john\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|d\" \"200\" \"500\" \"755|444\" true true true \"${__UAC_TEMP_DATA_DIR}/collected//home/john_john\" \"/home/john_john.txt\"
-_find_based_collector \"find\" \"/home/daenerys\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|d\" \"200\" \"500\" \"755|444\" true true true \"${__UAC_TEMP_DATA_DIR}/collected//home/daenerys_daenerys\" \"/home/daenerys_daenerys.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"find\" \"/home/uac\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|d\" \"200\" \"500\" \"755|444\" true true true \"\" \"${__UAC_TEMP_DATA_DIR}/collected//home/uac_uac\" \"/home/uac_uac.txt\"
+_find_based_collector \"find\" \"/home/john\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|d\" \"200\" \"500\" \"755|444\" true true true \"\" \"${__UAC_TEMP_DATA_DIR}/collected//home/john_john\" \"/home/john_john.txt\"
+_find_based_collector \"find\" \"/home/daenerys\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|d\" \"200\" \"500\" \"755|444\" true true true \"\" \"${__UAC_TEMP_DATA_DIR}/collected//home/daenerys_daenerys\" \"/home/daenerys_daenerys.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/user_home_success.yaml"
 version: 1.0
@@ -721,8 +723,8 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/user_home_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"/home/uac\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected//home/uac_uac\" \"/home/uac_uac.txt\"
-_find_based_collector \"find\" \"/home/john\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected//home/john_john\" \"/home/john_john.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"find\" \"/home/uac\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected//home/uac_uac\" \"/home/uac_uac.txt\"
+_find_based_collector \"find\" \"/home/john\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected//home/john_john\" \"/home/john_john.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/user_home_success.yaml"
 version: 1.0
@@ -749,8 +751,8 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/user_home_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"home/uac\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/home/uac_uac\" \"home/uac_uac.txt\"
-_find_based_collector \"find\" \"home/john\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/home/john_john\" \"home/john_john.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"find\" \"home/uac\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/home/uac_uac\" \"home/uac_uac.txt\"
+_find_based_collector \"find\" \"home/john\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/home/john_john\" \"home/john_john.txt\"" "${__test_actual}"
 
 }
 
@@ -780,7 +782,34 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"find\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
+
+  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
+version: 1.0
+artifacts:
+  -
+    description: example
+    supported_os: [ aix, linux, macos, solaris ]
+    collector: find
+    path: /usr/lib /usr/local/bin
+    path_pattern: ['/usr/local','/etc']
+    name_pattern: ['*.so', '*.txt']
+    exclude_path_pattern: ['/run', '/proc']
+    exclude_name_pattern: ['*.sh']
+    exclude_file_system: ['ntfs', 'ext4', 'btrfs']
+    max_depth: 5
+    file_type: [f, s, d]
+    min_file_size: 200
+    max_file_size: 500
+    permissions: [755, 644, 444]
+    ignore_date_range: true
+    command: lsattr -d
+    output_directory: find_collector_success
+    output_file: find_collector_success.txt
+EOF
+
+  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
+  assertEquals "_find_based_collector \"find\" \"/usr/lib /usr/local/bin\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"lsattr -d\" \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
 version: 1.0
@@ -806,33 +835,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"/usr/lib /usr/local/bin\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
-
-  cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
-version: 1.0
-artifacts:
-  -
-    description: example
-    supported_os: [ aix, linux, macos, solaris ]
-    collector: find
-    path: /usr/lib /usr/local/bin
-    path_pattern: ['/usr/local','/etc']
-    name_pattern: ['*.so', '*.txt']
-    exclude_path_pattern: ['/run', '/proc']
-    exclude_name_pattern: ['*.sh']
-    exclude_file_system: ['ntfs', 'ext4', 'btrfs']
-    max_depth: 5
-    file_type: [f, s, d]
-    min_file_size: 200
-    max_file_size: 500
-    permissions: [755, 644, 444]
-    ignore_date_range: true
-    output_directory: find_collector_success
-    output_file: find_collector_success.txt
-EOF
-
-  __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"/usr/lib /usr/local/bin\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"find\" \"/usr/lib /usr/local/bin\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
 }
 
 test_parse_artifact_file_collector_success()
@@ -859,7 +862,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/file_collector_success.yaml"`
-  assertEquals "_find_based_collector \"file\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"file\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"\" \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/file_collector_success.yaml"
 version: 1.0
@@ -884,7 +887,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/file_collector_success.yaml"`
-  assertEquals "_find_based_collector \"file\" \"/tmp/file_list.txt\" \"true\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"file\" \"/tmp/file_list.txt\" \"true\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"\" \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"" "${__test_actual}"
 }
 
 test_parse_artifact_file_collector_skip_collected_home_success()
@@ -909,10 +912,10 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/file_collector_skip_collected_home_success.yaml"`
-  assertEquals "_find_based_collector \"file\" \"/home/uac\" \"false\" \"\" \"\" \"\" \"\" \"\" \"5\" \"\" \"\" \"\" \"\" false false false \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"
-_find_based_collector \"file\" \"/home/john\" \"false\" \"\" \"\" \"\" \"\" \"\" \"5\" \"\" \"\" \"\" \"\" false false false \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"
-_find_based_collector \"file\" \"/\" \"false\" \"\" \"\" \"\" \"\" \"\" \"2\" \"\" \"\" \"\" \"\" false false false \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"
-_find_based_collector \"file\" \"/home/daenerys\" \"false\" \"\" \"\" \"\" \"\" \"\" \"5\" \"\" \"\" \"\" \"\" false false false \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"file\" \"/home/uac\" \"false\" \"\" \"\" \"\" \"\" \"\" \"5\" \"\" \"\" \"\" \"\" false false false \"\" \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"
+_find_based_collector \"file\" \"/home/john\" \"false\" \"\" \"\" \"\" \"\" \"\" \"5\" \"\" \"\" \"\" \"\" false false false \"\" \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"
+_find_based_collector \"file\" \"/\" \"false\" \"\" \"\" \"\" \"\" \"\" \"2\" \"\" \"\" \"\" \"\" false false false \"\" \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"
+_find_based_collector \"file\" \"/home/daenerys\" \"false\" \"\" \"\" \"\" \"\" \"\" \"5\" \"\" \"\" \"\" \"\" false false false \"\" \"${__TEST_TEMP_DIR}\" \"file_collector.tmp\"" "${__test_actual}"
 
 }
 
@@ -944,7 +947,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/hash_collector_success.yaml"`
-  assertEquals "_find_based_collector \"hash\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" true true true \"${__UAC_TEMP_DATA_DIR}/collected/hash_collector_success\" \"hash_collector_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"hash\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" true true true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/hash_collector_success\" \"hash_collector_success.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/hash_collector_success.yaml"
 version: 1.0
@@ -971,7 +974,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/hash_collector_success.yaml"`
-  assertEquals "_find_based_collector \"hash\" \"/tmp/file_list.txt\" \"true\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/hash_collector_success\" \"hash_collector_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"hash\" \"/tmp/file_list.txt\" \"true\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/hash_collector_success\" \"hash_collector_success.txt\"" "${__test_actual}"
 }
 
 test_parse_artifact_stat_collector_success()
@@ -1002,7 +1005,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/stat_collector_success.yaml"`
-  assertEquals "_find_based_collector \"stat\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" true true true \"${__UAC_TEMP_DATA_DIR}/collected/stat_collector_success\" \"stat_collector_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"stat\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" true true true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/stat_collector_success\" \"stat_collector_success.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/stat_collector_success.yaml"
 version: 1.0
@@ -1029,5 +1032,5 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/stat_collector_success.yaml"`
-  assertEquals "_find_based_collector \"stat\" \"/tmp/file_list.txt\" \"true\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"${__UAC_TEMP_DATA_DIR}/collected/stat_collector_success\" \"stat_collector_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"stat\" \"/tmp/file_list.txt\" \"true\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f\" \"200\" \"500\" \"755\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/stat_collector_success\" \"stat_collector_success.txt\"" "${__test_actual}"
 }

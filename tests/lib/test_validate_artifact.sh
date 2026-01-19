@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006
+# shellcheck disable=SC1091,SC2006,SC2317
 
 oneTimeSetUp()
 {
@@ -2425,6 +2425,7 @@ artifacts:
     path: /etc
     path_pattern: ["/etc/default"]
     permissions: [4444]
+    command: lsattr -d
 EOF
 
   assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/find_collector_success.yaml\""
