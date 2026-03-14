@@ -7,6 +7,7 @@ oneTimeSetUp()
     # shellcheck disable=SC2153
   . "${UAC_DIR}/lib/parse_artifact.sh"
   . "${UAC_DIR}/lib/replace_runtime_user_defined_variables.sh"
+  . "${UAC_DIR}/lib/convert_size.sh"
 
   # shellcheck disable=SC2329
   _is_in_list()
@@ -773,8 +774,8 @@ artifacts:
     exclude_file_system: ['ntfs', 'ext4', 'btrfs']
     max_depth: 5
     file_type: [f, s, d]
-    min_file_size: 200
-    max_file_size: 500
+    min_file_size: 200MB
+    max_file_size: 500GB
     permissions: [755, 644, 444]
     ignore_date_range: true
     output_directory: find_collector_success
@@ -782,7 +783,7 @@ artifacts:
 EOF
 
   __test_actual=`_parse_artifact "${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"`
-  assertEquals "_find_based_collector \"find\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"200\" \"500\" \"755|644|444\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
+  assertEquals "_find_based_collector \"find\" \"/usr/lib\" \"false\" \"/usr/local|/etc\" \"*.so|*.txt\" \"/run|/proc\" \"*.sh\" \"ntfs|ext4|btrfs\" \"5\" \"f|s|d\" \"209715200\" \"536870912000\" \"755|644|444\" false false true \"\" \"${__UAC_TEMP_DATA_DIR}/collected/find_collector_success\" \"find_collector_success.txt\"" "${__test_actual}"
 
   cat <<EOF >"${__TEST_TEMP_DIR}/uac/artifacts/find_collector_success.yaml"
 version: 1.0
