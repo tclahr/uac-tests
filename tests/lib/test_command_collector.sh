@@ -5,6 +5,8 @@
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/command_collector.sh"
+  . "${UAC_DIR}/lib/replace_placeholder_plain_text.sh"
+  . "${UAC_DIR}/lib/replace_placeholder_shell_fragment.sh"
   . "${UAC_DIR}/lib/sanitize_output_file.sh"
 
   # shellcheck disable=SC2329
@@ -114,7 +116,7 @@ EOF
 
   __TEST_TEMP_DIR="${USHUNIT_TEMP_DIR}/test_command_collector"
 
-  mkdir -p "${__TEST_TEMP_DIR}"
+  mkdir -p "${__TEST_TEMP_DIR}/mount_point/etc"
 
   __UAC_VERBOSE_CMD_PREFIX=" > "
 
@@ -339,4 +341,90 @@ test_command_collector_empty_command_fail()
 test_command_collector_empty_output_directory_fail()
 {
   assertFalse "_command_collector \"\" \"__ps\" \"\" \"ps.txt\" false \"${__TEST_TEMP_DIR}\""
+}
+
+test_command_collector_line_placeholder_code_injection_fail()
+{  
+  touch "${__TEST_TEMP_DIR}/mount_point/\$(touch\${IFS}LINE_COMMAND_EXECUTED)"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo %line%" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/LINE_COMMAND_EXECUTED"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo \"%line%\"" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/LINE_COMMAND_EXECUTED"
+
+  touch "${__TEST_TEMP_DIR}/mount_point/\`touch BACKTICK_LINE_COMMAND_EXECUTED\`"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo %line%" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/BACKTICK_LINE_COMMAND_EXECUTED"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo \"%line%\"" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/BACKTICK_LINE_COMMAND_EXECUTED"
+
+  touch "${__TEST_TEMP_DIR}/mount_point/\"\$(touch\${IFS}SLASH_DOUBLE_QUOTED_LINE_COMMAND_EXECUTED)"
+  
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo %line%" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/SLASH_DOUBLE_QUOTED_LINE_COMMAND_EXECUTED"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo \"%line%\"" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/SLASH_DOUBLE_QUOTED_LINE_COMMAND_EXECUTED"
+
+  touch "${__TEST_TEMP_DIR}/mount_point/\\\"\$(touch\${IFS}ESCAPED_DOUBLE_QUOTED_LINE_COMMAND_EXECUTED)"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo %line%" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/ESCAPED_DOUBLE_QUOTED_LINE_COMMAND_EXECUTED"
+
+  touch "${__TEST_TEMP_DIR}/mount_point/\\\"\$(touch\${IFS}ESCAPED_DOUBLE_QUOTED_LINE_COMMAND_EXECUTED)"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo \"%line%\"" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/ESCAPED_DOUBLE_QUOTED_LINE_COMMAND_EXECUTED"
+
+  touch "${__TEST_TEMP_DIR}/mount_point/\$(touch\${IFS}GREP_LINE_COMMAND_EXECUTED)"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo %line% | sed -e \"s|COMMAND|%line%|g\"" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/GREP_LINE_COMMAND_EXECUTED"
+
+  _command_collector \
+    "ls \"${__TEST_TEMP_DIR}/mount_point\"" \
+    "echo \"%line%\" | sed -e \"s|COMMAND|%line%|g\"" \
+    "${__TEST_TEMP_DIR}/line_placeholder_code_injection"
+
+  assertFileNotExists "${__TEST_TEMP_DIR}/line_placeholder_code_injection/GREP_LINE_COMMAND_EXECUTED"
+
 }
