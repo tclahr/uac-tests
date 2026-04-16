@@ -1,10 +1,11 @@
 #!/bin/sh
 # SPDX-License-Identifier: Apache-2.0
-# shellcheck disable=SC1091,SC2006
+# shellcheck disable=SC1091,SC2006,SC2317
 
 oneTimeSetUp()
 {
   . "${UAC_DIR}/lib/validate_artifact.sh"
+  . "${UAC_DIR}/lib/convert_size.sh"
 
   # shellcheck disable=SC2329
   _error_msg()
@@ -2425,6 +2426,7 @@ artifacts:
     path: /etc
     path_pattern: ["/etc/default"]
     permissions: [4444]
+    command: lsattr -d
 EOF
 
   assertTrue "_validate_artifact \"${__TEST_TEMP_DIR}/artifacts/find_collector_success.yaml\""
@@ -2481,8 +2483,8 @@ artifacts:
     ignore_date_range: true
     is_file_list: true
     max_depth: 5
-    max_file_size: 1000
-    min_file_size: 500
+    max_file_size: 1000MB
+    min_file_size: 500Gb
     name_pattern: ["*.txt"]
     no_group: true
     no_user: false
