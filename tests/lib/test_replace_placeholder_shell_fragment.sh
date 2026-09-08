@@ -69,6 +69,12 @@ test_replace_placeholder_shell_fragment_unquoted_value_with_backslash()
   assertEquals 'echo "a\\b"' "${__test_actual}"
 }
 
+test_replace_placeholder_shell_fragment_unquoted_value_root_slash()
+{
+  __test_actual=`_replace_placeholder_shell_fragment "echo %X%" "%X%" '/'`
+  assertEquals 'echo "/"' "${__test_actual}"
+}
+
 # ---------------------------------------------------------------------------
 # Inside double quotes
 # ---------------------------------------------------------------------------

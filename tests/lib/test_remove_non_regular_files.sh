@@ -47,6 +47,7 @@ oneTimeSetUp()
 setUp()
 {
   __UAC_TOOL_FIND_TYPE_SUPPORT=true
+  __UAC_TOOL_XARGS_BACKSLASH_ESCAPE_SUPPORT=true
 
   echo "${__TEST_TEMP_DIR}/mount-point/etc/issue" >"${__UAC_TEMP_DATA_DIR}/file_collector.tmp"
   # shellcheck disable=SC2129
